@@ -1,0 +1,135 @@
+<div class="dynamicContentTop" >
+  <div class="dynamicContentTopItem">
+    <h2>Entrée/Sortie périodique</h2>
+    <div id="chart">
+      <apx-chart [series]="chartOptions.series" [chart]="chartOptions.chart" [xaxis]="chartOptions.xaxis"
+        [stroke]="chartOptions.stroke" [tooltip]="chartOptions.tooltip"
+        [dataLabels]="chartOptions.dataLabels"></apx-chart>
+    </div>
+  </div>
+  <div class="dynamicContentTopItem">
+    <h2>Les entrée/sortie</h2>
+    <div id="chart" style="height: 100px;">
+      <apx-chart [series]="chartOptions2.series" [chart]="chartOptions2.chart" [labels]="chartOptions2.labels"
+        [responsive]="chartOptions2.responsive"></apx-chart>
+    </div>
+  </div>
+</div>
+<div class="dynamicContentBottom mt-5">
+  <div class="dynamicContentBottomLeft p-5">
+    <h5>Tableaux</h5>
+    <table datatable [dtOptions]="dtOptions" class="table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>First name</th>
+          <th>Last name</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>1</td>
+          <td>Foo</td>
+          <td>Bar</td>
+        </tr>
+        <tr>
+          <td>2</td>
+          <td>Someone</td>
+          <td>Youknow</td>
+        </tr>
+        <tr>
+          <td>3</td>
+          <td>Iamout</td>
+          <td>Ofinspiration</td>
+        </tr>
+        <tr>
+          <td>4</td>
+          <td>Yoda</td>
+          <td>Skywalker</td>
+        </tr>
+        <tr>
+          <td>5</td>
+          <td>Patrick</td>
+          <td>Dupont</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="dynamicContentBottomRight">
+    <h3>Les stats</h3>
+    <div class="dynamicContentBottomRightCard">
+      <div class="dynamicContentBottomRightCardItem blue">
+        <div class="icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="33" height="42" viewBox="0 0 33 42" fill="none">
+            <path
+              d="M13.6667 24.7059V39.604H0C0 35.6528 1.43988 31.8634 4.00287 29.0694C6.56587 26.2755 10.042 24.7059 13.6667 24.7059ZM23.9167 38.6729L18.8959 41.5501L19.8542 35.4549L15.7935 31.14L21.4071 30.2517L23.9167 24.7059L26.4279 30.2498L32.0398 31.14L27.9791 35.4567L28.9357 41.5501L23.9167 38.6729ZM13.6667 22.8436C8.00354 22.8436 3.41667 17.8434 3.41667 11.67C3.41667 5.49664 8.00354 0.49646 13.6667 0.49646C19.3298 0.49646 23.9167 5.49664 23.9167 11.67C23.9167 17.8434 19.3298 22.8436 13.6667 22.8436Z"
+              fill="#699BF7" />
+          </svg>
+        </div>
+        <h5 class="title">Employé</h5>
+        <div class="value">250</div>
+      </div>
+      <div class="dynamicContentBottomRightCardItem orange">
+        <div class="icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="40" height="43" viewBox="0 0 40 43" fill="none">
+            <path opacity="0.5"
+              d="M34 7.8598H6C4.4087 7.8598 2.88258 8.58719 1.75736 9.88194C0.632141 11.1767 0 12.9328 0 14.7638V21.0234L13.674 26.2705H26.326L40 21.0234V14.7638C40 12.9328 39.3679 11.1767 38.2426 9.88194C37.1174 8.58719 35.5913 7.8598 34 7.8598Z"
+              fill="#FF9A62" />
+            <path
+              d="M16 7.85982V5.55848H24V7.85982H28V5.55848C27.9989 4.33815 27.5772 3.16815 26.8273 2.30525C26.0773 1.44234 25.0605 0.957029 24 0.955811H16C14.9395 0.957029 13.9227 1.44234 13.1727 2.30525C12.4228 3.16815 12.0011 4.33815 12 5.55848V7.85982H16ZM13.674 26.2705L0 21.0235V35.4758C0.00158843 37.3063 0.63424 39.0613 1.75911 40.3557C2.88399 41.65 4.40919 42.378 6 42.3798H34C35.5908 42.378 37.116 41.65 38.2409 40.3557C39.3658 39.0613 39.9984 37.3063 40 35.4758V21.0235L26.326 26.2705H13.674Z"
+              fill="#FF9A62" />
+          </svg>
+        </div>
+        <h5 class="title">Client</h5>
+        <div class="value">250</div>
+      </div>
+      <div class="dynamicContentBottomRightCardItem green">
+        <div class="icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="30" height="19" viewBox="0 0 30 19" fill="none">
+            <path d="M20.2857 1.70673H28.8571V11.0505" stroke="#4ECB71" stroke-width="1.71429"
+              stroke-linecap="round" stroke-linejoin="round" />
+            <path
+              d="M28.8571 1.70673L16.75 14.9048C16.5497 15.1188 16.2804 15.2387 16 15.2387C15.7195 15.2387 15.4503 15.1188 15.25 14.9048L10.3214 9.53213C10.1211 9.31813 9.85188 9.19826 9.57143 9.19826C9.29098 9.19826 9.02171 9.31813 8.82143 9.53213L1 18.0583"
+              stroke="#4ECB71" stroke-width="1.71429" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+        </div>
+        <h5 class="title">Nombre d'achat</h5>
+        <div class="value">9964</div>
+      </div>
+      <div class="dynamicContentBottomRightCardItem red">
+        <div class="icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="30" height="19" viewBox="0 0 30 19" fill="none">
+            <path d="M9.59113 18.0735L1.01973 18.098L0.997288 8.75428" stroke="#EB5757" stroke-width="1.71429"
+              stroke-linecap="round" stroke-linejoin="round" />
+            <path
+              d="M1.01972 18.098L13.0951 4.86542C13.2949 4.65084 13.5639 4.53021 13.8443 4.52941C14.1248 4.52861 14.3943 4.64771 14.5951 4.86114L19.5366 10.2197C19.7374 10.4332 20.0069 10.5523 20.2874 10.5515C20.5678 10.5507 20.8368 10.43 21.0366 10.2154L28.8375 1.66696"
+              stroke="#EB5757" stroke-width="1.71429" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+        </div>
+        <h5 class="title">Nombre d'achat</h5>
+        <div class="value">6735</div>
+      </div>
+      <div class="dynamicContentBottomRightCardItem green">
+        <div class="icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="32" height="35" viewBox="0 0 32 35" fill="none">
+            <path
+              d="M15.9 0.123657C7.11857 0.123657 0 7.88365 0 17.4563C0 27.029 7.11857 34.789 15.9 34.789C24.6814 34.789 31.8 27.029 31.8 17.4563C31.8 7.88365 24.6814 0.123657 15.9 0.123657ZM17.273 26.8537V29.2949H15.1309V26.8812C11.6159 26.3564 10.0767 23.2081 10.0767 23.2081L12.2647 21.2129C12.2647 21.2129 13.6617 23.864 16.1888 23.864C17.5847 23.864 18.6437 23.0495 18.6437 21.6577C18.6437 18.4044 10.6029 18.7992 10.6029 12.7636C10.6029 10.14 12.5065 8.24977 15.1298 7.80256V5.36377H17.2719V7.80256C19.101 8.06492 21.2671 9.11438 21.2671 11.3719V13.1035H18.4271V12.2639C18.4271 11.3981 17.4152 10.8209 16.2829 10.8209C14.8388 10.8209 13.7809 11.608 13.7809 12.71C13.7809 16.042 21.8217 15.2286 21.8217 21.5528C21.8217 24.1526 20.0407 26.4065 17.273 26.8537Z"
+              fill="#27AE60" />
+          </svg>
+        </div>
+        <h5 class="title">Montant des ventes</h5>
+        <div class="value">550.928.575 F cfa</div>
+      </div>
+      <div class="dynamicContentBottomRightCardItem red">
+        <div class="icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="32" height="35" viewBox="0 0 32 35" fill="none">
+            <path d="M15.9 0.123657C7.11857 0.123657 0 7.88365 0 17.4563C0 27.029 7.11857 34.789 15.9 34.789C24.6814 34.789 31.8 27.029 31.8 17.4563C31.8 7.88365 24.6814 0.123657 15.9 0.123657ZM17.273 26.8537V29.2949H15.1309V26.8812C11.6159 26.3564 10.0767 23.2081 10.0767 23.2081L12.2647 21.2129C12.2647 21.2129 13.6617 23.864 16.1888 23.864C17.5847 23.864 18.6437 23.0495 18.6437 21.6577C18.6437 18.4044 10.6029 18.7992 10.6029 12.7636C10.6029 10.14 12.5065 8.24977 15.1298 7.80256V5.36377H17.2719V7.80256C19.101 8.06492 21.2671 9.11438 21.2671 11.3719V13.1035H18.4271V12.2639C18.4271 11.3981 17.4152 10.8209 16.2829 10.8209C14.8388 10.8209 13.7809 11.608 13.7809 12.71C13.7809 16.042 21.8217 15.2286 21.8217 21.5528C21.8217 24.1526 20.0407 26.4065 17.273 26.8537Z" fill="#EB5757"/>
+          </svg>
+        </div>
+        <h5 class="title">Montant des achats</h5>
+        <div class="value">250.928.575 F cfa</div>
+      </div>
+
+    </div>
+  </div>
+</div>

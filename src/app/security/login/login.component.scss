@@ -1,0 +1,64 @@
+main {
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  .mainContent {
+    height: 60%;
+    width: 60%;
+    display: grid;
+    grid-template-columns: 45% 55%;
+    box-shadow: 0px 0px 70px 1px rgba(0, 0, 0, 0.09);
+    border-radius: 13px ;
+
+    .mainContentImage {
+      // border: 1px solid;
+
+      border-radius: 13px 0px 0px 13px;
+      background-image: url('https://img.freepik.com/photos-gratuite/vue-dessus-du-marteau-acier-autres-elements-construction-outils_23-2150576389.jpg?w=1380&t=st=1705407683~exp=1705408283~hmac=9aeee22885692919f354848ac8552dbd042ade797ba19e4ecc6e6c090f223437');
+      background-position: right;
+      background-size: cover;
+
+    }
+
+    .mainContentForm {
+      // border: 1px solid;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: white;
+      border-radius: 0px 13px  13px 0px;
+
+      .mainContentFormContainer {
+        // border: 1Px solid;
+        width: 80%;
+        height: 80%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+
+        form {
+          // border: 1px solid;
+          height: 60%;
+
+          label {
+            font-size: 20px;
+          }
+
+          input {
+            height: 50px;
+            background-color: #e0dfdc;
+          }
+
+          button {
+            height: 50px;
+            background-color: #f47a20;
+            color: white;
+          }
+        }
+      }
+    }
+  }
+}

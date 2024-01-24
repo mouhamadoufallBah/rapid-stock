@@ -1,0 +1,73 @@
+<main>
+  <div class="mainTop">
+    <h4>La liste des catégories</h4>
+  </div>
+  <div class="mainBottom">
+    <div class="mainBottomLeft">
+      @if(categories){
+      <table datatable [dtOptions]="dtCategories" class="table">
+        <thead class="table-secondary rounded-top-3">
+          <tr>
+            <th>id</th>
+            <th>Nom</th>
+            <th>Nombre de vente</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (item of categories; track $index) {
+          <tr>
+            <td>{{ item.id }}</td>
+            <td>{{ item.nom }}</td>
+            <td>1</td>
+            <td>
+              <button class="btn" data-bs-toggle="modal" data-bs-target="#modifierCatégorie"
+                (click)=" onSelectCategorie(item.id)"><i class="fa-solid fa-pen-to-square"></i></button>
+              <button class="btn" (click)="onDeleteCategorie(item.id)"><i class="fa-solid fa-trash"></i></button>
+            </td>
+          </tr>
+          }
+        </tbody>
+      </table>
+      }
+
+    </div>
+    <div class="mainBottomRight">
+      <form>
+        <div class="mb-3">
+          <label for="nomCategory" class="form-label">Nom du caatégorie</label>
+          <input type="text" class="form-control" id="nomCategory" name="nomCategory" placeholder="Nom du produit"
+            [(ngModel)]="nomCategory">
+        </div>
+        <button type="button" class="btn" (click)="onAddCategorie()">Ajouter</button>
+      </form>
+    </div>
+  </div>
+</main>
+
+
+<!-- Modal -->
+<div class="modal fade" id="modifierCatégorie" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+  aria-labelledby="modifierCatégorieLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="modifierCatégorieLabel">Modal title</h1>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="mb-3">
+            <label for="nomCategoryUpdate" class="form-label">Nom du caatégorie</label>
+            <input type="text" class="form-control" id="nomCategoryUpdate" name="nomCategoryUpdate"
+              placeholder="Nom du produit" [(ngModel)]="nomCategoryUpdate">
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btnAnnuler" data-bs-dismiss="modal">Annuler</button>
+        <button type="button" class="btn"
+          (click)="onUpdateCategorie(selectedCategory.id) "  data-bs-dismiss="modal">Modifier</button>
+      </div>
+    </div>
+  </div>
+</div>

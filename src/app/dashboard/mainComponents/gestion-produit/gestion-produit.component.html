@@ -1,0 +1,183 @@
+<main>
+  <div class="mainTop">
+    <h4>La liste des produit</h4>
+    <!-- Button trigger modal -->
+    <button type="button" class="btn mt-3 modalBtn" data-bs-toggle="modal" data-bs-target="#modalAjouter" >
+      Ajouter produit
+    </button>
+  </div>
+  <div class="mainBottom p-4">
+    <table datatable [dtOptions]="dtOptions" class="table">
+      <thead>
+        <tr>
+          <th>Nom du produit</th>
+          <th>Quantité</th>
+          <th>Prix unitaire</th>
+          <th>Quantité seuil</th>
+          <th>Etat</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (item of dbProduit; track $index) {
+        <tr>
+          <td>{{ item.nom }}</td>
+          <td>{{ item.quantite }}</td>
+          <td>{{ item.prixUnitaire }}</td>
+          <td>{{ item.quantiteSeuil }}</td>
+          <td>
+            <span *ngIf="item.quantite <= 0" class="badge rounded-pill text-danger">Rupture de stock</span>
+            <span *ngIf="item.quantite > 0 && item.quantite <= 10"
+              class="badge rounded-pill text-warning">Niveau d'alerte</span>
+            <span *ngIf="item.quantite > 10" class="badge rounded-pill text-success p-2">En stock</span>
+          </td>
+          <td>
+            <button class="btn" data-bs-toggle="modal" data-bs-target="#voirDetail"><i
+                class="fa-solid fa-eye"></i></button>
+            <button class="btn" data-bs-toggle="modal" data-bs-target="#modifierProduit"><i
+                class="fa-solid fa-pen-to-square"></i></button>
+            <button class="btn"><i class="fa-solid fa-trash"></i></button>
+          </td>
+        </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</main>
+
+
+
+
+<!-- les Modals -->
+<div class="modal fade" id="modalAjouter" tabindex="-1" aria-labelledby="modalAjouterLabel" aria-hidden="true" data-bs-backdrop='static' >
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="modalAjouterLabel">Ajouter produit</h1>
+      </div>
+      <div class="modal-body p-4">
+        <form>
+          <div class="mb-3">
+            <label for="exampleInputEmail1" class="form-label">Nom du produit</label>
+            <input type="text" class="form-control" id="exampleInputEmail1" placeholder="Nom du produit">
+          </div>
+          <div class="mb-3">
+            <label for="exampleInputEmail1" class="form-label">Catégorie du produit</label>
+            <select class="form-select" aria-label="Small select example">
+              <option selected>veuillez selectionner la catégorie</option>
+              <option value="1">Outils</option>
+              <option value="2">Quincaillerie générale</option>
+              <option value="3">Éclairage</option>
+              <option value="3">Sécurité</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label for="exampleInputEmail1" class="form-label">Quantité</label>
+            <input type="number" class="form-control" id="exampleInputEmail1" placeholder="Nom du produit">
+          </div>
+          <div class="mb-3">
+            <label for="exampleInputEmail1" class="form-label">Quantité seuil</label>
+            <input type="number" class="form-control" id="exampleInputEmail1" placeholder="Nom du produit">
+          </div>
+          <div class="mb-3">
+            <label for="exampleInputEmail1" class="form-label">Image</label>
+            <input type="file" class="form-control" id="exampleInputEmail1" placeholder="Nom du produit">
+          </div>
+
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btnAnnuler" data-bs-dismiss="modal">Annuler</button>
+        <button type="button" class="btn">Ajouter</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" data-bs-backdrop='static' id="modifierProduit" tabindex="-1" aria-labelledby="modifierProduitLabel"
+  aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="modifierProduitLabel">Modifier produit</h1>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="mb-3">
+            <label for="exampleInputEmail1" class="form-label">Nom du produit</label>
+            <input type="text" class="form-control" id="exampleInputEmail1" placeholder="Nom du produit">
+          </div>
+          <div class="mb-3">
+            <label for="exampleInputEmail1" class="form-label">Catégorie du produit</label>
+            <select class="form-select" aria-label="Small select example">
+              <option selected>veuillez selectionner la catégorie</option>
+              <option value="1">Outils</option>
+              <option value="2">Quincaillerie générale</option>
+              <option value="3">Éclairage</option>
+              <option value="3">Sécurité</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label for="exampleInputEmail1" class="form-label">Quantité</label>
+            <input type="number" class="form-control" id="exampleInputEmail1" placeholder="Nom du produit">
+          </div>
+          <div class="mb-3">
+            <label for="exampleInputEmail1" class="form-label">Quantité seuil</label>
+            <input type="number" class="form-control" id="exampleInputEmail1" placeholder="Nom du produit">
+          </div>
+          <div class="mb-3">
+            <label for="exampleInputEmail1" class="form-label">Image</label>
+            <input type="file" class="form-control" id="exampleInputEmail1" placeholder="Nom du produit">
+          </div>
+
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btnAnnuler" data-bs-dismiss="modal">Annuler</button>
+        <button type="button" class="btn">Modifier</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" data-bs-backdrop='static' id="voirDetail" tabindex="-1" aria-labelledby="voirDetailLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="voirDetailLabel">Detail produit</h1>
+      </div>
+      <div class="modal-body">
+        <div class="modalBodyConatiner">
+          <div class="modalBodyConatinerLeft">
+            <img src="https://www.sococim.com/sites/default/files/styles/image_678x423/public/2022-08/CEM%20II%20B-LL%2032.5%20R%20CE%20-%20H423%20x%20L678_0.jpg?itok=A82vMEcs" alt="" >
+          </div>
+          <div class="modalBodyConatinerRight">
+            <div class="modalBodyConatinerRightItem py-5">
+              <div class="mb-4 ">
+                <label for="exampleInputEmail1" class="form-label">Nom du produit</label>
+                <h6>Ciment Sococim</h6>
+              </div>
+              <div class="mb-4 ">
+                <label for="exampleInputEmail1" class="form-label">Catégorie du produit</label>
+                <h6>Ciment</h6>
+              </div>
+              <div class="mb-4 ">
+                <label for="exampleInputEmail1" class="form-label">Quantité en stock</label>
+                <h6>150</h6>
+              </div>
+              <div class="mb-4 ">
+                <label for="exampleInputEmail1" class="form-label">Prix unitaire</label>
+                <h6>5000f CFA</h6>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btnAnnuler" data-bs-dismiss="modal">Fermer</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- les Modals -->

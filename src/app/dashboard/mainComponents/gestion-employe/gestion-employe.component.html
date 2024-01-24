@@ -1,0 +1,178 @@
+<main>
+  <div class="mainTop">
+    <h4>La liste des employés</h4>
+    <!-- Button trigger modal -->
+    <button type="button" class="btn mt-3 modalBtn" data-bs-toggle="modal" data-bs-target="#modalAjouter" >
+      Ajouter Employé
+    </button>
+  </div>
+  <div class="mainBottom p-4">
+    <table datatable [dtOptions]="dtOptions" class="table">
+      <thead class="table-secondary rounded-top-3">
+        <tr>
+          <th>Nom complet</th>
+          <th>Email</th>
+          <th>Addresse</th>
+          <th>Téléphone</th>
+          <th>Etat</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (item of dbEmployes; track $index) {
+        <tr>
+          <td>{{ item.nom + " "+ item.prenom }}</td>
+          <td>{{ item.email }}</td>
+          <td>{{ item.adresse }}</td>
+          <td>{{ item.telephone }}</td>
+          <td>
+            <span *ngIf="item.etat === 'Actif'" class="badge rounded-pill text-success">Actif</span>
+            <span *ngIf="item.etat === 'Inactif'"
+              class="badge rounded-pill text-danger">Inactif</span>
+          </td>
+          <td>
+            <button class="btn" data-bs-toggle="modal" data-bs-target="#voirDetail"><i
+                class="fa-solid fa-eye"></i></button>
+            <button class="btn" data-bs-toggle="modal" data-bs-target="#modifierProduit"><i
+                class="fa-solid fa-pen-to-square"></i></button>
+            <button class="btn"><i class="fa-solid fa-trash"></i></button>
+          </td>
+        </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</main>
+
+
+<!-- les Modals -->
+<div class="modal fade" id="modalAjouter" tabindex="-1" aria-labelledby="modalAjouterLabel" aria-hidden="true" data-bs-backdrop='static' >
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="modalAjouterLabel">Ajouter produit</h1>
+      </div>
+      <div class="modal-body p-4">
+        <form>
+          <div class="mb-3">
+            <label for="exampleInputEmail1" class="form-label">Nom du produit</label>
+            <input type="text" class="form-control" id="exampleInputEmail1" placeholder="Nom du produit">
+          </div>
+          <div class="mb-3">
+            <label for="exampleInputEmail1" class="form-label">Catégorie du produit</label>
+            <select class="form-select" aria-label="Small select example">
+              <option selected disabled>veuillez selectionner la catégorie</option>
+              <option value="1">Outils</option>
+              <option value="2">Quincaillerie générale</option>
+              <option value="3">Éclairage</option>
+              <option value="3">Sécurité</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label for="exampleInputEmail1" class="form-label">Quantité</label>
+            <input type="number" class="form-control" id="exampleInputEmail1" placeholder="Nom du produit">
+          </div>
+          <div class="mb-3">
+            <label for="exampleInputEmail1" class="form-label">Quantité seuil</label>
+            <input type="number" class="form-control" id="exampleInputEmail1" placeholder="Nom du produit">
+          </div>
+          <div class="mb-3">
+            <label for="exampleInputEmail1" class="form-label">Image</label>
+            <input type="file" class="form-control" id="exampleInputEmail1" placeholder="Nom du produit">
+          </div>
+
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btnAnnuler" data-bs-dismiss="modal">Annuler</button>
+        <button type="button" class="btn">Ajouter</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" data-bs-backdrop='static' id="modifierProduit" tabindex="-1" aria-labelledby="modifierProduitLabel"
+  aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="modifierProduitLabel">Modifier produit</h1>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="mb-3">
+            <label for="exampleInputEmail1" class="form-label">Nom du produit</label>
+            <input type="text" class="form-control" id="exampleInputEmail1" placeholder="Nom du produit">
+          </div>
+          <div class="mb-3">
+            <label for="exampleInputEmail1" class="form-label">Catégorie du produit</label>
+            <select class="form-select" aria-label="Small select example">
+              <option selected disabled>veuillez selectionner la catégorie</option>
+              <option value="1">Outils</option>
+              <option value="2">Quincaillerie générale</option>
+              <option value="3">Éclairage</option>
+              <option value="3">Sécurité</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label for="exampleInputEmail1" class="form-label">Quantité</label>
+            <input type="number" class="form-control" id="exampleInputEmail1" placeholder="Nom du produit">
+          </div>
+          <div class="mb-3">
+            <label for="exampleInputEmail1" class="form-label">Quantité seuil</label>
+            <input type="number" class="form-control" id="exampleInputEmail1" placeholder="Nom du produit">
+          </div>
+          <div class="mb-3">
+            <label for="exampleInputEmail1" class="form-label">Image</label>
+            <input type="file" class="form-control" id="exampleInputEmail1" placeholder="Nom du produit">
+          </div>
+
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btnAnnuler" data-bs-dismiss="modal">Annuler</button>
+        <button type="button" class="btn">Modifier</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" data-bs-backdrop='static' id="voirDetail" tabindex="-1" aria-labelledby="voirDetailLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="voirDetailLabel">Detail produit</h1>
+      </div>
+      <div class="modal-body modalContent">
+        <div class="modalContentTop">
+          <div class="modalContentTopImage">ee</div>
+          <div class="modalContentTopItems">
+            <div class="modalContentBottomItem">
+              <span class="fs-5 fw-bold">Nom complet</span>
+              <p class="fs-5">Moussa</p>
+            </div>
+            <div class="modalContentBottomItem">
+              <span class="fs-5 fw-bold">Email</span>
+              <p class="fs-5">Ndiaye</p>
+            </div>
+            <div class="modalContentBottomItem">
+              <span class="fs-5 fw-bold">Address</span>
+
+              <p class="fs-5">Yoff</p>
+            </div>
+            <div class="modalContentBottomItem">
+              <span class="fs-5 fw-bold">Numéro téléphone</span>
+              <p class="fs-5">771234567</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btnAnnuler" data-bs-dismiss="modal">Fermer</button>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- les Modals -->

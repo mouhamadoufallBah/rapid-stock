@@ -1,0 +1,57 @@
+<div class="mainContainer" [ngClass]="{'sidebar-reduced': toggleMenu}">
+
+  <aside>
+    <a routerLink="/dashboard" class="brand d-flex justify-content-center pt-2">
+      <img src="assets/RAPIDSTOCK.png" alt="" style="height: 100%;">
+    </a>
+    <nav class="d-flex justify-content-center">
+      <menu class="">
+        <ul class="list-unstyled">
+          @for (item of filteredSidebarItems(); track $index) {
+          <li class="mb-3">
+            <i [class]=item.icon></i>
+            <a routerLink="{{ item.lien }}" routerLinkActive="activeMenu">{{ item.title }}</a>
+          </li>
+          }
+        </ul>
+      </menu>
+    </nav>
+    <div class="sidebarBottom">
+      <div class="sidebarBottomLeft">
+        <div class="sidebarBottomLeftImage">
+          <img
+            src="https://img.freepik.com/photos-gratuite/homme-latin-souriant-maquette-psd-expression-joyeuse-closeup-portrai_53876-145665.jpg?size=626&ext=jpg&ga=GA1.1.1920336883.1697903598&semt=sph"
+            alt="">
+        </div>
+        <div class="sidebarBottomLeftInfo">
+          <div class="h-50">
+            <p class="fw-bold">{{ userConnected.prenom + " " + userConnected.nom }}</p>
+            <p class="fw-lighter">{{ userConnected.role_id | roleIdToroleName: roles}}</p>
+          </div>
+        </div>
+      </div>
+      <div class="sidebarBottomRight">
+        <svg (click)="logout()" xmlns="http://www.w3.org/2000/svg" width="33" height="32" viewBox="0 0 33 32" fill="none">
+          <path
+            d="M29.5433 24.1861H26.901C26.7206 24.1861 26.5514 24.2642 26.4387 24.4019C26.1756 24.7182 25.8937 25.0233 25.5967 25.3135C24.3823 26.517 22.9438 27.476 21.3608 28.1377C19.7208 28.8234 17.9581 29.1752 16.1778 29.1721C14.3774 29.1721 12.6334 28.8223 10.9947 28.1377C9.41167 27.476 7.97318 26.517 6.75876 25.3135C5.54216 24.1141 4.57208 22.6925 3.90224 21.1275C3.2069 19.5051 2.85736 17.7824 2.85736 16C2.85736 14.2177 3.21066 12.4949 3.90224 10.8726C4.57127 9.30609 5.53346 7.89586 6.75876 6.68656C7.98405 5.47726 9.40856 4.5247 10.9947 3.86238C12.6334 3.17773 14.3774 2.82796 16.1778 2.82796C17.9781 2.82796 19.7221 3.174 21.3608 3.86238C22.947 4.5247 24.3715 5.47726 25.5967 6.68656C25.8937 6.98051 26.1718 7.28562 26.4387 7.59818C26.5514 7.73586 26.7243 7.814 26.901 7.814H29.5433C29.78 7.814 29.9266 7.55353 29.7951 7.35632C26.9123 2.92098 21.8682 -0.0148274 16.1364 5.63298e-05C7.13086 0.0223819 -0.0893698 7.25958 0.000836112 16.1637C0.091042 24.9265 7.29999 32 16.1778 32C21.8946 32 26.916 29.0679 29.7951 24.6437C29.9229 24.4465 29.78 24.1861 29.5433 24.1861ZM32.8846 15.7656L27.5512 11.5982C27.352 11.4419 27.0626 11.5833 27.0626 11.8326V14.6605H15.2607C15.0953 14.6605 14.96 14.7944 14.96 14.9582V17.0419C14.96 17.2056 15.0953 17.3396 15.2607 17.3396H27.0626V20.1675C27.0626 20.4168 27.3558 20.5582 27.5512 20.4019L32.8846 16.2344C32.9206 16.2066 32.9496 16.171 32.9696 16.1304C32.9896 16.0898 33 16.0452 33 16C33 15.9548 32.9896 15.9103 32.9696 15.8696C32.9496 15.829 32.9206 15.7935 32.8846 15.7656Z" />
+        </svg>
+      </div>
+    </div>
+  </aside>
+
+  <main class="">
+    <div class="content">
+      <header class="d-flex justify-content-between align-items-center">
+        <div class="menuTogler" (click)="onToggleMenu()"><i class="bi bi-list "></i></div>
+        <a routerLink="./profile" class="profil"><img
+            src="https://img.freepik.com/photos-gratuite/homme-latin-souriant-maquette-psd-expression-joyeuse-closeup-portrai_53876-145665.jpg?size=626&ext=jpg&ga=GA1.1.1920336883.1697903598&semt=sph"
+            alt="">
+        </a>
+      </header>
+      <div class="dynamicContent p-5 pb-5">
+        <router-outlet></router-outlet>
+      </div>
+    </div>
+  </main>
+
+</div>

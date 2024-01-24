@@ -1,0 +1,25 @@
+<main>
+  <div class="mainContent">
+      <div class="mainContentImage">
+        <img src="" alt="">
+      </div>
+      <div class="mainContentForm">
+        <div class="mainContentFormContainer container">
+          <h3>Se connecter</h3>
+          <form action="#" class="signin-form mt-3">
+            <div class="form-group mb-3">
+              <label class="label" for="email">Email</label>
+              <input type="mail" class="form-control" id="email" placeholder="Veuillez entrer le email" name="email" [(ngModel)]="email" required>
+            </div>
+            <div class="form-group mb-3">
+              <label class="label" for="password">Mot de passe</label>
+              <input type="password" class="form-control" placeholder="Veuillez entrer votre mot de passe" name="email" id="email" [(ngModel)]="password" required>
+            </div>
+            <div class="form-group">
+              <button type="submit" class="form-control btn rounded submit px-3 mt-3" (click)="onLogin()">Connexion</button>
+            </div>
+          </form>
+        </div>
+      </div>
+  </div>
+</main>
