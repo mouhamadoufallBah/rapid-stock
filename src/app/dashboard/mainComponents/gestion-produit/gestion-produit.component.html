@@ -26,10 +26,10 @@
           <td>{{ item.prixUnitaire }}</td>
           <td>{{ item.quantiteSeuil }}</td>
           <td>
-            <span *ngIf="item.quantite <= 0" class="badge rounded-pill text-danger">Rupture de stock</span>
+            <span *ngIf="item.quantite <= 0" class="badge rounded-pill bg-danger-subtle text-danger px-3">Rupture de stock</span>
             <span *ngIf="item.quantite > 0 && item.quantite <= 10"
-              class="badge rounded-pill text-warning">Niveau d'alerte</span>
-            <span *ngIf="item.quantite > 10" class="badge rounded-pill text-success p-2">En stock</span>
+              class="badge rounded-pill bg-warning-subtle text-warning px-3">Niveau d'alerte</span>
+            <span *ngIf="item.quantite > 10" class="badge rounded-pill bg-success-subtle text-success px-3">En stock</span>
           </td>
           <td>
             <button class="btn" data-bs-toggle="modal" data-bs-target="#voirDetail"><i

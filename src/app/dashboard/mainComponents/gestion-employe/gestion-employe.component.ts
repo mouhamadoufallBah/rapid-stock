@@ -2,37 +2,36 @@ import { Component, OnInit } from '@angular/core';
 import { DataTablesModule } from 'angular-datatables';
 import { DatatableService } from '../../../services/datatable.service';
 import { NgIf } from '@angular/common';
+import { AuthService } from '../../../services/users/auth.service';
+import Notiflix from 'notiflix';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-gestion-employe',
   standalone: true,
-  imports: [DataTablesModule, NgIf],
+  imports: [DataTablesModule, FormsModule, NgIf],
   templateUrl: './gestion-employe.component.html',
   styleUrl: './gestion-employe.component.scss'
 })
 export class GestionEmployeComponent implements OnInit{
-  dbEmployes = [
-    { id: 1, nom: "Dupont", prenom: "Jean", email: "jean.dupont@email.com", telephone: "0123456789", adresse: "123 Rue de l'Entreprise", etat: "Actif" },
-    { id: 2, nom: "Martin", prenom: "Sophie", email: "sophie.martin@email.com", telephone: "0987654321", adresse: "456 Avenue du Travail", etat: "Inactif" },
-    { id: 3, nom: "Tremblay", prenom: "Pierre", email: "pierre.tremblay@email.com", telephone: "0123456789", adresse: "789 Boulevard de la Compagnie", etat: "Actif" },
-    { id: 4, nom: "Lavoie", prenom: "Isabelle", email: "isabelle.lavoie@email.com", telephone: "0987654321", adresse: "101 Rue de l'Industrie", etat: "Actif" },
-    { id: 5, nom: "Gagnon", prenom: "Marc", email: "marc.gagnon@email.com", telephone: "0123456789", adresse: "202 Avenue de la Société", etat: "Inactif" },
-    { id: 6, nom: "Leclerc", prenom: "Marie", email: "marie.leclerc@email.com", telephone: "0987654321", adresse: "303 Boulevard des Employés", etat: "Actif" },
-    { id: 7, nom: "Roy", prenom: "Philippe", email: "philippe.roy@email.com", telephone: "0123456789", adresse: "404 Rue du Bureau", etat: "Actif" },
-    { id: 8, nom: "Fortin", prenom: "Nathalie", email: "nathalie.fortin@email.com", telephone: "0987654321", adresse: "505 Avenue des Collègues", etat: "Inactif" },
-    { id: 9, nom: "Bergeron", prenom: "Robert", email: "robert.bergeron@email.com", telephone: "0123456789", adresse: "606 Boulevard de la Direction", etat: "Actif" },
-    { id: 10, nom: "Lévesque", prenom: "Catherine", email: "catherine.levesque@email.com", telephone: "0987654321", adresse: "707 Rue du Personnel", etat: "Actif" },
-    { id: 11, nom: "Caron", prenom: "François", email: "francois.caron@email.com", telephone: "0123456789", adresse: "808 Avenue de la Gestion", etat: "Inactif" },
-    { id: 12, nom: "Gauthier", prenom: "Annie", email: "annie.gauthier@email.com", telephone: "0987654321", adresse: "909 Boulevard des Ressources", etat: "Actif" },
-    { id: 13, nom: "Dubé", prenom: "Mathieu", email: "mathieu.dube@email.com", telephone: "0123456789", adresse: "111 Rue de l'Administration", etat: "Actif" },
-    { id: 14, nom: "Côté", prenom: "Mélanie", email: "melanie.cote@email.com", telephone: "0987654321", adresse: "222 Avenue des Collaborateurs", etat: "Inactif" },
-    { id: 15, nom: "Rousseau", prenom: "Julie", email: "julie.rousseau@email.com", telephone: "0123456789", adresse: "333 Boulevard du Personnel", etat: "Actif" }
-  ];
+  employe = [];
+
+
+  nomAdd: string = "";
+  prenomAdd: string = "";
+  emailAdd: string = "";
+  telephoneAdd: string = "";
+  adresseAdd: string = "";
+
+  nomUpdate: string = "";
+  prenomUpdate: string = "";
+  emailUpdate: string = "";
+  telephoneUpdate: string = "";
+  adresseUpdate: string = "";
 
   dtOptions: DataTables.Settings = {};
 
-
-  constructor(private dt: DatatableService){}
+  constructor(private authService: AuthService){}
 
   ngOnInit(): void {
     this.dtOptions = {
@@ -46,5 +45,78 @@ export class GestionEmployeComponent implements OnInit{
       }
     };
 
+    this.getAllEmploye();
+  }
+
+
+  getAllEmploye(){
+    Notiflix.Loading.init({
+      svgColor: '#f47a20',
+      cssAnimation: true,
+      cssAnimationDuration: 360,
+    });
+
+    Notiflix.Loading.hourglass();
+    this.authService.getAllEmploye().subscribe(
+      (data: any) =>{
+        this.employe = data.data;
+        console.log(this.employe);
+
+        Notiflix.Loading.remove();
+      },
+      (error) => {
+        console.error('Erreur lors de la récupération des employée', error);
+      }
+    )
+  }
+
+  onAddEmploye() {
+    const data: any = {
+      nom: this.nomAdd,
+      prenom: this.prenomAdd,
+      email: this.emailAdd,
+      password: "passer@123",
+      telephone: `+221${this.telephoneAdd}`,
+      etat: "actif",
+      adresse: this.adresseAdd,
+      role_id: 2
+    };
+
+    if (!this.nomAdd || !this.prenomAdd || !this.telephoneAdd || !this.adresseAdd || !this.emailAdd) {
+      Notiflix.Report.failure('Veuillez remplir le champs', '', 'Okay');
+    } else {
+      Notiflix.Loading.init({
+        svgColor: '#f47a20',
+        cssAnimation: true,
+        cssAnimationDuration: 360,
+
+      });
+      Notiflix.Loading.hourglass();
+      this.authService.addEmploye(data).subscribe(
+        () => {
+          Notiflix.Report.init({
+            cssAnimation: true,
+            cssAnimationDuration: 360,
+            cssAnimationStyle: 'zoom',
+          });
+
+          Notiflix.Report.success('Employé ajoutée avec succès', '', 'Okay');
+          this.getAllEmploye();
+          console.log(this.employe);
+
+          Notiflix.Loading.remove();
+          this.nomAdd = "";
+          this.prenomAdd = "";
+          this.emailAdd = "";
+          this.telephoneAdd = "";
+          this.adresseAdd = "";
+        },
+        (error) => {
+          console.error('Erreur lors de l\'ajout de l\'employé', error);
+          Notiflix.Report.failure('Une erreur s\'est produite lors de l\'ajout de l\'employé', '', 'Okay');
+          Notiflix.Loading.remove();
+        }
+      );
+    }
   }
 }

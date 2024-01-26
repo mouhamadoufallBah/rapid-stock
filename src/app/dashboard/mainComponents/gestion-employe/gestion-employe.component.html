@@ -2,11 +2,12 @@
   <div class="mainTop">
     <h4>La liste des employés</h4>
     <!-- Button trigger modal -->
-    <button type="button" class="btn mt-3 modalBtn" data-bs-toggle="modal" data-bs-target="#modalAjouter" >
+    <button type="button" class="btn mt-3 modalBtn" data-bs-toggle="modal" data-bs-target="#modalAjouter">
       Ajouter Employé
     </button>
   </div>
   <div class="mainBottom p-4">
+    @if (employe.length>0){
     <table datatable [dtOptions]="dtOptions" class="table">
       <thead class="table-secondary rounded-top-3">
         <tr>
@@ -19,16 +20,15 @@
         </tr>
       </thead>
       <tbody>
-        @for (item of dbEmployes; track $index) {
+        @for (item of employe; track $index) {
         <tr>
           <td>{{ item.nom + " "+ item.prenom }}</td>
           <td>{{ item.email }}</td>
           <td>{{ item.adresse }}</td>
           <td>{{ item.telephone }}</td>
           <td>
-            <span *ngIf="item.etat === 'Actif'" class="badge rounded-pill text-success">Actif</span>
-            <span *ngIf="item.etat === 'Inactif'"
-              class="badge rounded-pill text-danger">Inactif</span>
+            <span *ngIf="item.etat === 'actif'" class="badge rounded-pill bg-success-subtle text-success px-3">Actif</span>
+            <span *ngIf="item.etat === 'inactif'" class="badge rounded-pill bg-danger-subtle text-danger px-3">Inactif</span>
           </td>
           <td>
             <button class="btn" data-bs-toggle="modal" data-bs-target="#voirDetail"><i
@@ -41,12 +41,14 @@
         }
       </tbody>
     </table>
+    }
   </div>
 </main>
 
 
 <!-- les Modals -->
-<div class="modal fade" id="modalAjouter" tabindex="-1" aria-labelledby="modalAjouterLabel" aria-hidden="true" data-bs-backdrop='static' >
+<div class="modal fade" id="modalAjouter" tabindex="-1" aria-labelledby="modalAjouterLabel" aria-hidden="true"
+  data-bs-backdrop='static'>
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -55,44 +57,43 @@
       <div class="modal-body p-4">
         <form>
           <div class="mb-3">
-            <label for="exampleInputEmail1" class="form-label">Nom du produit</label>
-            <input type="text" class="form-control" id="exampleInputEmail1" placeholder="Nom du produit">
+            <label for="nomAdd" class="form-label">Nom</label>
+            <input type="text" class="form-control" id="nomAdd" name="nomAdd" placeholder="Nom de l'employé"
+              [(ngModel)]="nomAdd">
           </div>
           <div class="mb-3">
-            <label for="exampleInputEmail1" class="form-label">Catégorie du produit</label>
-            <select class="form-select" aria-label="Small select example">
-              <option selected disabled>veuillez selectionner la catégorie</option>
-              <option value="1">Outils</option>
-              <option value="2">Quincaillerie générale</option>
-              <option value="3">Éclairage</option>
-              <option value="3">Sécurité</option>
-            </select>
+            <label for="prenomAdd" class="form-label">Prénom</label>
+            <input type="text" class="form-control" id="prenomAdd" name="prenomAdd" placeholder="Prénom de l'employé"
+              [(ngModel)]="prenomAdd">
           </div>
           <div class="mb-3">
-            <label for="exampleInputEmail1" class="form-label">Quantité</label>
-            <input type="number" class="form-control" id="exampleInputEmail1" placeholder="Nom du produit">
+            <label for="emailAdd" class="form-label">Email</label>
+            <input type="text" class="form-control" id="emailAdd" name="emailAdd" placeholder="Prénom de l'employé"
+              [(ngModel)]="emailAdd">
           </div>
           <div class="mb-3">
-            <label for="exampleInputEmail1" class="form-label">Quantité seuil</label>
-            <input type="number" class="form-control" id="exampleInputEmail1" placeholder="Nom du produit">
+            <label for="telephoneAdd" class="form-label">Téléphone</label>
+            <input type="tel" class="form-control" id="telephoneAdd" name="telephoneAdd"
+              placeholder="Numéro téléphone de l'employé" [(ngModel)]="telephoneAdd">
           </div>
           <div class="mb-3">
-            <label for="exampleInputEmail1" class="form-label">Image</label>
-            <input type="file" class="form-control" id="exampleInputEmail1" placeholder="Nom du produit">
+            <label for="adresseAdd" class="form-label">Adresse</label>
+            <input type="text" class="form-control" id="adresseAdd" name="adresseAdd" placeholder="Adresse de l'employé"
+              [(ngModel)]="adresseAdd">
           </div>
 
         </form>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btnAnnuler" data-bs-dismiss="modal">Annuler</button>
-        <button type="button" class="btn">Ajouter</button>
+        <button type="button" class="btn" (click)="onAddEmploye()" data-bs-dismiss="modal">Ajouter</button>
       </div>
     </div>
   </div>
 </div>
 
-<div class="modal fade" data-bs-backdrop='static' id="modifierProduit" tabindex="-1" aria-labelledby="modifierProduitLabel"
-  aria-hidden="true">
+<div class="modal fade" data-bs-backdrop='static' id="modifierProduit" tabindex="-1"
+  aria-labelledby="modifierProduitLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -137,7 +138,8 @@
   </div>
 </div>
 
-<div class="modal fade" data-bs-backdrop='static' id="voirDetail" tabindex="-1" aria-labelledby="voirDetailLabel" aria-hidden="true">
+<div class="modal fade" data-bs-backdrop='static' id="voirDetail" tabindex="-1" aria-labelledby="voirDetailLabel"
+  aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">

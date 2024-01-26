@@ -12,6 +12,8 @@ import { DatatableService } from '../../../services/datatable.service';
 })
 export class GestionProduitComponent implements OnInit {
 
+  produits: [];
+
   dbProduit = [
     { id: 1, nom: "Clé à molette", categorie: "Outils", quantite: 50, prixUnitaire: 10.99, quantiteSeuil: 10, etat: "En stock", image: "url_de_l_image1" },
     { id: 2, nom: "Vis à bois", categorie: "Quincaillerie générale", quantite: 150, prixUnitaire: 0.05, quantiteSeuil: 10, etat: "En stock", image: "url_de_l_image2" },
@@ -45,6 +47,10 @@ export class GestionProduitComponent implements OnInit {
         url: 'https://cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/French.json',
       }
     };
+  }
+
+  getAllProducts(){
+    
   }
 
 }

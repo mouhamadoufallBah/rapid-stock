@@ -15,24 +15,15 @@ export class CategorieService {
     return this.http.get<any[]>(`${api}/categorie/lister`)
   }
 
-  addCategory(nom: string): Observable<any> {
-    const data = {
-      nom: nom
-    };
-
+  addCategory(data: any): Observable<any> {
     return this.http.post<Category>(`${api}/categorie/create`, data);
   }
 
-  updateCategory(nom: string, id: number): Observable<any> {
-    const data: any = {
-      nom: nom
-    };
-
+  updateCategory(data: any, id: number): Observable<any> {
     return this.http.put<any>(`${api}/categorie/edit/${id}`, data);
   }
 
-
-  deleteCategorie(id: number): Observable<any> {
+  deleteCategory(id: number): Observable<any> {
     return this.http.delete(`${api}/categorie/supprimer/${id}`);
   }
 }

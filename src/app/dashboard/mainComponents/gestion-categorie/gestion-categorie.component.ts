@@ -5,8 +5,6 @@ import Notiflix from 'notiflix';
 import { CategorieService } from '../../../services/categorie/categorie.service';
 import { Category } from '../../../models/category';
 
-// import { Loading } from 'notiflix/build/notiflix-loading-aio';
-
 @Component({
   selector: 'app-gestion-categorie',
   standalone: true,
@@ -63,7 +61,10 @@ export class GestionCategorieComponent implements OnInit {
   }
 
   onAddCategorie() {
-    if (this.nomCategory === "") {
+    const data = {
+      nom: this.nomCategory
+    }
+    if (!this.nomCategory) {
       Notiflix.Report.failure('Veuillez remplir le champs', '', 'Okay');
     } else {
       Notiflix.Loading.init({
@@ -73,7 +74,7 @@ export class GestionCategorieComponent implements OnInit {
 
       });
       Notiflix.Loading.hourglass();
-      this.categoryService.addCategory(this.nomCategory).subscribe(
+      this.categoryService.addCategory(data).subscribe(
         () => {
           Notiflix.Report.init({
             cssAnimation: true,
@@ -96,29 +97,39 @@ export class GestionCategorieComponent implements OnInit {
 
   onSelectCategorie(id: number) {
     this.selectedCategory = this.categories.find((category: any) => category.id === id);
-    this.nomCategoryUpdate = this.selectedCategory.nom
-    console.log(this.nomCategoryUpdate);
-
+    if(this.selectedCategory){
+      ({
+        nom : this.nomCategoryUpdate
+      } = this.selectedCategory)
+    }
   }
 
   onUpdateCategorie(id: number) {
-    Notiflix.Loading.init({
-      svgColor: '#f47a20',
-    });
-    Notiflix.Loading.hourglass();
+    const data = {
+      nom: this.nomCategoryUpdate
+    }
 
-    this.categoryService.updateCategory(this.nomCategoryUpdate, id).subscribe(
-      (data: Category) => {
-        Notiflix.Report.success('Catégorie mise à jour avec succès', '', 'Okay');
-        this.getAllCategories();
-        Notiflix.Loading.remove();
-        this.nomCategoryUpdate = "";
-      },
-      (error) => {
-        console.error('Erreur lors de la mise à jour de la catégorie', error);
-        const errorMessage = error.error && error.error.errors ? error.error.errors.nom[0] : 'Une erreur s\'est produite lors de la mise à jour de la catégorie';
-        Notiflix.Report.failure('Erreur lors de la mise à jour de la catégorie', '', 'Okay');
+    if (!this.nomCategoryUpdate) {
+      Notiflix.Report.failure('Veuillez remplir le champs', '', 'Okay');
+    } else {
+      Notiflix.Loading.init({
+        svgColor: '#f47a20',
       });
+      Notiflix.Loading.hourglass();
+
+      this.categoryService.updateCategory(data, id).subscribe(
+        (data: Category) => {
+          Notiflix.Report.success('Catégorie mise à jour avec succès', '', 'Okay');
+          this.getAllCategories();
+          Notiflix.Loading.remove();
+          this.nomCategoryUpdate = "";
+        },
+        (error) => {
+          console.error('Erreur lors de la mise à jour de la catégorie', error);
+          const errorMessage = error.error && error.error.errors ? error.error.errors.nom[0] : 'Une erreur s\'est produite lors de la mise à jour de la catégorie';
+          Notiflix.Report.failure('Erreur lors de la mise à jour de la catégorie', '', 'Okay');
+        });
+    }
   }
 
   onDeleteCategorie(id: number) {
@@ -137,7 +148,7 @@ export class GestionCategorieComponent implements OnInit {
         });
         Notiflix.Loading.hourglass();
 
-        this.categoryService.deleteCategorie(id).subscribe(
+        this.categoryService.deleteCategory(id).subscribe(
           (response) => {
             console.log()
             Notiflix.Loading.remove();

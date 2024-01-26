@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs'
+import { Observable, of } from 'rxjs'
 import { api } from '../../shared/apiUrl';
 
 @Injectable({
@@ -10,35 +10,33 @@ export class AuthService {
 
 
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
-  login(email: string, motDePasse: string): Observable<any> {
-    const data = {
-      email: email,
-      password: motDePasse
-    };
+  addEmploye(data: string): Observable<any> {
+    return this.http.post<any>(`${api}/register`, data);
+  }
 
+  login(email: string, password: string): Observable<any> {
+    const data = { email, password };
     return this.http.post<any>(`${api}/login`, data);
   }
 
+  updateEmploye(data: any, id: number): Observable<any> {
+    return this.http.put<any>(`${api}/client/edit/${id}`, data);
+  }
+
+  getAllEmploye(): Observable<any[]> {
+    return this.http.get<any[]>(`${api}/employe/lister`)
+  }
 
   logout(): Observable<any> {
     const accessToken = localStorage.getItem('access_token');
 
-    if (accessToken) {
-      // Ajouter le token d'accès aux en-têtes
-      const headers = new HttpHeaders({
-        'Authorization': `Bearer ${accessToken}`
-      });
-
-      console.log(headers)
-      return this.http.post(`${api}/logout`, {}, { headers });
-    } else {
-      console.error('Token d\'accès introuvable lors de la déconnexion');
-      return new Observable();
-    }
-
-
+    return accessToken ?
+      this.http.post<any>(`${api}/logout`, {}, {
+        headers: new HttpHeaders({ 'Authorization': `Bearer ${accessToken}` })
+      }) :
+      of(null); // Emit a null value if no token is found
   }
 
 }

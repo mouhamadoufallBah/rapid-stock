@@ -27,10 +27,6 @@ main {
             button {
               color: #f47a20;
             }
-
-            span{
-              width: 115px;
-            }
           }
         }
       }
@@ -52,9 +48,7 @@ main {
 }
 
 .modal {
-
   .modal-body {
-
     .modalBodyConatiner {
       // background-color: red;
       height: 400px;
@@ -62,69 +56,63 @@ main {
       grid-template-columns: 45% 53%;
       justify-content: space-between;
 
-      .modalBodyConatinerLeft{
+      .modalBodyConatinerLeft {
         // border: 1px solid;
         display: flex;
         justify-content: center;
         align-items: center;
 
-        img{
+        img {
           height: 90%;
           width: 90%;
           object-fit: cover;
-          box-shadow: 0px 0px 30px 16px rgba(0,0,0,0.05);
+          box-shadow: 0px 0px 30px 16px rgba(0, 0, 0, 0.05);
         }
       }
 
-      .modalBodyConatinerRight{
+      .modalBodyConatinerRight {
         // border: 1px solid;
         display: flex;
         justify-content: center;
         align-items: center;
 
-
-        .modalBodyConatinerRightItem{
+        .modalBodyConatinerRightItem {
           height: 90%;
           width: 90%;
           // border: 1px solid;
 
-          label{
+          label {
             color: #f47a20;
             font-size: 1.2em;
             font-weight: bold;
           }
         }
-
       }
     }
 
-
-    form{
-
-      label{
+    form {
+      label {
         font-weight: bold;
         color: #f47a20;
       }
 
-      input{
+      input {
         border: none;
         border-radius: 0;
         border-bottom: 2px solid #f47a20;
         padding-left: 0;
 
-        &::placeholder{
-          color: rgba(0, 0, 0, 0.335) ;
+        &::placeholder {
+          color: rgba(0, 0, 0, 0.335);
         }
       }
 
-
-      select{
+      select {
         border: none;
         border-radius: 0;
         border-bottom: 2px solid #f47a20;
         padding-left: 0;
       }
     }
-
   }
 }

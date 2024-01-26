@@ -1,36 +1,34 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { DatatableService } from '../../../services/datatable.service';
 import { DataTablesModule } from 'angular-datatables';
+import Notiflix from 'notiflix';
+import { ClientService } from '../../../services/client/client.service';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-gestion-client',
   standalone: true,
-  imports: [DataTablesModule],
+  imports: [DataTablesModule, FormsModule],
   templateUrl: './gestion-client.component.html',
   styleUrl: './gestion-client.component.scss'
 })
-export class GestionClientComponent {
-  dbEmployes = [
-    { id: 1, nom: "Dupont", prenom: "Jean", email: "jean.dupont@email.com", telephone: "0123456789", adresse: "123 Rue de l'Entreprise", etat: "Actif" },
-    { id: 2, nom: "Martin", prenom: "Sophie", email: "sophie.martin@email.com", telephone: "0987654321", adresse: "456 Avenue du Travail", etat: "Inactif" },
-    { id: 3, nom: "Tremblay", prenom: "Pierre", email: "pierre.tremblay@email.com", telephone: "0123456789", adresse: "789 Boulevard de la Compagnie", etat: "Actif" },
-    { id: 4, nom: "Lavoie", prenom: "Isabelle", email: "isabelle.lavoie@email.com", telephone: "0987654321", adresse: "101 Rue de l'Industrie", etat: "Actif" },
-    { id: 5, nom: "Gagnon", prenom: "Marc", email: "marc.gagnon@email.com", telephone: "0123456789", adresse: "202 Avenue de la Société", etat: "Inactif" },
-    { id: 6, nom: "Leclerc", prenom: "Marie", email: "marie.leclerc@email.com", telephone: "0987654321", adresse: "303 Boulevard des Employés", etat: "Actif" },
-    { id: 7, nom: "Roy", prenom: "Philippe", email: "philippe.roy@email.com", telephone: "0123456789", adresse: "404 Rue du Bureau", etat: "Actif" },
-    { id: 8, nom: "Fortin", prenom: "Nathalie", email: "nathalie.fortin@email.com", telephone: "0987654321", adresse: "505 Avenue des Collègues", etat: "Inactif" },
-    { id: 9, nom: "Bergeron", prenom: "Robert", email: "robert.bergeron@email.com", telephone: "0123456789", adresse: "606 Boulevard de la Direction", etat: "Actif" },
-    { id: 10, nom: "Lévesque", prenom: "Catherine", email: "catherine.levesque@email.com", telephone: "0987654321", adresse: "707 Rue du Personnel", etat: "Actif" },
-    { id: 11, nom: "Caron", prenom: "François", email: "francois.caron@email.com", telephone: "0123456789", adresse: "808 Avenue de la Gestion", etat: "Inactif" },
-    { id: 12, nom: "Gauthier", prenom: "Annie", email: "annie.gauthier@email.com", telephone: "0987654321", adresse: "909 Boulevard des Ressources", etat: "Actif" },
-    { id: 13, nom: "Dubé", prenom: "Mathieu", email: "mathieu.dube@email.com", telephone: "0123456789", adresse: "111 Rue de l'Administration", etat: "Actif" },
-    { id: 14, nom: "Côté", prenom: "Mélanie", email: "melanie.cote@email.com", telephone: "0987654321", adresse: "222 Avenue des Collaborateurs", etat: "Inactif" },
-    { id: 15, nom: "Rousseau", prenom: "Julie", email: "julie.rousseau@email.com", telephone: "0123456789", adresse: "333 Boulevard du Personnel", etat: "Actif" }
-  ];
+export class GestionClientComponent implements OnInit {
+  clients = [];
+  selectedClient: any;
+
+  nomAdd: string = "";
+  prenomAdd: string = "";
+  telephoneAdd: string = "";
+  adresseAdd: string = "";
+
+  nomUpdate: string = "";
+  prenomUpdate: string = "";
+  telephoneUpdate: string = "";
+  adresseUpdate: string = "";
 
   dtOptions: DataTables.Settings = {};
 
-  constructor(private dt: DatatableService){}
+  constructor(private clientService: ClientService) { }
 
   ngOnInit(): void {
     this.dtOptions = {
@@ -41,7 +39,161 @@ export class GestionClientComponent {
       pageLength: 9,
       language: {
         url: 'https://cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/French.json',
-      }
+      },
+      autoWidth: true,
     };
+
+    this.getAllClients();
+  }
+
+  getAllClients() {
+    Notiflix.Loading.init({
+      svgColor: '#f47a20',
+      cssAnimation: true,
+      cssAnimationDuration: 360,
+    });
+
+    Notiflix.Loading.hourglass();
+
+    this.clientService.getAllClient().subscribe(
+      (data: any) => {
+        this.clients = data.data;
+
+        Notiflix.Loading.remove();
+      },
+      (error) => {
+        console.error('Erreur lors de la récupération des clients', error);
+      }
+    );
+  }
+
+  onAddClient() {
+    const lastCodeClient = this.clients[this.clients.length - 1].code_client.slice(2);
+    let nombre = parseInt(lastCodeClient);
+    nombre++;
+    const newCode_client = `C${nombre.toString().padStart(5, '0')}`;
+
+    const data: any = {
+      nom: this.nomAdd,
+      prenom: this.prenomAdd,
+      code_client: newCode_client,
+      telephone: `+221${this.telephoneAdd}`,
+      adresse: this.adresseAdd
+    };
+
+    if (this.nomAdd === "", this.prenomAdd === "", this.telephoneAdd === "", this.adresseAdd === "") {
+      Notiflix.Report.failure('Veuillez remplir le champs', '', 'Okay');
+    } else {
+      Notiflix.Loading.init({
+        svgColor: '#f47a20',
+        cssAnimation: true,
+        cssAnimationDuration: 360,
+
+      });
+      Notiflix.Loading.hourglass();
+      this.clientService.addClient(data).subscribe(
+        () => {
+          Notiflix.Report.init({
+            cssAnimation: true,
+            cssAnimationDuration: 360,
+            cssAnimationStyle: 'zoom',
+          });
+
+          Notiflix.Report.success('Client ajoutée avec succès', '', 'Okay');
+          this.getAllClients();
+          console.log(this.clients);
+
+          Notiflix.Loading.remove();
+          this.nomAdd = "";
+          this.prenomAdd = "";
+          this.telephoneAdd = "";
+          this.adresseAdd = "";
+        },
+        (error) => {
+          console.error('Erreur lors de l\'ajout du client', error);
+          Notiflix.Report.failure('Une erreur s\'est produite lors de l\'ajout du client', '', 'Okay');
+          Notiflix.Loading.remove();
+        }
+      );
+    }
+  }
+
+  onSelectedClient(id: number) {
+    this.selectedClient = this.clients.find((category: any) => category.id === id);
+    if (this.selectedClient) {
+      ({
+        nom: this.nomUpdate,
+        prenom: this.prenomUpdate,
+        telephone: this.telephoneUpdate,
+        adresse: this.adresseUpdate
+      } = this.selectedClient);
+    }
+  }
+
+  onUpdateClient(id: number) {
+    const data = {
+      nom: this.nomUpdate,
+      prenom: this.prenomUpdate,
+      code_client: this.selectedClient.code_client,
+      telephone: this.telephoneUpdate,
+      adresse: this.adresseUpdate
+    };
+
+    // Combine multiple conditions for conciseness
+    if (!data.nom || !data.prenom || !data.telephone || !data.adresse) {
+      Notiflix.Report.failure('Veuillez remplir tous les champs', '', 'Okay');
+      return;
+    }
+
+    //update
+    Notiflix.Loading.hourglass(); // Show loading indicator directly
+    this.clientService.updateClient(data, id).subscribe({
+      next: () => {
+        Notiflix.Report.success('Client modifié avec succès', '', 'Okay');
+        this.getAllClients();
+        Notiflix.Loading.remove();
+      },
+      error: (error) => {
+        console.error('Erreur lors de la modification du client', error);
+        Notiflix.Report.failure('Une erreur s\'est produite lors de la modification du client', '', 'Okay');
+        Notiflix.Loading.remove();
+      }
+    });
+  }
+
+  onDeleteClient(id: number) {
+    Notiflix.Confirm.init({
+      okButtonBackground: '#FF1700',
+      titleColor: '#FF1700'
+    });
+    Notiflix.Confirm.show(
+      'Attention',
+      'Voulez-vous supprimer cette client?',
+      'Oui',
+      'Non',
+      () => {
+        Notiflix.Loading.init({
+          svgColor: '#f47a20',
+        });
+        Notiflix.Loading.hourglass();
+
+        this.clientService.deleteClient(id).subscribe(
+          (response) => {
+            console.log()
+            Notiflix.Loading.remove();
+            Notiflix.Report.success('Client supprimée avec succès', '', 'Okay');
+            this.getAllClients();
+          },
+          (error) => {
+            // Une erreur s'est produite lors de la suppression de la catégorie
+            console.error('Erreur lors de la suppression du client', error);
+            Notiflix.Report.failure('Une erreur s\'est produite lors de la suppression du client', '', 'Okay');
+          }
+        );
+      },
+      () => { },
+      {},
+    );
+
   }
 }
