@@ -39,6 +39,25 @@
       </tbody>
     </table>
     }
+    @else {
+    <table class="table">
+      <thead class="table-secondary rounded-top-3">
+        <tr>
+          <th>Code client</th>
+          <th>Nom complet</th>
+          <th>Prenom</th>
+          <th>Addresse</th>
+          <th>Téléphone</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td colspan="6" class="text-center">Auncun client</td>
+        </tr>
+      </tbody>
+    </table>
+    }
   </div>
 </main>
 
@@ -88,7 +107,7 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h1 class="modal-title fs-5" id="modifierProduitLabel">Modifier produit</h1>
+        <h1 class="modal-title fs-5" id="modifierProduitLabel">Modifier client</h1>
       </div>
       <div class="modal-body">
         <form>
@@ -117,7 +136,8 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btnAnnuler" data-bs-dismiss="modal">Annuler</button>
-        <button type="button" class="btn" (click)="onUpdateClient(selectedClient.id)" data-bs-dismiss="modal">Modifier</button>
+        <button type="button" class="btn" (click)="onUpdateClient(selectedClient.id)"
+          data-bs-dismiss="modal">Modifier</button>
       </div>
     </div>
   </div>
@@ -128,7 +148,7 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h1 class="modal-title fs-5" id="voirDetailLabel">Detail produit</h1>
+        <h1 class="modal-title fs-5" id="voirDetailLabel">Detail Client</h1>
       </div>
       <div class="modal-body modalContent">
         <div class="modalContentTop">

@@ -27,8 +27,10 @@
           <td>{{ item.adresse }}</td>
           <td>{{ item.telephone }}</td>
           <td>
-            <span *ngIf="item.etat === 'actif'" class="badge rounded-pill bg-success-subtle text-success px-3">Actif</span>
-            <span *ngIf="item.etat === 'inactif'" class="badge rounded-pill bg-danger-subtle text-danger px-3">Inactif</span>
+            <span *ngIf="item.etat === 'actif'"
+              class="badge rounded-pill bg-success-subtle text-success px-3">Actif</span>
+            <span *ngIf="item.etat === 'inactif'"
+              class="badge rounded-pill bg-danger-subtle text-danger px-3">Inactif</span>
           </td>
           <td>
             <button class="btn" data-bs-toggle="modal" data-bs-target="#voirDetail"><i
@@ -39,6 +41,24 @@
           </td>
         </tr>
         }
+      </tbody>
+    </table>
+    }@else {
+    <table class="table">
+      <thead class="table-secondary rounded-top-3">
+        <tr>
+          <th>Nom complet</th>
+          <th>Email</th>
+          <th>Addresse</th>
+          <th>Téléphone</th>
+          <th>Etat</th>
+          <th>Action</th> 
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td colspan="6" class="text-center">Auncun client</td>
+        </tr>
       </tbody>
     </table>
     }
@@ -52,7 +72,7 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h1 class="modal-title fs-5" id="modalAjouterLabel">Ajouter produit</h1>
+        <h1 class="modal-title fs-5" id="modalAjouterLabel">Ajouter employé</h1>
       </div>
       <div class="modal-body p-4">
         <form>
@@ -97,7 +117,7 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h1 class="modal-title fs-5" id="modifierProduitLabel">Modifier produit</h1>
+        <h1 class="modal-title fs-5" id="modifierProduitLabel">Modifier employé</h1>
       </div>
       <div class="modal-body">
         <form>
@@ -143,7 +163,7 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h1 class="modal-title fs-5" id="voirDetailLabel">Detail produit</h1>
+        <h1 class="modal-title fs-5" id="voirDetailLabel">Detail employé</h1>
       </div>
       <div class="modal-body modalContent">
         <div class="modalContentTop">

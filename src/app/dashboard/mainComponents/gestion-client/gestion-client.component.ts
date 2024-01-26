@@ -4,6 +4,7 @@ import { DataTablesModule } from 'angular-datatables';
 import Notiflix from 'notiflix';
 import { ClientService } from '../../../services/client/client.service';
 import { FormsModule } from '@angular/forms';
+import { Client } from '../../../models/client'
 
 @Component({
   selector: 'app-gestion-client',
@@ -13,8 +14,9 @@ import { FormsModule } from '@angular/forms';
   styleUrl: './gestion-client.component.scss'
 })
 export class GestionClientComponent implements OnInit {
-  clients = [];
+  clients : Client[] = [];
   selectedClient: any;
+  newCode_client: string = "";
 
   nomAdd: string = "";
   prenomAdd: string = "";
@@ -68,15 +70,20 @@ export class GestionClientComponent implements OnInit {
   }
 
   onAddClient() {
-    const lastCodeClient = this.clients[this.clients.length - 1].code_client.slice(2);
-    let nombre = parseInt(lastCodeClient);
-    nombre++;
-    const newCode_client = `C${nombre.toString().padStart(5, '0')}`;
+    if(this.clients.length > 0){
+      const lastCodeClient = this.clients[this.clients.length - 1].code_client.slice(2);
+      let nombre = parseInt(lastCodeClient);
+      nombre++;
+      this.newCode_client = `C${nombre.toString().padStart(5, '0')}`;
+    }else{
+      this.newCode_client =  'C00001';
+    }
+
 
     const data: any = {
       nom: this.nomAdd,
       prenom: this.prenomAdd,
-      code_client: newCode_client,
+      code_client: this.newCode_client,
       telephone: `+221${this.telephoneAdd}`,
       adresse: this.adresseAdd
     };
