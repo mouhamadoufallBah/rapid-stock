@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { DataTablesModule } from 'angular-datatables';
 import { DatatableService } from '../../../services/datatable.service';
-import { NgIf } from '@angular/common';
+import { NgClass, NgIf } from '@angular/common';
 import { AuthService } from '../../../services/users/auth.service';
 import Notiflix from 'notiflix';
 import { FormsModule } from '@angular/forms';
@@ -9,12 +9,13 @@ import { FormsModule } from '@angular/forms';
 @Component({
   selector: 'app-gestion-employe',
   standalone: true,
-  imports: [DataTablesModule, FormsModule, NgIf],
+  imports: [DataTablesModule, FormsModule, NgIf, NgClass],
   templateUrl: './gestion-employe.component.html',
   styleUrl: './gestion-employe.component.scss'
 })
 export class GestionEmployeComponent implements OnInit{
   employe = [];
+  selectedEmploye : any;
 
 
   nomAdd: string = "";
@@ -119,4 +120,23 @@ export class GestionEmployeComponent implements OnInit{
       );
     }
   }
+
+  getEmployeById(id: number){
+    this.authService.getEmployeById(id).subscribe(
+      (data) => {
+        this.selectedEmploye = data;
+      }
+    )
+  }
+
+  onActiveDeactiveEmploye(id: number){
+    this.authService.activeDeactiveEmploye(id).subscribe(
+      (data) => {
+        console.log(data)
+        this.getAllEmploye();
+      }
+    )
+  }
+
+
 }

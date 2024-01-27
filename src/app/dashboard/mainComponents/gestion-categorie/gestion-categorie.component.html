@@ -4,7 +4,7 @@
   </div>
   <div class="mainBottom">
     <div class="mainBottomLeft">
-      @if(categories){
+      @if(categories.length > 0){
       <table datatable [dtOptions]="dtCategories" class="table">
         <thead class="table-secondary rounded-top-3">
           <tr>
@@ -29,6 +29,24 @@
           }
         </tbody>
       </table>
+      }@else {
+        <table class="table">
+          <thead class="table-secondary rounded-top-3">
+            <tr>
+              <th>id</th>
+              <th>Nom</th>
+              <th>Nombre de vente</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+
+            <tr>
+              <td colspan="4" class="text-center"> Aucun catégorie disponible</td>
+            </tr>
+
+          </tbody>
+        </table>
       }
 
     </div>

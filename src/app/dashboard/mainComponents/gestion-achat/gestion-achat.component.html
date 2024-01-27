@@ -7,34 +7,58 @@
     </button>
   </div>
   <div class="mainBottom p-4">
+    @if(achats.length > 0){
     <table datatable [dtOptions]="dtOptions" class="table">
       <thead class="table-secondary rounded-top-3">
         <tr>
-          <th>Nom</th>
-          <th>Prenom</th>
-          <th>Téléphone</th>
+          <th>Produit</th>
+          <th>Quantité</th>
+          <th>Prix unitaire</th>
           <th>Montant</th>
           <th>Date</th>
           <th>Action</th>
         </tr>
       </thead>
       <tbody>
+        @for(item of achats; track $index){
         <tr>
-          <td>Ndiaye</td>
-          <td>Moussa</td>
-          <td>78 305 44 23</td>
-          <td>12500f CFA</td>
-          <td>12/12/2023</td>
+          <td>{{ item.nomachat }}</td>
+          <td>{{ item.quantiteachat }}</td>
+          <td>{{ item.prixachat }}f CFA</td>
+          <td>{{ item.montantachat }}f CFA</td>
+          <td>{{ item.created_at | date: 'dd/MM/YYYY' }}</td>
           <td>
-            <button class="btn" data-bs-toggle="modal" data-bs-target="#voirDetail"><i
+            <button class="btn" data-bs-toggle="modal" data-bs-target="#voirDetail" (click)="getAchatById(item.id)"><i
                 class="fa-solid fa-eye"></i></button>
             <button class="btn" data-bs-toggle="modal" data-bs-target="#modifierProduit"><i
                 class="fa-solid fa-pen-to-square"></i></button>
             <button class="btn"><i class="fa-solid fa-trash"></i></button>
           </td>
         </tr>
+        }
+
       </tbody>
     </table>
+    }@else {
+      <table class="table">
+        <thead class="table-secondary rounded-top-3">
+          <tr>
+            <th>id</th>
+            <th>Nom</th>
+            <th>Nombre de vente</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+
+          <tr>
+            <td colspan="4" class="text-center"> Aucun achat disponible</td>
+          </tr>
+
+        </tbody>
+      </table>
+    }
+
   </div>
 </main>
 
@@ -45,7 +69,7 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h1 class="modal-title fs-5" id="modalAjouterLabel">Ajouter produit</h1>
+        <h1 class="modal-title fs-5" id="modalAjouterLabel">Ajouter achat</h1>
       </div>
       <div class="modal-body p-4 row d-flex justify-content-between">
         <div class="col-5">
@@ -54,9 +78,6 @@
             <select class="form-select" aria-label="Small select example">
               <option selected disabled>veuillez selectionner la catégorie</option>
               <option value="1">Outils</option>
-              <option value="2">Quincaillerie générale</option>
-              <option value="3">Éclairage</option>
-              <option value="3">Sécurité</option>
             </select>
           </div>
           <div class="mb-3 border border-1 p-2">

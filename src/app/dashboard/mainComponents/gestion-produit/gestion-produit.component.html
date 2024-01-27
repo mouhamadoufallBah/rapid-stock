@@ -2,11 +2,13 @@
   <div class="mainTop">
     <h4>La liste des produit</h4>
     <!-- Button trigger modal -->
-    <button type="button" class="btn mt-3 modalBtn" data-bs-toggle="modal" data-bs-target="#modalAjouter" >
+    <button type="button" class="btn mt-3 modalBtn" data-bs-toggle="modal" data-bs-target="#modalAjouter"
+      (click)="getAllCategorie()">
       Ajouter produit
     </button>
   </div>
   <div class="mainBottom p-4">
+    @if(produits.length > 0){
     <table datatable [dtOptions]="dtOptions" class="table">
       <thead>
         <tr>
@@ -19,29 +21,53 @@
         </tr>
       </thead>
       <tbody>
-        @for (item of dbProduit; track $index) {
+        @for (item of produits; track $index) {
         <tr>
-          <td>{{ item.nom }}</td>
+          <td>{{ item.nomproduit }}</td>
           <td>{{ item.quantite }}</td>
-          <td>{{ item.prixUnitaire }}</td>
-          <td>{{ item.quantiteSeuil }}</td>
+          <td>{{ item.prixU }}</td>
+          <td>{{ item.quantiteseuil }}</td>
           <td>
-            <span *ngIf="item.quantite <= 0" class="badge rounded-pill bg-danger-subtle text-danger px-3">Rupture de stock</span>
+            <span *ngIf="item.quantite <= 0" class="badge rounded-pill bg-danger-subtle text-danger px-3">Rupture de
+              stock</span>
             <span *ngIf="item.quantite > 0 && item.quantite <= 10"
               class="badge rounded-pill bg-warning-subtle text-warning px-3">Niveau d'alerte</span>
-            <span *ngIf="item.quantite > 10" class="badge rounded-pill bg-success-subtle text-success px-3">En stock</span>
+            <span *ngIf="item.quantite > 10" class="badge rounded-pill bg-success-subtle text-success px-3">En
+              stock</span>
           </td>
           <td>
-            <button class="btn" data-bs-toggle="modal" data-bs-target="#voirDetail"><i
+            <button class="btn" data-bs-toggle="modal" data-bs-target="#voirDetail" (click)="getProduitById(item.id)"><i
                 class="fa-solid fa-eye"></i></button>
-            <button class="btn" data-bs-toggle="modal" data-bs-target="#modifierProduit"><i
-                class="fa-solid fa-pen-to-square"></i></button>
-            <button class="btn"><i class="fa-solid fa-trash"></i></button>
+            <button class="btn" data-bs-toggle="modal" data-bs-target="#modifierProduit"
+              (click)="getProduitById(item.id)"><i class="fa-solid fa-pen-to-square"></i></button>
+            <button class="btn" (click)="onDeleteProduit(item.id)"><i class="fa-solid fa-trash"></i></button>
           </td>
         </tr>
         }
       </tbody>
     </table>
+    } @else {
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Nom du produit</th>
+          <th>Quantité</th>
+          <th>Prix unitaire</th>
+          <th>Quantité seuil</th>
+          <th>Etat</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (item of produits; track $index) {
+        <tr>
+          <td colspan="6" class="text-center">Aucun produit disponible</td>
+        </tr>
+        }
+      </tbody>
+    </table>
+    }
+
   </div>
 </main>
 
@@ -49,7 +75,8 @@
 
 
 <!-- les Modals -->
-<div class="modal fade" id="modalAjouter" tabindex="-1" aria-labelledby="modalAjouterLabel" aria-hidden="true" data-bs-backdrop='static' >
+<div class="modal fade" id="modalAjouter" tabindex="-1" aria-labelledby="modalAjouterLabel" aria-hidden="true"
+  data-bs-backdrop='static'>
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -58,44 +85,58 @@
       <div class="modal-body p-4">
         <form>
           <div class="mb-3">
-            <label for="exampleInputEmail1" class="form-label">Nom du produit</label>
-            <input type="text" class="form-control" id="exampleInputEmail1" placeholder="Nom du produit">
+            <label for="nomProduitAdd" class="form-label">Nom du produit</label>
+            <input type="text" class="form-control" id="nomProduitAdd" placeholder="Nom du produit" name="nomProduitAdd"
+              [(ngModel)]="nomAdd">
           </div>
           <div class="mb-3">
-            <label for="exampleInputEmail1" class="form-label">Catégorie du produit</label>
-            <select class="form-select" aria-label="Small select example">
-              <option selected>veuillez selectionner la catégorie</option>
-              <option value="1">Outils</option>
-              <option value="2">Quincaillerie générale</option>
-              <option value="3">Éclairage</option>
-              <option value="3">Sécurité</option>
+            <label for="categorieAdd" class="form-label">Catégorie du produit</label>
+            <select class="form-select" name="specialite" aria-label="Default select example"
+              [(ngModel)]="categorie_idAdd">
+              <option selected disabled>Selectionner son specialté</option>
+              @for(item of categorie; track $index){
+              <option [value]="item.id"> {{ item.nom }}</option>
+              }
             </select>
           </div>
           <div class="mb-3">
-            <label for="exampleInputEmail1" class="form-label">Quantité</label>
-            <input type="number" class="form-control" id="exampleInputEmail1" placeholder="Nom du produit">
+            <label for="quantiteAdd" class="form-label">Quantité</label>
+            <input type="number" class="form-control" id="quantiteAdd" name="quantiteAdd" placeholder="Nom du produit"
+              [(ngModel)]="quantiteAdd">
           </div>
           <div class="mb-3">
-            <label for="exampleInputEmail1" class="form-label">Quantité seuil</label>
-            <input type="number" class="form-control" id="exampleInputEmail1" placeholder="Nom du produit">
+            <label for="quantiteSeuil" class="form-label">Quantité seuil</label>
+            <input type="number" class="form-control" id="quantiteSeuil" placeholder="Nom du produit"
+              name="quantiteSeuil" [(ngModel)]="quantiteSeuilAdd">
           </div>
           <div class="mb-3">
-            <label for="exampleInputEmail1" class="form-label">Image</label>
-            <input type="file" class="form-control" id="exampleInputEmail1" placeholder="Nom du produit">
+            <label for="quantiteSeuil" class="form-label">Prix unitaire</label>
+            <input type="number" class="form-control" id="quantiteSeuil" placeholder="Nom du produit"
+              name="quantiteSeuil" [(ngModel)]="prixUAdd">
           </div>
+          <div class="mb-3">
+            <label for="imageAdd" class="form-label">Image</label>
+            <input type="text" class="form-control" id="imageAdd" placeholder="Image du produit" name="imageAdd"
+              [(ngModel)]="imageAdd">
+          </div>
+          <!-- <div class="mb-3">
+            <label for="imageAdd" class="form-label">Image</label>
+            <input type="file" class="form-control" id="imageAdd" placeholder="Nom du produit" name="imageAdd"
+              [(ngModel)]="imageAdd">
+          </div> -->
 
         </form>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btnAnnuler" data-bs-dismiss="modal">Annuler</button>
-        <button type="button" class="btn">Ajouter</button>
+        <button type="button" class="btn" (click)="onAddProduit()" data-bs-dismiss="modal">Ajouter</button>
       </div>
     </div>
   </div>
 </div>
 
-<div class="modal fade" data-bs-backdrop='static' id="modifierProduit" tabindex="-1" aria-labelledby="modifierProduitLabel"
-  aria-hidden="true">
+<div class="modal fade" data-bs-backdrop='static' id="modifierProduit" tabindex="-1"
+  aria-labelledby="modifierProduitLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -103,32 +144,49 @@
       </div>
       <div class="modal-body">
         <form>
+          @if(selectedProduit){
           <div class="mb-3">
-            <label for="exampleInputEmail1" class="form-label">Nom du produit</label>
-            <input type="text" class="form-control" id="exampleInputEmail1" placeholder="Nom du produit">
+            <label for="nomProduitUpdate" class="form-label">Nom du produit</label>
+            <input type="text" class="form-control" id="nomProduitUpdate" placeholder="Nom du produit"
+              name="nomProduitUpdate" [(ngModel)]="nomUpdate">
           </div>
           <div class="mb-3">
-            <label for="exampleInputEmail1" class="form-label">Catégorie du produit</label>
-            <select class="form-select" aria-label="Small select example">
-              <option selected>veuillez selectionner la catégorie</option>
-              <option value="1">Outils</option>
-              <option value="2">Quincaillerie générale</option>
-              <option value="3">Éclairage</option>
-              <option value="3">Sécurité</option>
-            </select>
+            <label for="categorieUpdate" class="form-label">Catégorie du produit</label>
+            <select class="form-select" name="specialite" aria-label="Default select example"
+              [(ngModel)]="categorie_idUpdate">
+              <option selected [value]="selectedProduit.id">{{ selectedProduit.nom }}</option>
+              @for(item of categorie; track $index){
+              <option [value]="item.id"> {{ item.nom }}</option>
+              }
+            </select> 
           </div>
           <div class="mb-3">
-            <label for="exampleInputEmail1" class="form-label">Quantité</label>
-            <input type="number" class="form-control" id="exampleInputEmail1" placeholder="Nom du produit">
+            <label for="quantiteUpdate" class="form-label">Quantité</label>
+            <input type="number" class="form-control" id="quantiteUpdate" name="quantiteUpdate"
+              placeholder="Nom du produit" [(ngModel)]="quantiteUpdate">
           </div>
           <div class="mb-3">
-            <label for="exampleInputEmail1" class="form-label">Quantité seuil</label>
-            <input type="number" class="form-control" id="exampleInputEmail1" placeholder="Nom du produit">
+            <label for="quantiteSeuil" class="form-label">Quantité seuil</label>
+            <input type="number" class="form-control" id="quantiteSeuil" placeholder="Nom du produit"
+              name="quantiteSeuil" [(ngModel)]="quantiteSeuilUpdate">
           </div>
           <div class="mb-3">
-            <label for="exampleInputEmail1" class="form-label">Image</label>
-            <input type="file" class="form-control" id="exampleInputEmail1" placeholder="Nom du produit">
+            <label for="prixUniatireUpdate" class="form-label">Prix unitaire</label>
+            <input type="number" class="form-control" id="prixUniatireUpdate" placeholder="Nom du produit"
+              name="prixUniatireUpdate" [(ngModel)]="prixUUpdate">
           </div>
+          <div class="mb-3">
+            <label for="imageUpdate" class="form-label">Image</label>
+            <input type="text" class="form-control" id="imageUpdate" placeholder="Image du produit" name="imageUpdate"
+              [(ngModel)]="imageUpdate">
+          </div>
+          <!-- <div class="mb-3">
+              <label for="imageAdd" class="form-label">Image</label>
+              <input type="file" class="form-control" id="imageAdd" placeholder="Nom du produit" name="imageAdd"
+                [(ngModel)]="imageAdd">
+            </div> -->
+          }
+
 
         </form>
       </div>
@@ -140,7 +198,8 @@
   </div>
 </div>
 
-<div class="modal fade" data-bs-backdrop='static' id="voirDetail" tabindex="-1" aria-labelledby="voirDetailLabel" aria-hidden="true">
+<div class="modal fade" data-bs-backdrop='static' id="voirDetail" tabindex="-1" aria-labelledby="voirDetailLabel"
+  aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -149,26 +208,30 @@
       <div class="modal-body">
         <div class="modalBodyConatiner">
           <div class="modalBodyConatinerLeft">
-            <img src="https://www.sococim.com/sites/default/files/styles/image_678x423/public/2022-08/CEM%20II%20B-LL%2032.5%20R%20CE%20-%20H423%20x%20L678_0.jpg?itok=A82vMEcs" alt="" >
+            <img
+              src="https://www.sococim.com/sites/default/files/styles/image_678x423/public/2022-08/CEM%20II%20B-LL%2032.5%20R%20CE%20-%20H423%20x%20L678_0.jpg?itok=A82vMEcs"
+              alt="">
           </div>
           <div class="modalBodyConatinerRight">
             <div class="modalBodyConatinerRightItem py-5">
+              @if(selectedProduit){
               <div class="mb-4 ">
                 <label for="exampleInputEmail1" class="form-label">Nom du produit</label>
-                <h6>Ciment Sococim</h6>
+                <h6>{{ selectedProduit.nomproduit }}</h6>
               </div>
               <div class="mb-4 ">
                 <label for="exampleInputEmail1" class="form-label">Catégorie du produit</label>
-                <h6>Ciment</h6>
+                <h6>{{ selectedProduit.categorie_id }}</h6>
               </div>
               <div class="mb-4 ">
                 <label for="exampleInputEmail1" class="form-label">Quantité en stock</label>
-                <h6>150</h6>
+                <h6>{{ selectedProduit.quantite }}</h6>
               </div>
               <div class="mb-4 ">
                 <label for="exampleInputEmail1" class="form-label">Prix unitaire</label>
-                <h6>5000f CFA</h6>
+                <h6>{{ selectedProduit.prixU }}f CFA</h6>
               </div>
+              }
             </div>
           </div>
         </div>

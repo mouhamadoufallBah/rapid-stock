@@ -27,17 +27,15 @@
           <td>{{ item.adresse }}</td>
           <td>{{ item.telephone }}</td>
           <td>
-            <span *ngIf="item.etat === 'actif'"
-              class="badge rounded-pill bg-success-subtle text-success px-3">Actif</span>
-            <span *ngIf="item.etat === 'inactif'"
-              class="badge rounded-pill bg-danger-subtle text-danger px-3">Inactif</span>
+            <span class="badge rounded-pill"  (click)="onActiveDeactiveEmploye(item.id)"
+            [ngClass]="{'bg-success-subtle text-success px-3': item.etat === 'actif',
+                        'bg-danger-subtle text-danger px-3': item.etat === 'inactif'}" style="cursor: pointer;">
+            {{ item.etat }}
+        </span>
           </td>
           <td>
-            <button class="btn" data-bs-toggle="modal" data-bs-target="#voirDetail"><i
+            <button class="btn" data-bs-toggle="modal" data-bs-target="#voirDetail" (click)="getEmployeById(item.id)"><i
                 class="fa-solid fa-eye"></i></button>
-            <button class="btn" data-bs-toggle="modal" data-bs-target="#modifierProduit"><i
-                class="fa-solid fa-pen-to-square"></i></button>
-            <button class="btn"><i class="fa-solid fa-trash"></i></button>
           </td>
         </tr>
         }
@@ -52,7 +50,7 @@
           <th>Addresse</th>
           <th>Téléphone</th>
           <th>Etat</th>
-          <th>Action</th> 
+          <th>Action</th>
         </tr>
       </thead>
       <tbody>
@@ -112,52 +110,6 @@
   </div>
 </div>
 
-<div class="modal fade" data-bs-backdrop='static' id="modifierProduit" tabindex="-1"
-  aria-labelledby="modifierProduitLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h1 class="modal-title fs-5" id="modifierProduitLabel">Modifier employé</h1>
-      </div>
-      <div class="modal-body">
-        <form>
-          <div class="mb-3">
-            <label for="exampleInputEmail1" class="form-label">Nom du produit</label>
-            <input type="text" class="form-control" id="exampleInputEmail1" placeholder="Nom du produit">
-          </div>
-          <div class="mb-3">
-            <label for="exampleInputEmail1" class="form-label">Catégorie du produit</label>
-            <select class="form-select" aria-label="Small select example">
-              <option selected disabled>veuillez selectionner la catégorie</option>
-              <option value="1">Outils</option>
-              <option value="2">Quincaillerie générale</option>
-              <option value="3">Éclairage</option>
-              <option value="3">Sécurité</option>
-            </select>
-          </div>
-          <div class="mb-3">
-            <label for="exampleInputEmail1" class="form-label">Quantité</label>
-            <input type="number" class="form-control" id="exampleInputEmail1" placeholder="Nom du produit">
-          </div>
-          <div class="mb-3">
-            <label for="exampleInputEmail1" class="form-label">Quantité seuil</label>
-            <input type="number" class="form-control" id="exampleInputEmail1" placeholder="Nom du produit">
-          </div>
-          <div class="mb-3">
-            <label for="exampleInputEmail1" class="form-label">Image</label>
-            <input type="file" class="form-control" id="exampleInputEmail1" placeholder="Nom du produit">
-          </div>
-
-        </form>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btnAnnuler" data-bs-dismiss="modal">Annuler</button>
-        <button type="button" class="btn">Modifier</button>
-      </div>
-    </div>
-  </div>
-</div>
-
 <div class="modal fade" data-bs-backdrop='static' id="voirDetail" tabindex="-1" aria-labelledby="voirDetailLabel"
   aria-hidden="true">
   <div class="modal-dialog">
@@ -169,23 +121,24 @@
         <div class="modalContentTop">
           <div class="modalContentTopImage">ee</div>
           <div class="modalContentTopItems">
+            @if(selectedEmploye){
             <div class="modalContentBottomItem">
               <span class="fs-5 fw-bold">Nom complet</span>
-              <p class="fs-5">Moussa</p>
+              <p class="fs-5">{{ selectedEmploye.nom + " " + selectedEmploye.prenom }}</p>
             </div>
             <div class="modalContentBottomItem">
               <span class="fs-5 fw-bold">Email</span>
-              <p class="fs-5">Ndiaye</p>
+              <p class="fs-5">{{ selectedEmploye.email }}</p>
             </div>
             <div class="modalContentBottomItem">
               <span class="fs-5 fw-bold">Address</span>
-
-              <p class="fs-5">Yoff</p>
+              <p class="fs-5">{{ selectedEmploye.adresse }}</p>
             </div>
             <div class="modalContentBottomItem">
               <span class="fs-5 fw-bold">Numéro téléphone</span>
-              <p class="fs-5">771234567</p>
+              <p class="fs-5">{{ selectedEmploye.telephone }}</p>
             </div>
+            }
           </div>
         </div>
       </div>

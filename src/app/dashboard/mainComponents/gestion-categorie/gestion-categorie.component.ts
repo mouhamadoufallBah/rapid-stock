@@ -4,16 +4,17 @@ import { FormsModule } from '@angular/forms';
 import Notiflix from 'notiflix';
 import { CategorieService } from '../../../services/categorie/categorie.service';
 import { Category } from '../../../models/category';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-gestion-categorie',
   standalone: true,
-  imports: [DataTablesModule, FormsModule],
+  imports: [DataTablesModule, FormsModule, DatePipe],
   templateUrl: './gestion-categorie.component.html',
   styleUrl: './gestion-categorie.component.scss'
 })
 export class GestionCategorieComponent implements OnInit {
-  categories: any;
+  categories: any = "";
   selectedCategory: any;
 
   nomCategory = "";

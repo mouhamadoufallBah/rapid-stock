@@ -29,6 +29,18 @@ export class AuthService {
     return this.http.get<any[]>(`${api}/employe/lister`)
   }
 
+  getEmployeById(id: number): Observable<any>{
+    return this.http.get<any>(`${api}/employe/detail/${id}`)
+  }
+
+  activeDeactiveEmploye(id: number): Observable<any>{
+    const accessToken = localStorage.getItem('access_token');
+
+    return accessToken ? this.http.put<any>(`${api}/employe/archive/${id}`, {}, {
+      headers: new HttpHeaders({ 'Authorization': `Bearer ${accessToken}` })
+    }) : of(null);
+  }
+
   logout(): Observable<any> {
     const accessToken = localStorage.getItem('access_token');
 
@@ -36,7 +48,7 @@ export class AuthService {
       this.http.post<any>(`${api}/logout`, {}, {
         headers: new HttpHeaders({ 'Authorization': `Bearer ${accessToken}` })
       }) :
-      of(null); // Emit a null value if no token is found
+      of(null);
   }
 
 }
