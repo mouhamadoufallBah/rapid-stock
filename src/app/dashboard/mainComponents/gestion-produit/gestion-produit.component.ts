@@ -6,7 +6,7 @@ import { ProduitService } from '../../../services/produit/produit.service';
 import Notiflix from 'notiflix';
 import { FormsModule } from '@angular/forms';
 import { CategorieService } from '../../../services/categorie/categorie.service';
-import { data } from 'jquery';
+
 
 @Component({
   selector: 'app-gestion-produit',
@@ -20,7 +20,7 @@ export class GestionProduitComponent implements OnInit {
   produits: any[] = [];
   selectedProduit: any;
 
-  categorie: any;
+  categories: any;
 
 
   nomAdd: string = "";
@@ -82,9 +82,15 @@ export class GestionProduitComponent implements OnInit {
   getAllCategorie() {
     this.categorieService.getAllCategory().subscribe(
       (data) => {
-        this.categorie = data.data;
+        this.categories = data.data;
+        console.log(this.categories);
+
       }
     )
+  }
+
+  getProduitByIdCategorie() {
+
   }
 
   onAddProduit() {
@@ -94,7 +100,7 @@ export class GestionProduitComponent implements OnInit {
       prixU: this.prixUAdd,
       quantite: this.quantiteAdd,
       quantiteseuil: this.quantiteSeuilAdd,
-      etat: this.quantiteAdd > this.quantiteSeuilAdd ? "En_stock" : "rupture",
+      // etat: this.quantiteAdd > this.quantiteSeuilAdd ? "En_stock" : "rupture",
       categorie_id: this.categorie_idAdd
     };
 
@@ -118,7 +124,7 @@ export class GestionProduitComponent implements OnInit {
 
           Notiflix.Report.success('Produit ajoutée avec succès', '', 'Okay');
           this.getAllProducts();
-          console.log(this.produits);
+          // console.log(this.produits);
 
           Notiflix.Loading.remove();
           this.nomAdd = "";
@@ -138,7 +144,7 @@ export class GestionProduitComponent implements OnInit {
     }
   }
 
-  getProduitById(id: number){
+  getProduitById(id: number) {
     this.produitService.getProductById(id).subscribe(
       (data) => {
         this.selectedProduit = data;
@@ -151,6 +157,9 @@ export class GestionProduitComponent implements OnInit {
           etat: data.etat,
           categorie_id: this.categorie_idUpdate
         } = this.selectedProduit);
+
+        console.log(this.selectedProduit);
+
       }
     )
   }
@@ -163,18 +172,37 @@ export class GestionProduitComponent implements OnInit {
       prixU: this.prixUUpdate,
       quantite: this.quantiteUpdate,
       quantiteseuil: this.quantiteSeuilUpdate,
-      etat: this.quantiteUpdate > this.quantiteSeuilUpdate ? "En_stock" : "rupture",
+      // etat: this.quantiteUpdate > this.quantiteSeuilUpdate ? "En_stock" : "rupture",
       categorie_id: this.categorie_idUpdate
     };
 
     if (this.nomUpdate == "" || this.imageUpdate == "" || this.prixUUpdate == undefined || this.quantiteUpdate == undefined || this.quantiteSeuilUpdate == undefined || this.categorie_idUpdate == undefined) {
       Notiflix.Report.failure('Veuillez remplir le champs', '', 'Okay');
     } else {
-      this.produitService.updateProduct(id, data);
+      Notiflix.Loading.init({
+        svgColor: '#f47a20',
+        cssAnimation: true,
+        cssAnimationDuration: 360,
+
+      });
+      Notiflix.Loading.hourglass();
+
+      this.produitService.updateProduct(id, data).subscribe(
+        (data) => {
+          Notiflix.Report.init({
+            cssAnimation: true,
+            cssAnimationDuration: 360,
+            cssAnimationStyle: 'zoom',
+          });
+
+          Notiflix.Report.success('Produit modifier avec succès', '', 'Okay');
+          this.getAllProducts();
+        }
+      );
     }
   }
 
-  onDeleteProduit(id: number){
+  onDeleteProduit(id: number) {
     Notiflix.Confirm.init({
       okButtonBackground: '#FF1700',
       titleColor: '#FF1700'

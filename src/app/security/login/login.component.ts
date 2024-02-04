@@ -35,7 +35,7 @@ export class LoginComponent {
 
       this.authService.login(this.email, this.password).subscribe(
         (data) => {
-          console.log(data)
+          // console.log(data)
           if (data.user) {
             Notiflix.Loading.remove();
 

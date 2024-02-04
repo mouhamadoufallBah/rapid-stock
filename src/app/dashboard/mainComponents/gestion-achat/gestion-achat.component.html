@@ -2,7 +2,8 @@
   <div class="mainTop">
     <h4>La liste des achat</h4>
     <!-- Button trigger modal -->
-    <button type="button" class="btn mt-3 modalBtn" data-bs-toggle="modal" data-bs-target="#modalAjouter">
+    <button type="button" class="btn mt-3 modalBtn" data-bs-toggle="modal" data-bs-target="#modalAjouter"
+      (click)="getAllCategorie()">
       Ajouter achat
     </button>
   </div>
@@ -22,7 +23,7 @@
       <tbody>
         @for(item of achats; track $index){
         <tr>
-          <td>{{ item.nomachat }}</td>
+          <td>{{ item.produit_id | produitIdToProduitName: AllProducts }}</td>
           <td>{{ item.quantiteachat }}</td>
           <td>{{ item.prixachat }}f CFA</td>
           <td>{{ item.montantachat }}f CFA</td>
@@ -30,9 +31,9 @@
           <td>
             <button class="btn" data-bs-toggle="modal" data-bs-target="#voirDetail" (click)="getAchatById(item.id)"><i
                 class="fa-solid fa-eye"></i></button>
-            <button class="btn" data-bs-toggle="modal" data-bs-target="#modifierProduit"><i
-                class="fa-solid fa-pen-to-square"></i></button>
-            <button class="btn"><i class="fa-solid fa-trash"></i></button>
+            <button class="btn" data-bs-toggle="modal" data-bs-target="#modifierAchat"
+              (click)="getAchatById(item.id)"><i class="fa-solid fa-pen-to-square"></i></button>
+            <button class="btn"><i class="fa-solid fa-trash" (click)="  onDeleteAchat(item.id)"></i></button>
           </td>
         </tr>
         }
@@ -40,23 +41,23 @@
       </tbody>
     </table>
     }@else {
-      <table class="table">
-        <thead class="table-secondary rounded-top-3">
-          <tr>
-            <th>id</th>
-            <th>Nom</th>
-            <th>Nombre de vente</th>
-            <th>Action</th>
-          </tr>
-        </thead>
-        <tbody>
+    <table class="table">
+      <thead class="table-secondary rounded-top-3">
+        <tr>
+          <th>id</th>
+          <th>Nom</th>
+          <th>Nombre de vente</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
 
-          <tr>
-            <td colspan="4" class="text-center"> Aucun achat disponible</td>
-          </tr>
+        <tr>
+          <td colspan="4" class="text-center"> Aucun achat disponible</td>
+        </tr>
 
-        </tbody>
-      </table>
+      </tbody>
+    </table>
     }
 
   </div>
@@ -64,7 +65,7 @@
 
 
 <!-- les Modals -->
-<div class="modal fade modal-xl" id="modalAjouter" tabindex="-1" aria-labelledby="modalAjouterLabel" aria-hidden="true"
+<div class="modal fade modal" id="modalAjouter" tabindex="-1" aria-labelledby="modalAjouterLabel" aria-hidden="true"
   data-bs-backdrop='static'>
   <div class="modal-dialog">
     <div class="modal-content">
@@ -72,100 +73,110 @@
         <h1 class="modal-title fs-5" id="modalAjouterLabel">Ajouter achat</h1>
       </div>
       <div class="modal-body p-4 row d-flex justify-content-between">
-        <div class="col-5">
-          <div class="mb-3">
-            <label for="exampleInputEmail1" class="form-label">Catégorie du produit</label>
-            <select class="form-select" aria-label="Small select example">
-              <option selected disabled>veuillez selectionner la catégorie</option>
-              <option value="1">Outils</option>
-            </select>
-          </div>
-          <div class="mb-3 border border-1 p-2">
-            <h6>Produit</h6>
-            <ul class="list-unstyled">
-              <li>Veuillez selectionner une catégorie</li>
-            </ul>
-          </div>
+        <div class="d-flex justify-content-end">
+          <button class="btn btn-sm col-4 ms-2 " data-bs-toggle="modal" data-bs-target="#ajouterNouveauProduit">Nouveau
+            produit</button>
         </div>
-        <div class="col-6 border border-1 p-2">
-          <table datatable [dtOptions]="panier" class="table">
-            <thead class="table-secondary rounded-top-3">
-              <tr>
-                <th>Produit</th>
-                <th>Quantité</th>
-                <th>Montant</th>
-                <th>Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>Ciment blanc</td>
-                <td (dblclick)="onEdit()" class="pointer-event" *ngIf="!editValue; else editCell">
-                  2
-                </td>
-                <td>12500f CFA</td>
-                <td>
-                  <a class="btn-sm bg"><i class="fa-solid fa-trash"></i></a>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btnAnnuler" data-bs-dismiss="modal">Annuler</button>
-        <button type="button" class="btn">Ajouter</button>
-      </div>
-    </div>
-  </div>
-  <ng-template #editCell>
-    <td>
-      <input type="number" [(ngModel)]="editValue" (keydown.enter)="onClickEnter()">
-    </td>
-  </ng-template>
-</div>
-
-<div class="modal fade" data-bs-backdrop='static' id="modifierProduit" tabindex="-1"
-  aria-labelledby="modifierProduitLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h1 class="modal-title fs-5" id="modifierProduitLabel">Modifier produit</h1>
-      </div>
-      <div class="modal-body">
         <form>
           <div class="mb-3">
-            <label for="exampleInputEmail1" class="form-label">Nom du produit</label>
-            <input type="text" class="form-control" id="exampleInputEmail1" placeholder="Nom du produit">
+            <label for="nomAdd" class="form-label align-items-center">Nom du achat</label>
+            <input type="text" class="form-control" id="nomAdd" name="nomAdd" placeholder="Nom de l'achat"
+              [(ngModel)]="nomAchatAdd">
           </div>
           <div class="mb-3">
-            <label for="exampleInputEmail1" class="form-label">Catégorie du produit</label>
-            <select class="form-select" aria-label="Small select example">
-              <option selected disabled>veuillez selectionner la catégorie</option>
-              <option value="1">Outils</option>
-              <option value="2">Quincaillerie générale</option>
-              <option value="3">Éclairage</option>
-              <option value="3">Sécurité</option>
+            <label for="categorie" class="form-label">Catégorie</label>
+            <select class="form-select" name="categorie" id="categorie" aria-label="Default select example"
+              [(ngModel)]="SelectedcategorieId">
+              <option selected disabled>Selectionner la catégorie</option>
+              @for(item of categories; track $index){
+              <option [value]="item.id" (click)="getProduitByIdCategorie(item.id)"> {{ item.nom }}</option>
+              }
             </select>
           </div>
           <div class="mb-3">
-            <label for="exampleInputEmail1" class="form-label">Quantité</label>
-            <input type="number" class="form-control" id="exampleInputEmail1" placeholder="Nom du produit">
+            <label for="produit" class="form-label">Produit</label>
+            <select class="form-select" name="produit" id="produit" aria-label="Default select example"
+              [(ngModel)]="produit_idAdd" (click)="getProduitByIdCategorie(SelectedcategorieId)">
+              <option selected disabled>Veuillez selectionner la categorie pour voir les produits</option>
+              @for(item of productsByCategorie; track $index){
+              <option [value]="item.id"> {{ item.nomproduit }}</option>
+              }
+            </select>
           </div>
           <div class="mb-3">
-            <label for="exampleInputEmail1" class="form-label">Quantité seuil</label>
-            <input type="number" class="form-control" id="exampleInputEmail1" placeholder="Nom du produit">
+            <label for="quantiteachatAdd" class="form-label">Quantité achat</label>
+            <input type="text" class="form-control" id="quantiteachatAdd" name="quantiteachatAdd"
+              placeholder="Qantité acheter" [(ngModel)]="quantiteachatAdd">
           </div>
           <div class="mb-3">
-            <label for="exampleInputEmail1" class="form-label">Image</label>
-            <input type="file" class="form-control" id="exampleInputEmail1" placeholder="Nom du produit">
+            <label for="prixachatAdd" class="form-label">Prix unitaire</label>
+            <input type="tel" class="form-control" id="prixachatAdd" name="prixachatAdd" placeholder="Prix unitaire"
+              [(ngModel)]="prixachatAdd">
           </div>
-
         </form>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btnAnnuler" data-bs-dismiss="modal">Annuler</button>
-        <button type="button" class="btn">Modifier</button>
+        <button type="button" class="btn" (click)="  onAddAchat()" data-bs-dismiss="modal">Ajouter</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" data-bs-backdrop='static' id="modifierAchat" tabindex="-1" aria-labelledby="modifierAchatLabel"
+  aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="modifierAchatLabel">Modifier produit</h1>
+      </div>
+      <div class="modal-body">
+        @if(selectedAchat){
+        <form>
+          <div class="mb-3">
+            <label for="nomAchatUpdate" class="form-label align-items-center">Nom du achat</label>
+            <input type="text" class="form-control" id="nomAchatUpdate" name="nomAchatUpdate"
+              placeholder="Nom de l'achat" [(ngModel)]="nomAchatUpdate">
+          </div>
+          <div class="mb-3">
+            <label for="categorie" class="form-label">Catégorie</label>
+            <select class="form-select" name="categorie" id="categorie" aria-label="Default select example"
+              [(ngModel)]="SelectedcategorieId" (click)="getAllCategorie()">
+              <option selected>Optionelle</option>
+              @for(item of categories; track $index){
+              <option [value]="item.id" (click)="getProduitByIdCategorie(item.id)"> {{ item.nom }}</option>
+              }
+            </select>
+          </div>
+          <div class="mb-3">
+            <label for="produitUpdate" class="form-label">Produit</label>
+            <select class="form-select" name="produitUpdate" id="produitUpdate" aria-label="Default select example"
+              [(ngModel)]="produit_idUpdate" (click)="getProduitByIdCategorie(SelectedcategorieId)">
+              <option selected [value]="selectedAchat.produit_id">{{ selectedAchat.produit_id | produitIdToProduitName:
+                AllProducts }}</option>
+              @for(item of productsByCategorie; track $index){
+              <option [value]="item.id"> {{ item.nomproduit }}</option>
+              }
+            </select>
+          </div>
+          <div class="mb-3">
+            <label for="quantiteachatAdd" class="form-label">Quantité achat</label>
+            <input type="text" class="form-control" id="quantiteachatAdd" name="quantiteachatAdd"
+              placeholder="Qantité acheter" [(ngModel)]="quantiteachatUpdate">
+          </div>
+          <div class="mb-3">
+            <label for="prixachatAdd" class="form-label">Prix unitaire</label>
+            <input type="tel" class="form-control" id="prixachatAdd" name="prixachatAdd" placeholder="Prix unitaire"
+              [(ngModel)]="prixachatUpdate">
+          </div>
+        </form>
+        }
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btnAnnuler" data-bs-dismiss="modal">Annuler</button>
+        <button type="button" class="btn" (click)=" onUpdateAchat(selectedAchat.id)"
+          data-bs-dismiss="modal">Modifier</button>
       </div>
     </div>
   </div>
@@ -180,31 +191,98 @@
       </div>
       <div class="modal-body modalContent">
         <div class="modalContentTop">
-          <div class="modalContentTopImage">ee</div>
+          <div class="modalContentTopImage"></div>
+          @if(selectedAchat){
           <div class="modalContentTopItems">
             <div class="modalContentBottomItem">
-              <span class="fs-5 fw-bold">Nom complet</span>
-              <p class="fs-5">Moussa</p>
+              <span class="fs-5 fw-bold">Nom de l'achat</span>
+              <p class="fs-5">{{ selectedAchat.nomachat }}</p>
             </div>
             <div class="modalContentBottomItem">
-              <span class="fs-5 fw-bold">Email</span>
-              <p class="fs-5">Ndiaye</p>
+              <span class="fs-5 fw-bold">Produit</span>
+              <p class="fs-5">{{ selectedAchat.produit_id | produitIdToProduitName: AllProducts }}</p>
             </div>
             <div class="modalContentBottomItem">
-              <span class="fs-5 fw-bold">Address</span>
-
+              <span class="fs-5 fw-bold">Quantité</span>
               <p class="fs-5">Yoff</p>
             </div>
             <div class="modalContentBottomItem">
-              <span class="fs-5 fw-bold">Numéro téléphone</span>
-              <p class="fs-5">771234567</p>
+              <span class="fs-5 fw-bold">Prix unitaire</span>
+              <p class="fs-5">{{ selectedAchat.prixachat }}f CFA</p>
+            </div>
+            <div class="modalContentBottomItem">
+              <span class="fs-5 fw-bold">Montant Total</span>
+              <p class="fs-5">{{ selectedAchat.montantachat }}f CFA</p>
             </div>
           </div>
+          }
         </div>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btnAnnuler" data-bs-dismiss="modal">Fermer</button>
 
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="modal fade" id="ajouterNouveauProduit" tabindex="-1" aria-labelledby="ajouterNouveauProduitLabel"
+  aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="ajouterNouveauProduitLabel">Ajouter produit</h1>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="mb-3">
+            <label for="nomProduit" class="form-label">Nom du produit</label>
+            <input type="text" class="form-control" id="nomProduit" placeholder="Nom du produit" name="nomProduit"
+              [(ngModel)]="nomProduit">
+          </div>
+          <div class="mb-3">
+            <label for="categorie_idProduit" class="form-label">Catégorie du produit</label>
+            <select class="form-select" name="specialite" aria-label="Default select example"
+              [(ngModel)]="categorie_idProduit">
+              <option selected disabled>Selectionner son specialté</option>
+              @for(item of categories; track $index){
+              <option [value]="item.id"> {{ item.nom }}</option>
+              }
+            </select>
+          </div>
+          <div class="mb-3">
+            <label for="quantiteProduit" class="form-label">Quantité</label>
+            <input type="number" class="form-control" id="quantiteProduit" name="quantiteProduit"
+              placeholder="Nom du produit" [(ngModel)]="quantiteProduit">
+          </div>
+          <div class="mb-3">
+            <label for="quantiteSeuilProduit" class="form-label">Quantité seuil</label>
+            <input type="number" class="form-control" id="quantiteSeuilProduit" placeholder="Nom du produit"
+              name="quantiteSeuilProduit" [(ngModel)]="quantiteSeuilProduit">
+          </div>
+          <div class="mb-3">
+            <label for="prixUProduit" class="form-label">Prix unitaire</label>
+            <input type="number" class="form-control" id="prixUProduit" placeholder="Nom du produit" name="prixUProduit"
+              [(ngModel)]="prixUProduit">
+          </div>
+          <div class="mb-3">
+            <label for="imageProduit" class="form-label">Image</label>
+            <input type="text" class="form-control" id="imageProduit" placeholder="Image du produit" name="imageProduit"
+              [(ngModel)]="imageProduit">
+          </div>
+          <!-- <div class="mb-3">
+            <label for="imageAdd" class="form-label">Image</label>
+            <input type="file" class="form-control" id="imageAdd" placeholder="Nom du produit" name="imageAdd"
+              [(ngModel)]="imageAdd">
+          </div> -->
+
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btnAnnuler" data-bs-dismiss="modal">Annuler</button>
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalAjouter"
+          (click)="onAddProduitFromAchat()">Ajouter</button>
       </div>
     </div>
   </div>

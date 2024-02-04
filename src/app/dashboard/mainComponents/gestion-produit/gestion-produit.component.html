@@ -39,7 +39,7 @@
             <button class="btn" data-bs-toggle="modal" data-bs-target="#voirDetail" (click)="getProduitById(item.id)"><i
                 class="fa-solid fa-eye"></i></button>
             <button class="btn" data-bs-toggle="modal" data-bs-target="#modifierProduit"
-              (click)="getProduitById(item.id)"><i class="fa-solid fa-pen-to-square"></i></button>
+              (click)="getProduitById(item.id); getAllCategorie()"><i class="fa-solid fa-pen-to-square"></i></button>
             <button class="btn" (click)="onDeleteProduit(item.id)"><i class="fa-solid fa-trash"></i></button>
           </td>
         </tr>
@@ -94,7 +94,7 @@
             <select class="form-select" name="specialite" aria-label="Default select example"
               [(ngModel)]="categorie_idAdd">
               <option selected disabled>Selectionner son specialté</option>
-              @for(item of categorie; track $index){
+              @for(item of categories; track $index){
               <option [value]="item.id"> {{ item.nom }}</option>
               }
             </select>
@@ -155,10 +155,10 @@
             <select class="form-select" name="specialite" aria-label="Default select example"
               [(ngModel)]="categorie_idUpdate">
               <option selected [value]="selectedProduit.id">{{ selectedProduit.nom }}</option>
-              @for(item of categorie; track $index){
+            @for(item of categories; track $index){
               <option [value]="item.id"> {{ item.nom }}</option>
               }
-            </select> 
+            </select>
           </div>
           <div class="mb-3">
             <label for="quantiteUpdate" class="form-label">Quantité</label>
@@ -192,7 +192,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btnAnnuler" data-bs-dismiss="modal">Annuler</button>
-        <button type="button" class="btn">Modifier</button>
+        <button type="button" class="btn" data-bs-dismiss="modal" (click)="onUpdateProduit(selectedProduit.id)">Modifier</button>
       </div>
     </div>
   </div>

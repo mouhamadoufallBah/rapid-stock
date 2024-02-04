@@ -9,7 +9,6 @@ import { GestionClientComponent } from './mainComponents/gestion-client/gestion-
 import { GestionEmployeComponent } from './mainComponents/gestion-employe/gestion-employe.component';
 import { GestionAchatComponent } from './mainComponents/gestion-achat/gestion-achat.component';
 import { GestionVenteComponent } from './mainComponents/gestion-vente/gestion-vente.component';
-import { GestionAccompteComponent } from './mainComponents/gestion-accompte/gestion-accompte.component';
 
 const routes: Routes = [
   {
@@ -22,7 +21,6 @@ const routes: Routes = [
       {path: 'gestion-catégorie', component:GestionCategorieComponent},
       {path: 'gestion-client', component:GestionClientComponent},
       {path: 'gestion-employe', component:GestionEmployeComponent},
-      {path: 'gestion-accompte', component:GestionAccompteComponent},
       {path: '', redirectTo: 'acceuil-dashboard', pathMatch: 'full'}
     ]
   }

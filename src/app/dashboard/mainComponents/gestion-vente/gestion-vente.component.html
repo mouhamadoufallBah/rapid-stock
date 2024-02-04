@@ -2,39 +2,63 @@
   <div class="mainTop">
     <h4>La liste des ventes</h4>
     <!-- Button trigger modal -->
-    <button type="button" class="btn mt-3 modalBtn" data-bs-toggle="modal" data-bs-target="#modalAjouter">
+    <button type="button" class="btn mt-3 modalBtn" data-bs-toggle="modal" data-bs-target="#modalAjouter"
+      (click)="getAllCategorie(); getProductFromCart()">
       Ajouter vente
     </button>
   </div>
   <div class="mainBottom p-4">
+    @if(ventes.length > 0){
     <table datatable [dtOptions]="dtOptions" class="table">
       <thead class="table-secondary rounded-top-3">
         <tr>
-          <th>Nom</th>
-          <th>Prenom</th>
-          <th>Téléphone</th>
+          <th>Prenom du client</th>
+          <th>Nom du client</th>
+          <th>Telephone</th>
           <th>Montant</th>
           <th>Date</th>
           <th>Action</th>
         </tr>
       </thead>
       <tbody>
+        @for(item of ventes; track $index){
         <tr>
-          <td>Ndiaye</td>
-          <td>Moussa</td>
-          <td>78 305 44 23</td>
-          <td>12500f CFA</td>
-          <td>12/12/2023</td>
+          <td>{{ item.client_id | clientIdToClientInfo:allClient:false:true:false:false }}</td>
+          <td>{{ item.client_id | clientIdToClientInfo:allClient:true:false:false:false }}</td>
+          <td>{{ item.client_id | clientIdToClientInfo:allClient:false:false:true:false }}</td>
+          <td>{{ item.montant_total }}f CFA</td>
+          <td>{{ item.created_at | date: 'dd/MM/YYYY' }}</td>
           <td>
-            <button class="btn" data-bs-toggle="modal" data-bs-target="#voirDetail"><i
-                class="fa-solid fa-eye"></i></button>
-            <button class="btn" data-bs-toggle="modal" data-bs-target="#modifierProduit"><i
-                class="fa-solid fa-pen-to-square"></i></button>
-            <button class="btn"><i class="fa-solid fa-trash"></i></button>
+            <button class="btn" data-bs-toggle="modal" data-bs-target="#voirDetail"
+              (click)=" getSelectedVente(item.id)"><i class="fa-solid fa-eye"></i></button>
+            <button class="btn" data-bs-toggle="modal" data-bs-target="#modifierVente"
+              (click)="getVenteById(item.id)"><i class="fa-solid fa-pen-to-square"></i></button>
+            <button class="btn"><i class="fa-solid fa-trash" (click)="  onDeleteVente(item.id)"></i></button>
           </td>
         </tr>
+        }
       </tbody>
     </table>
+    }@else {
+    <table class="table">
+      <thead class="table-secondary rounded-top-3">
+        <tr>
+          <th>id</th>
+          <th>Nom</th>
+          <th>Nombre de vente</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+
+        <tr>
+          <td colspan="4" class="text-center"> Aucun achat disponible</td>
+        </tr>
+
+      </tbody>
+    </table>
+    }
+
   </div>
 </main>
 
@@ -45,28 +69,42 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h1 class="modal-title fs-5" id="modalAjouterLabel">Ajouter produit</h1>
+        <h1 class="modal-title fs-5" id="modalAjouterLabel">Ajouter vente</h1>
       </div>
       <div class="modal-body p-4 row d-flex justify-content-between">
-        <div class="col-5">
+        <div class="col-5 leftContentModal">
           <div class="mb-3">
-            <label for="exampleInputEmail1" class="form-label">Catégorie du produit</label>
-            <select class="form-select" aria-label="Small select example">
-              <option selected disabled>veuillez selectionner la catégorie</option>
-              <option value="1">Outils</option>
-              <option value="2">Quincaillerie générale</option>
-              <option value="3">Éclairage</option>
-              <option value="3">Sécurité</option>
+            <label for="categorie">Selectionner une categorie</label>
+            <select class="form-select" name="categorie" id="categorie" aria-label="Default select example"
+              [(ngModel)]="SelectedcategorieId">
+              <option selected disabled>Selectionner la catégorie</option>
+              @for(item of categories; track $index){
+              <option [value]="item.id" (click)="getProduitByIdCategorie(item.id)"> {{ item.nom }}</option>
+              }
             </select>
           </div>
-          <div class="mb-3 border border-1 p-2">
-            <h6>Produit</h6>
+
+          <div class="mb-3 p-2">
+            <h4 class="text-center">Produits</h4>
             <ul class="list-unstyled">
-              <li>Veuillez selectionner une catégorie</li>
+              @if(SelectedcategorieId){
+              <div class="list-group">
+                @for(item of productsByCategorie; track $index){
+                <button class="list-group-item mb-3" (click)="addProductToCart(item)">{{ item.nomproduit }}</button>
+                }
+              </div>
+              }@else{
+              <li class="text-center">Veuillez selectionner une catégorie</li>
+              }
             </ul>
           </div>
+
         </div>
-        <div class="col-6 border border-1 p-2">
+
+
+
+        <div class="col-6 p-2 rigthContentModal">
+          @if(cartProducts.length > 0){
           <table datatable [dtOptions]="panier" class="table">
             <thead class="table-secondary rounded-top-3">
               <tr>
@@ -77,112 +115,245 @@
               </tr>
             </thead>
             <tbody>
+              @for (item of cartProducts; track $index) {
               <tr>
-                <td>Ciment blanc</td>
-                <td (dblclick)="onEdit()" class="pointer-event" *ngIf="!editValue; else editCell">
-                  2
-                </td>
-                <td>12500f CFA</td>
+                <td>{{ item.nomproduit }}</td>
                 <td>
-                  <a class="btn-sm bg"><i class="fa-solid fa-trash"></i></a>
+                  {{ item.quantiteVendu }}
                 </td>
+                <td>{{ item.prixU * item.quantiteVendu}}f CFA</td>
+                <td>
+                  <button class="btn-sm bg" (click)="addProductQuantite(item.id)"
+                    style="background-color: transparent;"><i class="fa-solid fa-plus"
+                      style="color: #f47a20"></i></button>
+                  <button class="btn-sm bg" (click)="reduceProductQuantite(item.id)"
+                    style="background-color: transparent;"><i class="fa-solid fa-minus"
+                      style="color: #f47a20"></i></button>
+                  <button class="btn-sm bg" (click)="removeProductFromCart(item.id)"
+                    style="background-color: transparent;"><i class="fa-solid fa-trash"
+                      style="color: #f47a20"></i></button>
+                </td>
+              </tr>
+              }
+              <tr>
+                <td>Totale</td>
+                <td></td>
+                <td>{{ sommeCart }}f CFA</td>
+                <td></td>
               </tr>
             </tbody>
           </table>
+          }@else {
+          <table class="table mb-5">
+            <thead class="table-secondary rounded-top-3">
+              <tr>
+                <th>Produit</th>
+                <th>Quantité</th>
+                <th>Montant</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td colspan="4" class="text-center">Aucun produit dans le panier</td>
+              </tr>
+
+            </tbody>
+          </table>
+          }
+
+          @if(cartProducts.length > 0){
+
+          <label for="categorie">Selectionner le client</label>
+          <select class="form-select" name="categorie" id="categorie" aria-label="Default select example"
+            [(ngModel)]="client_id">
+            <option selected disabled>Selectionner le client</option>
+            @for(item of allClient; track $index){
+            <option [value]="item.id" (click)="getProduitByIdCategorie(item.id)"> {{ item.prenom + " " + item.prenom }}
+            </option>
+            }
+          </select>
+          }
+
         </div>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btnAnnuler" data-bs-dismiss="modal">Annuler</button>
-        <button type="button" class="btn">Ajouter</button>
+        <button type="button" class="btn" (click)="addVente()">Ajouter</button>
       </div>
     </div>
   </div>
-  <ng-template #editCell>
-    <td>
-      <input type="number" [(ngModel)]="editValue" (keydown.enter)="onClickEnter()">
-    </td>
-  </ng-template>
 </div>
 
-<div class="modal fade" data-bs-backdrop='static' id="modifierProduit" tabindex="-1"
-  aria-labelledby="modifierProduitLabel" aria-hidden="true">
+<div class="modal fade modal-xl" data-bs-backdrop='static' id="modifierVente" tabindex="-1"
+  aria-labelledby="modifierVenteLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h1 class="modal-title fs-5" id="modifierProduitLabel">Modifier produit</h1>
+        <h1 class="modal-title fs-5" id="modifierVenteLabel">Modifier vente</h1>
       </div>
-      <div class="modal-body">
-        <form>
+      <div class="modal-body p-4 row d-flex justify-content-between">
+        <div class="col-5 leftContentModal">
           <div class="mb-3">
-            <label for="exampleInputEmail1" class="form-label">Nom du produit</label>
-            <input type="text" class="form-control" id="exampleInputEmail1" placeholder="Nom du produit">
-          </div>
-          <div class="mb-3">
-            <label for="exampleInputEmail1" class="form-label">Catégorie du produit</label>
-            <select class="form-select" aria-label="Small select example">
-              <option selected disabled>veuillez selectionner la catégorie</option>
-              <option value="1">Outils</option>
-              <option value="2">Quincaillerie générale</option>
-              <option value="3">Éclairage</option>
-              <option value="3">Sécurité</option>
+            <label for="categorie">Selectionner une categorie</label>
+            <select class="form-select" name="categorie" id="categorie" aria-label="Default select example"
+              [(ngModel)]="SelectedcategorieId">
+              <option selected disabled>Selectionner la catégorie</option>
+              @for(item of categories; track $index){
+              <option [value]="item.id" (click)="getProduitByIdCategorie(item.id)"> {{ item.nom }}</option>
+              }
             </select>
           </div>
-          <div class="mb-3">
-            <label for="exampleInputEmail1" class="form-label">Quantité</label>
-            <input type="number" class="form-control" id="exampleInputEmail1" placeholder="Nom du produit">
-          </div>
-          <div class="mb-3">
-            <label for="exampleInputEmail1" class="form-label">Quantité seuil</label>
-            <input type="number" class="form-control" id="exampleInputEmail1" placeholder="Nom du produit">
-          </div>
-          <div class="mb-3">
-            <label for="exampleInputEmail1" class="form-label">Image</label>
-            <input type="file" class="form-control" id="exampleInputEmail1" placeholder="Nom du produit">
+
+          <div class="mb-3 p-2">
+            <h4 class="text-center">Produits</h4>
+            <ul class="list-unstyled">
+              @if(SelectedcategorieId){
+              <div class="list-group">
+                @for(item of productsByCategorie; track $index){
+                <button class="list-group-item mb-3" (click)="addProductToCart(item)">{{ item.nomproduit }}</button>
+                }
+              </div>
+              }@else{
+              <li class="text-center">Veuillez selectionner une catégorie</li>
+              }
+            </ul>
           </div>
 
-        </form>
+        </div>
+        <div class="col-6 p-2 rigthContentModal">
+          @if(cartForUpdate.length > 0){
+          <table datatable [dtOptions]="panier" class="table">
+            <thead class="table-secondary rounded-top-3">
+              <tr>
+                <th>Produit</th>
+                <th>Quantité</th>
+                <th>Montant</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody >
+              @for (item of cartForUpdate; track $index) {
+              <tr (load)="getProductById(item.id)">
+                <td>{{ item.idProduit | produitIdToProduitName: AllProducts }}</td>
+                <td>
+                  {{ item.quantiteVendu }}
+                </td>
+                <td>{{ price   }}f CFA</td>
+                <td>
+                  <button class="btn-sm bg" (click)="addProductQuantite(item.id)"
+                    style="background-color: transparent;"><i class="fa-solid fa-plus"
+                      style="color: #f47a20"></i></button>
+                  <button class="btn-sm bg" (click)="reduceProductQuantite(item.id)"
+                    style="background-color: transparent;"><i class="fa-solid fa-minus"
+                      style="color: #f47a20"></i></button>
+                  <button class="btn-sm bg" (click)="removeProductFromCart(item.id)"
+                    style="background-color: transparent;"><i class="fa-solid fa-trash"
+                      style="color: #f47a20"></i></button>
+                </td>
+              </tr>
+              }
+              <tr>
+                <td>Totale</td>
+                <td></td>
+                <td>{{ sommeCart }}f CFA</td>
+                <td></td>
+              </tr>
+            </tbody>
+          </table>
+          }@else {
+          <table class="table mb-5">
+            <thead class="table-secondary rounded-top-3">
+              <tr>
+                <th>Produit</th>
+                <th>Quantité</th>
+                <th>Montant</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td colspan="4" class="text-center">Aucun produit dans le panier</td>
+              </tr>
+
+            </tbody>
+          </table>
+          }
+
+          @if(cartProducts.length > 0){
+
+          <label for="categorie">Selectionner le client</label>
+          <select class="form-select" name="categorie" id="categorie" aria-label="Default select example"
+            [(ngModel)]="client_id">
+            <option selected disabled>Selectionner le client</option>
+            @for(item of allClient; track $index){
+            <option [value]="item.id" (click)="getProduitByIdCategorie(item.id)"> {{ item.prenom + " " + item.prenom }}
+            </option>
+            }
+          </select>
+          }
+
+        </div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btnAnnuler" data-bs-dismiss="modal">Annuler</button>
+        <button type="button" class="btn btnAnnuler" data-bs-dismiss="modal" (click)="clearCart()">Annuler</button>
         <button type="button" class="btn">Modifier</button>
       </div>
     </div>
   </div>
 </div>
 
-<div class="modal fade" data-bs-backdrop='static' id="voirDetail" tabindex="-1" aria-labelledby="voirDetailLabel"
-  aria-hidden="true">
+<div class="modal fade modal-xl" data-bs-backdrop='static' id="voirDetail" tabindex="-1"
+  aria-labelledby="voirDetailLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
         <h1 class="modal-title fs-5" id="voirDetailLabel">Detail produit</h1>
       </div>
-      <div class="modal-body modalContent">
-        <div class="modalContentTop">
-          <div class="modalContentTopImage">ee</div>
-          <div class="modalContentTopItems">
-            <div class="modalContentBottomItem">
-              <span class="fs-5 fw-bold">Nom complet</span>
-              <p class="fs-5">Moussa</p>
-            </div>
-            <div class="modalContentBottomItem">
-              <span class="fs-5 fw-bold">Email</span>
-              <p class="fs-5">Ndiaye</p>
-            </div>
-            <div class="modalContentBottomItem">
-              <span class="fs-5 fw-bold">Address</span>
-
-              <p class="fs-5">Yoff</p>
-            </div>
-            <div class="modalContentBottomItem">
-              <span class="fs-5 fw-bold">Numéro téléphone</span>
-              <p class="fs-5">771234567</p>
-            </div>
+      <div class="modal-body p-4 row d-flex justify-content-between">
+        @if(selectedVente){
+        <div class="col-5 leftContentModal">
+          <h4 class="text-center pt-4">Information du client</h4>
+          <div class="col-12 mb-3 p-1">
+            <label for="">Prenom</label>
+            <h5 for="">{{ selectedVente.client_id | clientIdToClientInfo:allClient:false:true:false:false }}</h5>
+          </div>
+          <div class="col-12 mb-3 p-1">
+            <label for="">Nom</label>
+            <h5 for="">{{ selectedVente.client_id | clientIdToClientInfo:allClient:true:false:false:false }}</h5>
+          </div>
+          <div class="col-12 mb-3 p-1">
+            <label for="">Telephone</label>
+            <h5 for="">{{ selectedVente.client_id | clientIdToClientInfo:allClient:false:false:true:false }}</h5>
+          </div>
+          <div class="col-12 mb-3 p-1">
+            <label for="">Adresse</label>
+            <h5 for="">{{ selectedVente.client_id | clientIdToClientInfo:allClient:false:false:false:true }}</h5>
           </div>
         </div>
+        }
+
+        @if(selectedVente){
+        <div class="col-6 rigthContentModal">
+          <h4 class="text-center pt-4">Information du vente</h4>
+          <h5>Produit et quantité</h5>
+          <ul class="list-group mb-5">
+            @if(selectedVente.historiques.length > 0){
+            @for(item of selectedVente.historiques; track $index){
+              <li class="list-group-item">{{ item.produit_id | produitIdToProduitInfo:AllProducts:true:false:false }} : {{ item.quantite_vendu }}</li>
+            }
+            }
+          </ul>
+          <h5>Montant total</h5>
+          <h6 class="fw-bold mb-5">{{ selectedVente.historiques[0].vente_id | venteIdToVenteInfo: ventes}}f CFA</h6>
+          <button class="btn">Effectuer le paiement</button>
+
+        </div>
+        }
+
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btnAnnuler" data-bs-dismiss="modal">Fermer</button>
+        <button type="button" class="btn btnAnnuler " data-bs-dismiss="modal">Fermer</button>
 
       </div>
     </div>
