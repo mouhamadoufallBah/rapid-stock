@@ -31,8 +31,8 @@
           <td>
             <button class="btn" data-bs-toggle="modal" data-bs-target="#voirDetail"
               (click)=" getSelectedVente(item.id)"><i class="fa-solid fa-eye"></i></button>
-            <button class="btn" data-bs-toggle="modal" data-bs-target="#modifierVente"
-              (click)="getVenteById(item.id)"><i class="fa-solid fa-pen-to-square"></i></button>
+            <!-- <button class="btn" data-bs-toggle="modal" data-bs-target="#modifierVente"
+              (click)="getVenteById(item.id)"><i class="fa-solid fa-pen-to-square"></i></button> -->
             <button class="btn"><i class="fa-solid fa-trash" (click)="  onDeleteVente(item.id)"></i></button>
           </td>
         </tr>
@@ -185,7 +185,7 @@
   </div>
 </div>
 
-<div class="modal fade modal-xl" data-bs-backdrop='static' id="modifierVente" tabindex="-1"
+<!-- <div class="modal fade modal-xl" data-bs-backdrop='static' id="modifierVente" tabindex="-1"
   aria-labelledby="modifierVenteLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -234,12 +234,12 @@
             </thead>
             <tbody >
               @for (item of cartForUpdate; track $index) {
-              <tr (load)="getProductById(item.id)">
+              <tr>
                 <td>{{ item.idProduit | produitIdToProduitName: AllProducts }}</td>
                 <td>
                   {{ item.quantiteVendu }}
                 </td>
-                <td>{{ price   }}f CFA</td>
+                <td (click)="getProductById(item.idProduit)">{{ price }}f CFA</td>
                 <td>
                   <button class="btn-sm bg" (click)="addProductQuantite(item.id)"
                     style="background-color: transparent;"><i class="fa-solid fa-plus"
@@ -301,7 +301,7 @@
       </div>
     </div>
   </div>
-</div>
+</div> -->
 
 <div class="modal fade modal-xl" data-bs-backdrop='static' id="voirDetail" tabindex="-1"
   aria-labelledby="voirDetailLabel" aria-hidden="true">

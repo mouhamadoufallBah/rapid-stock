@@ -1,0 +1,204 @@
+nav {
+  margin: 0 auto;
+  background-color: rgba(255, 255, 255, 0.694);
+  backdrop-filter: blur(12px);
+  height: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: sticky;
+
+  ul {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+}
+
+header {
+  margin: 0 auto;
+  height: 850px;
+  background-image: url('https://img.freepik.com/photos-gratuite/lieu-travail-artisan_1098-13379.jpg?w=1380&t=st=1707149959~exp=1707150559~hmac=98f6a40a22c3f7e6a950a3e8f7d7c650de546f2b679083b3afe7166a6006f035');
+  background-size: cover;
+}
+
+.about {
+  margin: 0 auto;
+  height: 780px;
+  // background-color: white;
+  display: flex;
+  justify-content: space-between;
+
+  .aboutLeft {
+    // border: 1px solid;
+    width: 45%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .aboutLeftItem {
+      height: 70%;
+      width: 90%;
+      background-color: #e9e9e9;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+
+      h5 {
+        color: #f47a20;
+      }
+
+      h3 {
+        span {
+          color: #f47a20;
+        }
+      }
+
+      p {
+        text-align: justify;
+      }
+
+      button {
+        background-color: #f47a20;
+        color: white;
+        border: none;
+        height: 35px;
+        width: 160px;
+        border-radius: 6px;
+        transition: background-color ease 0.4s;
+
+        &:hover {
+          background-color: #ff6a00;
+        }
+      }
+    }
+  }
+
+  .aboutRight {
+    // border: 1px solid;
+    width: 55%;
+    display: flex;
+    justify-content: space-between;
+
+    .aboutRightItemLeft {
+      // border: 1px solid;
+      width: 47%;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+
+      .aboutRightItem {
+        // border: 1px solid;
+        height: 47%;
+        background-color: white;
+
+        .circle {
+          height: 100px;
+          width: 100px;
+          border-radius: 50%;
+          background-color: #E9E9E9;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          transition: background-color ease 0.5s;
+
+          i {
+            font-size: 2em;
+            color: #f47a20;
+            transition: color ease 0.5s;
+          }
+        }
+
+        &:hover {
+          .circle {
+            background-color: #f47a20;
+
+            i {
+              color: white;
+            }
+          }
+        }
+      }
+    }
+    .aboutRightItemRight {
+      // border: 1px solid;
+      width: 48%;
+
+      width: 48%;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+
+      .aboutRightItem {
+        // border: 1px solid;
+        height: 47%;
+        background-color: white;
+
+        .circle {
+          height: 100px;
+          width: 100px;
+          border-radius: 50%;
+          background-color: #E9E9E9;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          transition: background-color ease 0.5s;
+
+          i {
+            font-size: 2em;
+            color: #f47a20;
+            transition: color ease 0.5s;
+          }
+        }
+
+        &:hover {
+          .circle {
+            background-color: #f47a20;
+
+            i {
+              color: white;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+.productList {
+  margin: 0 auto;
+  background-color: white;
+  height: auto;
+
+
+  ul {
+    margin: 0;
+    // padding: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #E9E9E9;
+    height: 55px;
+  }
+
+  .product{
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+
+    .productCard{
+      height: 300px;
+      width: 23%;
+      border: 1px solid;
+      border-radius: 12px;
+    }
+  }
+
+  .pagination{
+    height: 55px;
+    background-color: #E9E9E9;
+  }
+}

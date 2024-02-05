@@ -115,7 +115,9 @@ export class GestionProduitComponent implements OnInit {
       });
       Notiflix.Loading.hourglass();
       this.produitService.addProduct(data).subscribe(
-        () => {
+        (data) => {
+          console.log(data);
+
           Notiflix.Report.init({
             cssAnimation: true,
             cssAnimationDuration: 360,

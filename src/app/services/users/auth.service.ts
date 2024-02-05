@@ -22,13 +22,13 @@ export class AuthService {
   }
 
   updateEmploye(data: any, id: number): Observable<any> {
-    const accessToken = localStorage.getItem('access_token');
+      const accessToken = localStorage.getItem('access_token');
 
-    return accessToken ?
-      this.http.put<any>(`${api}/client/edit/${id}`, data, {
-        headers: new HttpHeaders({ 'Authorization': `Bearer ${accessToken}` })
-      }) :
-      of(null);
+      return accessToken ?
+        this.http.put<any>(`${api}/client/edit/${id}`, data, {
+          headers: new HttpHeaders({ 'Authorization': `Bearer ${accessToken}` })
+        }) :
+        of(null);
 
   }
 

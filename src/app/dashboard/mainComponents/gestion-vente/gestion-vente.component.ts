@@ -126,18 +126,6 @@ export class GestionVenteComponent {
     )
   }
 
-  price: any;
-  getProductById(id: number){
-    this.produitService.getProductById(id).subscribe(
-      (data) => {
-        console.log(data);
-
-        this.price = data.prixU
-
-      }
-    )
-  }
-
   getAllClient() {
     this.clientService.getAllClient().subscribe(
       (data: any) => {
@@ -162,38 +150,12 @@ export class GestionVenteComponent {
     }
   }
 
-  async getSelectedVente(id: number) {
-    try {
-      const data = await this.venteService.getVenteInfo(id).toPromise();
-      this.selectedVente = data.data;
-      this.recupCartForUpdate = this.selectedVente.historiques;
-
-      console.log(this.recupCartForUpdate);
-
-      let cart = [];
-      this.recupCartForUpdate.forEach((item: any) => {
-        let cartItem = {
-          idProduit: item.produit_id,
-          quantiteVendu: item.quantite_vendu
-        };
-
-        // Ajout de l'objet au tableau cart
-        cart.push(cartItem);
-      });
-      localStorage.setItem('cart',JSON.stringify( cart))
-      // console.log(this.recupCartForUpdate, "panier");
-      // console.log(cart, "panier");
-
-      this.cartForUpdate = JSON.parse(localStorage.getItem('cart') || '');
-      console.log(this.recupCartForUpdate);
-
-
-
-
-
-    } catch (error) {
-      console.error('Erreur lors de la récupération des informations détaillées de la vente', error);
-    }
+  getSelectedVente(id: number) {
+      this.venteService.getVenteInfo(id).subscribe(
+        (data) =>{
+          this.selectedVente = data.data;
+        }
+      );
   }
 
   onDeleteVente(id: any) {
@@ -341,6 +303,7 @@ export class GestionVenteComponent {
           this.clearCart();
 
           this.getProductFromCart();
+
 
           Notiflix.Report.success('Vente ajoutée avec succès', '', 'Okay');
           this.getAllVente();
