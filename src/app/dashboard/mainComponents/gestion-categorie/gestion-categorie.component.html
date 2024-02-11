@@ -10,7 +10,6 @@
           <tr>
             <th>id</th>
             <th>Nom</th>
-            <th>Nombre de vente</th>
             <th>Action</th>
           </tr>
         </thead>
@@ -19,7 +18,6 @@
           <tr>
             <td>{{ item.id }}</td>
             <td>{{ item.nom }}</td>
-            <td>1</td>
             <td>
               <button class="btn" data-bs-toggle="modal" data-bs-target="#modifierCatégorie"
                 (click)=" onSelectCategorie(item.id)"><i class="fa-solid fa-pen-to-square"></i></button>
@@ -35,7 +33,6 @@
             <tr>
               <th>id</th>
               <th>Nom</th>
-              <th>Nombre de vente</th>
               <th>Action</th>
             </tr>
           </thead>

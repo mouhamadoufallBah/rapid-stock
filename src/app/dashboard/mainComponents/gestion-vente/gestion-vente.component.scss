@@ -1,13 +1,10 @@
 main {
-  height: 100%;
+  height: 100vh;
   display: grid;
   grid-template-rows: 13% 85%;
   row-gap: 2%;
-  // background-color: white;
 
   .mainTop {
-    // border: 1px solid;
-
     button {
       background-color: #f47a20;
       color: white;
@@ -50,9 +47,10 @@ main {
     border: none;
   }
   .modal-body {
+    min-height: 300px;
+
     .modalBodyConatiner {
       // background-color: red;
-      height: 400px;
       display: grid;
       grid-template-columns: 45% 53%;
       justify-content: space-between;
@@ -168,11 +166,11 @@ main {
   border-radius: 12px;
   box-shadow: 0px 0px 44px 3px rgba(0, 0, 0, 0.07);
 
-  h4{
+  h4 {
     color: #f47a20;
   }
 
-  label{
+  label {
     color: #f47a20;
   }
 }
@@ -183,11 +181,12 @@ main {
   border-radius: 12px;
   box-shadow: 0px 0px 44px 3px rgba(0, 0, 0, 0.07);
 
-  h4, h5{
+  h4,
+  h5 {
     color: #f47a20;
   }
 
-  label{
+  label {
     color: #f47a20;
   }
 }
@@ -202,3 +201,35 @@ main {
     color: white;
   }
 }
+
+.containerModal {
+  .container {
+    width: 21cm;
+    min-height: 10.7cm;
+  }
+
+  .invoice {
+    background: #fff;
+    width: 100%;
+    padding: 50px;
+  }
+
+  .logo {
+    width: 2.5cm !important;
+  }
+
+  .document-type {
+    text-align: right;
+    color: #444;
+  }
+
+  .conditions {
+    font-size: 0.7em;
+    color: #666;
+  }
+
+  .bottom-page {
+    font-size: 0.7em;
+  }
+}
+

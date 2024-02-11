@@ -2,13 +2,15 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { api } from '../../shared/apiUrl';
+import { Storage, getDownloadURL, ref, uploadBytesResumable } from '@angular/fire/storage';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ProduitService {
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private storage: Storage) { }
+
 
   addProduct(data: any): Observable<any> {
     const accessToken = localStorage.getItem('access_token');
@@ -68,6 +70,22 @@ export class ProduitService {
         headers: new HttpHeaders({ 'Authorization': `Bearer ${accessToken}` })
       }) :
       of(null);
+  }
+
+  async addFile(fichier: File): Promise<string> {
+    try {
+      const randomFileName = `${Math.floor(Math.random() * 100000)}`;
+      const fileref = ref(this.storage, `fichier/rapidStokProduct${randomFileName}`);
+      const uploadTask = uploadBytesResumable(fileref, fichier);
+
+      await uploadTask;
+
+      return await getDownloadURL(fileref);
+    } catch (error) {
+      console.log(error);
+
+      throw error;
+    }
   }
 
 }

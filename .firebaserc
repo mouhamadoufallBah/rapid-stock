@@ -1,5 +1,14 @@
 {
   "projects": {
     "default": "rapid-stock"
+  },
+  "targets": {
+    "rapid-stock": {
+      "hosting": {
+        "rapid-stock": [
+          "rapid-stock"
+        ]
+      }
+    }
   }
 }

@@ -30,6 +30,16 @@ export class VenteService {
       of(null);
   }
 
+  getLatestVentes() {
+    const accessToken = localStorage.getItem('access_token');
+
+    return accessToken ?
+      this.http.get<any>(`${api}/vente/derniereVente`, {
+        headers: new HttpHeaders({ 'Authorization': `Bearer ${accessToken}` })
+      }) :
+      of(null);
+  }
+
   getVenteById(id: number): Observable<any> {
     const accessToken = localStorage.getItem('access_token');
 
@@ -60,7 +70,7 @@ export class VenteService {
       of(null);
   }
 
-  getVenteInfo(vente_id: number): Observable<any>{
+  getVenteInfo(vente_id: number): Observable<any> {
     const accessToken = localStorage.getItem('access_token');
 
     return accessToken ?

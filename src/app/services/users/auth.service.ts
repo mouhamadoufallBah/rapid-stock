@@ -32,11 +32,11 @@ export class AuthService {
 
   }
 
-  getAllEmploye(): Observable<any[]> {
+  getAllEmploye(): Observable<any> {
     const accessToken = localStorage.getItem('access_token');
 
     return accessToken ?
-      this.http.get<any[]>(`${api}/employe/lister`, {
+      this.http.get<any>(`${api}/employe/lister`, {
         headers: new HttpHeaders({ 'Authorization': `Bearer ${accessToken}` })
       }) :
       of(null);

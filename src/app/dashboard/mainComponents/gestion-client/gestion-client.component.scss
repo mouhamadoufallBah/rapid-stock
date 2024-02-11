@@ -1,5 +1,5 @@
 main {
-  height: 100%;
+  height: 100vh;
   display: grid;
   grid-template-rows: 13% 85%;
   row-gap: 2%;
@@ -133,7 +133,7 @@ main {
         gap: 4%;
 
         .modalContentTopImage{
-          background-image: url('https://img.freepik.com/photos-gratuite/portrait-succes-entrepreneur-peau-sombre-confiant-portant-costume-formel-gris-debout-contre-mur_273609-5600.jpg?w=826&t=st=1707168822~exp=1707169422~hmac=796bdf758324b7ee6660f3bc1e6212aab133eb8435cc31d48668198863344604');
+          background-image: url('https://previews.123rf.com/images/asmati/asmati1701/asmati170103570/70514999-illustration-d-avatar-utilisateur-signe-anonyme-ic%C3%B4ne-orange-avec-chemin-d-ombre-de-style-plat.jpg');
           background-position: center;
           background-size: cover;
           border-radius: 8px;

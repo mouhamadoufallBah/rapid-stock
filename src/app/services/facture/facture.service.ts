@@ -6,27 +6,28 @@ import { api } from '../../shared/apiUrl';
 @Injectable({
   providedIn: 'root'
 })
-export class PaiementService {
+export class FactureService {
 
   constructor(private http: HttpClient) { }
 
-  addPaiement(data: any, vente_id: number): Observable<any> {
+  createFacture(data: any): Observable<any> {
     const accessToken = localStorage.getItem('access_token');
 
     return accessToken ?
-      this.http.post<any>(`${api}/payement/create/${vente_id}`, data, {
+      this.http.post<any>(`${api}/facture/create`, data, {
         headers: new HttpHeaders({ 'Authorization': `Bearer ${accessToken}` })
       }) :
       of(null);
   }
 
-  newPaiementAcompte(vente_id: number, data: any){
+  getFactureById(id: number): Observable<any> {
     const accessToken = localStorage.getItem('access_token');
 
     return accessToken ?
-      this.http.post<any>(`${api}/payement/edit/${vente_id}`, data, {
+      this.http.get<any>(`${api}/facture/${id}`, {
         headers: new HttpHeaders({ 'Authorization': `Bearer ${accessToken}` })
       }) :
       of(null);
   }
+
 }

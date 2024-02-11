@@ -6,7 +6,7 @@ main {
   align-items: center;
 
   .mainContent {
-    height: 60%;
+    min-height: 60%;
     width: 60%;
     display: grid;
     grid-template-columns: 45% 55%;

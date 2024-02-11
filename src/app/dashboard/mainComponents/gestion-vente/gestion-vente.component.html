@@ -27,7 +27,7 @@
           <td>{{ item.client_id | clientIdToClientInfo:allClient:true:false:false:false }}</td>
           <td>{{ item.client_id | clientIdToClientInfo:allClient:false:false:true:false }}</td>
           <td>{{ item.montant_total }}f CFA</td>
-          <td>{{ item.created_at | date: 'dd/MM/YYYY' }}</td>
+          <td>{{ item.created_at | date: 'dd/MM/YYYY hh:mm' }}</td>
           <td>
             <button class="btn" data-bs-toggle="modal" data-bs-target="#voirDetail"
               (click)=" getSelectedVente(item.id)"><i class="fa-solid fa-eye"></i></button>
@@ -52,7 +52,7 @@
       <tbody>
 
         <tr>
-          <td colspan="4" class="text-center"> Aucun achat disponible</td>
+          <td colspan="4" class="text-center"> Aucun vente disponible</td>
         </tr>
 
       </tbody>
@@ -164,15 +164,38 @@
 
           @if(cartProducts.length > 0){
 
-          <label for="categorie">Selectionner le client</label>
-          <select class="form-select" name="categorie" id="categorie" aria-label="Default select example"
-            [(ngModel)]="client_id">
-            <option selected disabled>Selectionner le client</option>
-            @for(item of allClient; track $index){
-            <option [value]="item.id" (click)="getProduitByIdCategorie(item.id)"> {{ item.prenom + " " + item.prenom }}
-            </option>
-            }
-          </select>
+          <div class="row">
+            <div class="col-5">
+              <label for="categorie">Selectionner le client</label>
+              <select class="form-select mb-3" name="categorie" id="categorie" aria-label="Default select example"
+                [(ngModel)]="client_id">
+                <option selected disabled>Selectionner le client</option>
+                @for(item of allClient; track $index){
+                <option [value]="item.id" (click)="getProduitByIdCategorie(item.id)"> {{ item.prenom + " " + item.prenom
+                  }}
+                </option>
+                }
+              </select>
+            </div>
+
+            <div class="col-5">
+              <label for="categorie">Selectionner le client</label>
+              <select class="form-select mb-3" name="categorie" id="categorie" aria-label="Default select example"
+                [(ngModel)]="etatPaiment">
+                <option value="comptant" selected>Comptant</option>
+                <option value="acompte">Acompte</option>
+              </select>
+            </div>
+          </div>
+
+          @if(etatPaiment === "acompte"){
+          <div class="mb-3">
+            <label for="montant" class="form-label">Montant</label>
+            <input type="text" class="form-control" id="montant" name="montant" placeholder="montant du versement"
+              [(ngModel)]="montantPaiment">
+          </div>
+          }
+
           }
 
         </div>
@@ -337,16 +360,29 @@
         <div class="col-6 rigthContentModal">
           <h4 class="text-center pt-4">Information du vente</h4>
           <h5>Produit et quantité</h5>
-          <ul class="list-group mb-5">
+          <ul class="list-group mb-3">
             @if(selectedVente.historiques.length > 0){
             @for(item of selectedVente.historiques; track $index){
-              <li class="list-group-item">{{ item.produit_id | produitIdToProduitInfo:AllProducts:true:false:false }} : {{ item.quantite_vendu }}</li>
+            <li class="list-group-item">{{ item.produit_id | produitIdToProduitInfo:AllProducts:true:false:false }} : {{
+              item.quantite_vendu }}</li>
             }
             }
           </ul>
           <h5>Montant total</h5>
-          <h6 class="fw-bold mb-5">{{ selectedVente.historiques[0].vente_id | venteIdToVenteInfo: ventes}}f CFA</h6>
-          <button class="btn">Effectuer le paiement</button>
+          <h6 class="fw-bold mb-3">{{ selectedVente.historiques[0].vente_id | venteIdToVenteInfo: ventes}}f CFA</h6>
+
+          @if(selectedVente.paiementInfo.montant_restant > 0){
+          <button class="btn mb-3" (click)="curentVenteId()" data-bs-toggle="modal"
+            data-bs-target="#newPaiment">Effectuer le
+            paiement</button><br>
+          }
+          <h5>Les factures</h5>
+          @if(this.selectedVente.factures){
+          @for (item of this.selectedVente.factures; track $index) {
+          <button class="me-3 mb-3 rounded-1" (click)="getFactureById(item.id)" data-bs-toggle="modal"
+            data-bs-target="#facture">{{ item.created_at | date:"dd/MM/yyyy HH:mm" }}</button>
+          }
+          }
 
         </div>
         }
@@ -360,4 +396,136 @@
   </div>
 </div>
 
+
+<!-- NewPaiementModal-->
+<div class="modal fade" id="newPaiment" tabindex="-1" aria-labelledby="newPaimentLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="newPaimentLabel">Modal title</h1>
+      </div>
+      <div class="modal-body">
+        <!-- {{ idVent }} -->
+        <div class="mb-3">
+          <label for="montant" class="form-label">Montant</label>
+          <input type="number" class="form-control" id="montant" name="montant" placeholder="montant du versement"
+            [(ngModel)]="montantVersementAcompte">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btnAnnuler" data-bs-dismiss="modal">Annuler</button>
+        <button type="button" class="btn btn-primary" (click)="newPaimentAcompte(idVent)">Enregistrer</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
 <!-- les Modals -->
+
+<!-- facture modal-->
+<div class="modal fade modal-xl" id="facture" tabindex="-1" aria-labelledby="factureLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="factureLabel">Facture</h1>
+      </div>
+      <div class="modal-body containerModal overflow-x-scroll" id="print-section">
+        <div class="container">
+          <div class="invoice">
+            <div class="row">
+              <div class="col-7">
+                <img src="assets/RAPIDSTOCK.png" class="logo">
+              </div>
+              <div class="col-5">
+                <h1 class="document-type display-4">FACTURE</h1>
+                <p class="text-right">N°<strong>{{ selectedFacture?.facture?.numerofacture}}</strong></p>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-7">
+                <p>
+                  <strong>Rapid stock</strong><br>
+                  Yoff<br>
+                  Dakar-Sénégal<br>
+                  le {{ selectedFacture?.facture?.created_at | date:'dd/MM/yyyy HH:mm' }}
+                </p>
+              </div>
+              <div class="col-5">
+                <p>
+                  Vendu par: <br>
+                  <strong>{{ selectedFacture?.vente?.user_id |
+                    userIdToUserInfo:allUsers:false:true:false:false}}</strong>&nbsp;
+                  <strong>{{ selectedFacture?.vente?.user_id |
+                    userIdToUserInfo:allUsers:true:false:false:false}}</strong><br>
+
+                </p>
+                <p>
+                  <strong>{{ selectedFacture?.client?.prenom + " " + selectedFacture?.client?.nom }}</strong><br>
+                  Réf. Client <em>{{ selectedFacture?.client?.code_client }}</em><br>
+                  {{ selectedFacture?.client?.adresse }}<br>
+                  {{ selectedFacture?.client?.telephone }}
+                </p>
+              </div>
+            </div>
+            <br>
+            <br>
+            <br>
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th>Description</th>
+                  <th>Quantité</th>
+                  <th>PU</th>
+                  <th>Total</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for(item of selectedFacture.produit ; track $index){
+                <tr>
+                  <td>{{ item.nomproduit }}</td>
+                  <td>{{ item.quantitevendu }}</td>
+                  <td class="text-right">{{ item.prixunitaire }}</td>
+                  <td class="text-right">{{ item.prixunitaire * item.quantitevendu }}</td>
+                </tr>
+                }
+              </tbody>
+            </table>
+            <div class="row">
+              <div class="col-6">
+              </div>
+              <div class="col-6">
+                <br>
+                <br>
+                <table class="table table-sm text-right">
+                  <tr>
+                    <td><strong>Total à payer</strong></td>
+                    <td class="text-right">{{ selectedFacture?.vente?.montant_total }} FCfa</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Montant verser</strong></td>
+                    <td class="text-right">{{ selectedFacture?.facture?.montantVerser }} FCfa</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Montant Total Payée</strong></td>
+                    <td class="text-right">{{ selectedFacture?.payerment?.montant_payement }} FCfa</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Montant Restante</strong></td>
+                    <td class="text-right">{{ selectedFacture?.payerment?.montant_restant }} FCfa</td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btnAnnuler" data-bs-dismiss="modal">Annuler</button>
+        <button type="button" class="btn btn-primary" [printStyle]="{img: {'width':'2.5cm'}}" [useExistingCss]="true"
+          styleSheetFile="../gestion-vente/gestion-vente.component.scss" printSectionId="print-section"
+          ngxPrint>Imprimer</button>
+      </div>
+    </div>
+  </div>
+</div>

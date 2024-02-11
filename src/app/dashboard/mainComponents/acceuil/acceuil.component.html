@@ -1,6 +1,6 @@
 <div class="dynamicContentTop" >
   <div class="dynamicContentTopItem">
-    <h2>Entrée/Sortie périodique</h2>
+    <h6>Entrée/Sortie périodique</h6>
     <div id="chart">
       <apx-chart [series]="chartOptions.series" [chart]="chartOptions.chart" [xaxis]="chartOptions.xaxis"
         [stroke]="chartOptions.stroke" [tooltip]="chartOptions.tooltip"
@@ -18,42 +18,49 @@
 <div class="dynamicContentBottom mt-5">
   <div class="dynamicContentBottomLeft p-5">
     <h5>La liste des dernière vente</h5>
-    <table datatable [dtOptions]="dtOptions" class="table">
-      <thead>
-        <tr>
-          <th>ID</th>
-          <th>First name</th>
-          <th>Last name</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>1</td>
-          <td>Foo</td>
-          <td>Bar</td>
-        </tr>
-        <tr>
-          <td>2</td>
-          <td>Someone</td>
-          <td>Youknow</td>
-        </tr>
-        <tr>
-          <td>3</td>
-          <td>Iamout</td>
-          <td>Ofinspiration</td>
-        </tr>
-        <tr>
-          <td>4</td>
-          <td>Yoda</td>
-          <td>Skywalker</td>
-        </tr>
-        <tr>
-          <td>5</td>
-          <td>Patrick</td>
-          <td>Dupont</td>
-        </tr>
-      </tbody>
-    </table>
+    @if(latestVente.length > 0){
+      <table datatable [dtOptions]="dtOptions" class="table">
+        <thead class="table-secondary rounded-top-3">
+          <tr>
+            <th>Prenom du client</th>
+            <th>Nom du client</th>
+            <th>Telephone</th>
+            <th>Montant</th>
+            <th>Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for(item of latestVente; track $index){
+          <tr>
+            <td>{{ item.client_id | clientIdToClientInfo:allClients:false:true:false:false }}</td>
+            <td>{{ item.client_id | clientIdToClientInfo:allClients:true:false:false:false }}</td>
+            <td>{{ item.client_id | clientIdToClientInfo:allClients:false:false:true:false }}</td>
+            <td>{{ item.montant_total }}f CFA</td>
+            <td>{{ item.created_at | date: 'dd/MM/YYYY hh:mm' }}</td>
+          </tr>
+          }
+        </tbody>
+      </table>
+      }@else {
+      <table class="table">
+        <thead class="table-secondary rounded-top-3">
+          <tr>
+            <th>Prenom du client</th>
+            <th>Nom du client</th>
+            <th>Telephone</th>
+            <th>Montant</th>
+            <th>Date</th>
+          </tr>
+        </thead>
+        <tbody>
+
+          <tr>
+            <td colspan="5" class="text-center"> Aucun vente disponible</td>
+          </tr>
+
+        </tbody>
+      </table>
+      }
   </div>
   <div class="dynamicContentBottomRight">
     <h3>Les stats</h3>
@@ -67,7 +74,7 @@
           </svg>
         </div>
         <h5 class="title">Employé</h5>
-        <div class="value">250</div>
+        <div class="value">{{ allEmploye }}</div>
       </div>
       <div class="dynamicContentBottomRightCardItem orange">
         <div class="icon">
@@ -81,7 +88,7 @@
           </svg>
         </div>
         <h5 class="title">Client</h5>
-        <div class="value">250</div>
+        <div class="value">{{ allClient }}</div>
       </div>
       <div class="dynamicContentBottomRightCardItem green">
         <div class="icon">
@@ -93,8 +100,8 @@
               stroke="#4ECB71" stroke-width="1.71429" stroke-linecap="round" stroke-linejoin="round" />
           </svg>
         </div>
-        <h5 class="title">Nombre d'achat</h5>
-        <div class="value">9964</div>
+        <h5 class="title">Nombre de vente</h5>
+        <div class="value">{{ allVente }}</div>
       </div>
       <div class="dynamicContentBottomRightCardItem red">
         <div class="icon">
@@ -107,7 +114,7 @@
           </svg>
         </div>
         <h5 class="title">Nombre d'achat</h5>
-        <div class="value">6735</div>
+        <div class="value">{{ allAchat }}</div>
       </div>
       <div class="dynamicContentBottomRightCardItem green">
         <div class="icon">
@@ -118,7 +125,7 @@
           </svg>
         </div>
         <h5 class="title">Montant des ventes</h5>
-        <div class="value">550.928.575 F cfa</div>
+        <div class="value">{{ montantvente }} F cfa</div>
       </div>
       <div class="dynamicContentBottomRightCardItem red">
         <div class="icon">
@@ -127,7 +134,7 @@
           </svg>
         </div>
         <h5 class="title">Montant des achats</h5>
-        <div class="value">250.928.575 F cfa</div>
+        <div class="value">{{ montantAchat }} F cfa</div>
       </div>
 
     </div>

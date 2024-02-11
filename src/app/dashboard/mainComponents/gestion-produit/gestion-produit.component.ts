@@ -6,12 +6,13 @@ import { ProduitService } from '../../../services/produit/produit.service';
 import Notiflix from 'notiflix';
 import { FormsModule } from '@angular/forms';
 import { CategorieService } from '../../../services/categorie/categorie.service';
+import { CategorieIdToCategorieNamePipe } from '../../../pipes/categorie/categorie-id-to-categorie-name.pipe';
 
 
 @Component({
   selector: 'app-gestion-produit',
   standalone: true,
-  imports: [NgIf, DataTablesModule, FormsModule,],
+  imports: [NgIf, DataTablesModule, FormsModule,CategorieIdToCategorieNamePipe],
   templateUrl: './gestion-produit.component.html',
   styleUrl: './gestion-produit.component.scss'
 })
@@ -30,6 +31,8 @@ export class GestionProduitComponent implements OnInit {
   quantiteSeuilAdd: number;
   etatAdd: string = "";
   categorie_idAdd: number;
+
+  fichierAdd: File;
 
   nomUpdate: string = "";
   imageUpdate: string = "";
@@ -93,6 +96,34 @@ export class GestionProduitComponent implements OnInit {
 
   }
 
+
+  upload($event){
+    this.fichierAdd = $event.target.files[0];
+  }
+
+
+  save() {
+    Notiflix.Loading.init({
+      svgColor: '#f47a20',
+      cssAnimation: true,
+      cssAnimationDuration: 360,
+
+    });
+    Notiflix.Loading.hourglass();
+    this.produitService.addFile(this.fichierAdd)
+      .then(downloadURL => {
+        // Utiliser l'URL de téléchargement, par exemple :
+        console.log('Fichier téléchargé avec succès ! URL :', downloadURL);
+        this.imageAdd = downloadURL;
+        this.onAddProduit();
+      })
+      .catch(error => {
+        // Gérer les erreurs
+        console.error('Erreur lors du téléchargement du fichier : ', error);
+        alert('Échec du téléchargement du fichier.');
+      });
+  }
+
   onAddProduit() {
     const data: any = {
       nomproduit: this.nomAdd,
@@ -100,11 +131,10 @@ export class GestionProduitComponent implements OnInit {
       prixU: this.prixUAdd,
       quantite: this.quantiteAdd,
       quantiteseuil: this.quantiteSeuilAdd,
-      // etat: this.quantiteAdd > this.quantiteSeuilAdd ? "En_stock" : "rupture",
       categorie_id: this.categorie_idAdd
     };
 
-    if (this.nomAdd == "" || this.imageAdd == "" || this.prixUAdd == undefined || this.quantiteAdd == undefined || this.quantiteSeuilAdd == undefined || this.categorie_idAdd == undefined) {
+    if (this.nomAdd == "" || this.prixUAdd == undefined || this.quantiteAdd == undefined || this.quantiteSeuilAdd == undefined || this.categorie_idAdd == undefined) {
       Notiflix.Report.failure('Veuillez remplir le champs', '', 'Okay');
     } else {
       Notiflix.Loading.init({
@@ -147,6 +177,7 @@ export class GestionProduitComponent implements OnInit {
   }
 
   getProduitById(id: number) {
+    this.getAllCategorie();
     this.produitService.getProductById(id).subscribe(
       (data) => {
         this.selectedProduit = data;
@@ -174,11 +205,10 @@ export class GestionProduitComponent implements OnInit {
       prixU: this.prixUUpdate,
       quantite: this.quantiteUpdate,
       quantiteseuil: this.quantiteSeuilUpdate,
-      // etat: this.quantiteUpdate > this.quantiteSeuilUpdate ? "En_stock" : "rupture",
       categorie_id: this.categorie_idUpdate
     };
 
-    if (this.nomUpdate == "" || this.imageUpdate == "" || this.prixUUpdate == undefined || this.quantiteUpdate == undefined || this.quantiteSeuilUpdate == undefined || this.categorie_idUpdate == undefined) {
+    if (this.nomUpdate == "" || this.prixUUpdate == undefined || this.quantiteUpdate == undefined || this.quantiteSeuilUpdate == undefined || this.categorie_idUpdate == undefined) {
       Notiflix.Report.failure('Veuillez remplir le champs', '', 'Okay');
     } else {
       Notiflix.Loading.init({

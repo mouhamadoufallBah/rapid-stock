@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ElementRef, Renderer2, ViewChild } from '@angular/core';
 // import { CommonModule } from '@angular/common';
 import { DataTablesModule } from 'angular-datatables';
 import { FormsModule } from '@angular/forms';
@@ -15,12 +15,17 @@ import { ClientIdToClientInfoPipe } from '../../../pipes/clients/client-id-to-cl
 import { data } from 'jquery';
 import { ProduitIdToProduitInfoPipe } from '../../../pipes/produit/produit-id-to-produit-info.pipe';
 import { VenteIdToVenteInfoPipe } from '../../../pipes/vente/vente-id-to-vente-info.pipe';
+import { PaiementService } from '../../../services/paiement/paiement.service';
+import { FactureService } from '../../../services/facture/facture.service';
+import { NgxPrintModule } from 'ngx-print';
+import { UserIdToUserInfoPipe } from '../../../pipes/user/user-id-to-user-info.pipe';
+import { AuthService } from '../../../services/users/auth.service';
 
 
 @Component({
   selector: 'app-gestion-vente',
   standalone: true,
-  imports: [DataTablesModule, FormsModule, NgIf, ProduitIdToProduitNamePipe, DatePipe, ProduitIdToProduitPricePipe, ClientIdToClientInfoPipe, ProduitIdToProduitInfoPipe, VenteIdToVenteInfoPipe],
+  imports: [DataTablesModule, FormsModule, NgIf, ProduitIdToProduitNamePipe, DatePipe, ProduitIdToProduitPricePipe, ClientIdToClientInfoPipe, ProduitIdToProduitInfoPipe, VenteIdToVenteInfoPipe, UserIdToUserInfoPipe, NgxPrintModule],
   templateUrl: './gestion-vente.component.html',
   styleUrl: './gestion-vente.component.scss'
 })
@@ -35,19 +40,28 @@ export class GestionVenteComponent {
   SelectedcategorieId: any;
 
   allClient: any[] = [];
+  allUsers: any[] = [];
   client_id: number = null;
 
   cartProducts: any[] = [];
   sommeCart: number = 0;
   recupCartForUpdate: any;
 
-  cartForUpdate: any [] = [];
+  cartForUpdate: any[] = [];
+
+  //paiement Ngmodel
+  etatPaiment: string = "";
+  montantPaiment!: number;
+
+  idVent: any;
+  montantVersementAcompte: any;
+
+  selectedFacture: any = {};
 
   dtOptions: DataTables.Settings = {};
   panier: DataTables.Settings = {};
 
-
-  constructor(private venteService: VenteService, private categorieService: CategorieService, private produitService: ProduitService, private clientService: ClientService) { }
+  constructor(private venteService: VenteService, private categorieService: CategorieService, private produitService: ProduitService, private clientService: ClientService, private paiementService: PaiementService, private factureService: FactureService, private authService: AuthService) { }
 
   ngOnInit(): void {
     this.dtOptions = {
@@ -74,6 +88,16 @@ export class GestionVenteComponent {
     this.getAllVente();
     this.getAllProducts();
     this.getAllClient();
+    this.getAllUsers();
+  }
+
+  getAllUsers() {
+    this.authService.getAllEmploye().subscribe(
+      (response) => {
+        this.allUsers = response.data;
+      }
+
+    )
   }
 
   getAllVente() {
@@ -102,8 +126,7 @@ export class GestionVenteComponent {
     this.categorieService.getAllCategory().subscribe(
       (data) => {
         this.categories = data.data;
-        console.log(this.categories);
-
+        // console.log(this.categories);
       }
     )
   }
@@ -112,7 +135,7 @@ export class GestionVenteComponent {
     this.produitService.getProductByIdCategorie(id).subscribe(
       (data) => {
         this.productsByCategorie = data.data;
-        console.log(data);
+        // console.log(data);
       }
     )
   }
@@ -151,15 +174,15 @@ export class GestionVenteComponent {
   }
 
   getSelectedVente(id: number) {
-      this.venteService.getVenteInfo(id).subscribe(
-        (data) =>{
-          this.selectedVente = data.data;
-        }
-      );
+    this.venteService.getVenteInfo(id).subscribe(
+      (data) => {
+        this.selectedVente = data.data;
+        console.log(this.selectedVente.paiementInfo.montant_restant, "les facture");
+      }
+    );
   }
 
   onDeleteVente(id: any) {
-
     Notiflix.Confirm.init({
       okButtonBackground: '#FF1700',
       titleColor: '#FF1700'
@@ -299,11 +322,36 @@ export class GestionVenteComponent {
 
       this.venteService.addVente(data).subscribe(
         (response) => {
-          console.log(response);
+          // console.log(response, "info vente");
           this.clearCart();
 
-          this.getProductFromCart();
+          const paiementInfo = {
+            id: response.vente.id,
+            etat: this.etatPaiment,
+            montantVerser: this.etatPaiment === "comptant" ? response.vente.montant_total : this.montantPaiment
+          }
 
+          //paiement
+          this.paiementService.addPaiement(paiementInfo, response.vente.id).subscribe(
+            (res) => {
+              // console.log(res, "info paiment");
+
+              const data = {
+                "payement_id": res.idPaiement,
+                "montantVerser": res.informationPaiement.montantVerser
+              }
+
+              // facture
+              this.factureService.createFacture(data).subscribe(
+                (data) => {
+                  // console.log(data, "info facture");
+
+                }
+              );
+            }
+          );
+
+          this.getProductFromCart();
 
           Notiflix.Report.success('Vente ajoutée avec succès', '', 'Okay');
           this.getAllVente();
@@ -315,8 +363,60 @@ export class GestionVenteComponent {
     }
   }
 
-  clearCart(){
+  clearCart() {
     localStorage.removeItem('cart');
   }
 
+  curentVenteId() {
+    this.idVent = this.selectedVente.historiques[0].vente_id;
+    console.log(this.idVent);
+
+  }
+
+  newPaimentAcompte(id: number) {
+    if (this.montantVersementAcompte == undefined) {
+      Notiflix.Report.failure('Veuillez renseigner le montant verser', '', 'Okay');
+    } else {
+      const data = {
+        "montantVerser": this.montantVersementAcompte
+      }
+      Notiflix.Loading.init({
+        svgColor: '#f47a20',
+        cssAnimation: true,
+        cssAnimationDuration: 360,
+
+      });
+      Notiflix.Loading.hourglass();
+      this.paiementService.newPaiementAcompte(id, data).subscribe(
+        (resp) => {
+          // console.log(resp, "nouvelle versement");
+          const data = {
+            "payement_id": resp.payment.id,
+            "montantVerser": resp.montantVerser
+          }
+
+          // facture
+          this.factureService.createFacture(data).subscribe(
+            (data) => {
+              // console.log(data, "info facture");
+              Notiflix.Loading.remove();
+              Notiflix.Report.success('Paiement enregistrer avec succès', '', 'Okay');
+
+            }
+          );
+        }
+      );
+    }
+  }
+
+  getFactureById(id: number) {
+    this.factureService.getFactureById(id).subscribe(
+      (resp) => {
+        // console.log(resp);
+        this.selectedFacture = resp;
+      }
+    )
+  }
+
 }
+

@@ -12,6 +12,8 @@
     <table datatable [dtOptions]="dtOptions" class="table">
       <thead>
         <tr>
+
+          <th>Image</th>
           <th>Nom du produit</th>
           <th>Quantité</th>
           <th>Prix unitaire</th>
@@ -23,6 +25,7 @@
       <tbody>
         @for (item of produits; track $index) {
         <tr>
+          <td><img src="{{ item.image }}" alt="" style="height: 50px; width: 50px; border-radius: 50%;"></td>
           <td>{{ item.nomproduit }}</td>
           <td>{{ item.quantite }}</td>
           <td>{{ item.prixU }}</td>
@@ -115,21 +118,14 @@
               name="quantiteSeuil" [(ngModel)]="prixUAdd">
           </div>
           <div class="mb-3">
-            <label for="imageAdd" class="form-label">Image</label>
-            <input type="text" class="form-control" id="imageAdd" placeholder="Image du produit" name="imageAdd"
-              [(ngModel)]="imageAdd">
+            <label for="imageAdd" class="form-label">Image</label><br>
+            <input type="file" (change)="upload($event)" accept="*.png.jpg" style="width: 100%; overflow: scroll;">
           </div>
-          <!-- <div class="mb-3">
-            <label for="imageAdd" class="form-label">Image</label>
-            <input type="file" class="form-control" id="imageAdd" placeholder="Nom du produit" name="imageAdd"
-              [(ngModel)]="imageAdd">
-          </div> -->
-
         </form>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btnAnnuler" data-bs-dismiss="modal">Annuler</button>
-        <button type="button" class="btn" (click)="onAddProduit()" data-bs-dismiss="modal">Ajouter</button>
+        <button type="button" class="btn" (click)="save()" data-bs-dismiss="modal">Ajouter</button>
       </div>
     </div>
   </div>
@@ -155,7 +151,7 @@
             <select class="form-select" name="specialite" aria-label="Default select example"
               [(ngModel)]="categorie_idUpdate">
               <option selected [value]="selectedProduit.id">{{ selectedProduit.nom }}</option>
-            @for(item of categories; track $index){
+              @for(item of categories; track $index){
               <option [value]="item.id"> {{ item.nom }}</option>
               }
             </select>
@@ -175,11 +171,6 @@
             <input type="number" class="form-control" id="prixUniatireUpdate" placeholder="Nom du produit"
               name="prixUniatireUpdate" [(ngModel)]="prixUUpdate">
           </div>
-          <div class="mb-3">
-            <label for="imageUpdate" class="form-label">Image</label>
-            <input type="text" class="form-control" id="imageUpdate" placeholder="Image du produit" name="imageUpdate"
-              [(ngModel)]="imageUpdate">
-          </div>
           <!-- <div class="mb-3">
               <label for="imageAdd" class="form-label">Image</label>
               <input type="file" class="form-control" id="imageAdd" placeholder="Nom du produit" name="imageAdd"
@@ -192,7 +183,8 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btnAnnuler" data-bs-dismiss="modal">Annuler</button>
-        <button type="button" class="btn" data-bs-dismiss="modal" (click)="onUpdateProduit(selectedProduit.id)">Modifier</button>
+        <button type="button" class="btn" data-bs-dismiss="modal"
+          (click)="onUpdateProduit(selectedProduit.id)">Modifier</button>
       </div>
     </div>
   </div>
@@ -207,21 +199,22 @@
       </div>
       <div class="modal-body">
         <div class="modalBodyConatiner">
+          @if(selectedProduit){
           <div class="modalBodyConatinerLeft">
             <img
-              src="https://www.sococim.com/sites/default/files/styles/image_678x423/public/2022-08/CEM%20II%20B-LL%2032.5%20R%20CE%20-%20H423%20x%20L678_0.jpg?itok=A82vMEcs"
+              src="{{ selectedProduit.image }}"
               alt="">
           </div>
           <div class="modalBodyConatinerRight">
             <div class="modalBodyConatinerRightItem py-5">
-              @if(selectedProduit){
+
               <div class="mb-4 ">
                 <label for="exampleInputEmail1" class="form-label">Nom du produit</label>
                 <h6>{{ selectedProduit.nomproduit }}</h6>
               </div>
               <div class="mb-4 ">
                 <label for="exampleInputEmail1" class="form-label">Catégorie du produit</label>
-                <h6>{{ selectedProduit.categorie_id }}</h6>
+                <h6>{{ selectedProduit.categorie_id | categorieIdToCategorieName:categories }}</h6>
               </div>
               <div class="mb-4 ">
                 <label for="exampleInputEmail1" class="form-label">Quantité en stock</label>
@@ -231,9 +224,10 @@
                 <label for="exampleInputEmail1" class="form-label">Prix unitaire</label>
                 <h6>{{ selectedProduit.prixU }}f CFA</h6>
               </div>
-              }
+
             </div>
           </div>
+        }
         </div>
       </div>
       <div class="modal-footer">

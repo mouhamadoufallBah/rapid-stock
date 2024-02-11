@@ -10,11 +10,11 @@ export class ClientService {
 
   constructor(private http: HttpClient) { }
 
-  getAllClient(): Observable<any[]> {
+  getAllClient(): Observable<any> {
     const accessToken = localStorage.getItem('access_token');
 
     return accessToken ?
-      this.http.get<any[]>(`${api}/client/lister`, {
+      this.http.get<any>(`${api}/client/lister`, {
         headers: new HttpHeaders({ 'Authorization': `Bearer ${accessToken}` })
       }) :
       of(null);

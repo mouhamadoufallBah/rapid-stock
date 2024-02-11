@@ -8,9 +8,9 @@
       <menu class="">
         <ul class="list-unstyled">
           @for (item of filteredSidebarItems(); track $index) {
-          <li class="mb-3">
+          <li class="mb-3"  routerLinkActive="activeMenu" aria-current="page" routerLink="{{ item.lien }}" style="cursor: pointer;">
             <i [class]=item.icon></i>
-            <a routerLink="{{ item.lien }}" routerLinkActive="activeMenu">{{ item.title }}</a>
+            <a routerLinkActive="activeMenu" aria-current="page" routerLink="{{ item.lien }}" >{{ item.title }}</a>
           </li>
           }
         </ul>
@@ -20,7 +20,7 @@
       <div class="sidebarBottomLeft">
         <div class="sidebarBottomLeftImage">
           <img
-            src="https://img.freepik.com/photos-gratuite/homme-latin-souriant-maquette-psd-expression-joyeuse-closeup-portrai_53876-145665.jpg?size=626&ext=jpg&ga=GA1.1.1920336883.1697903598&semt=sph"
+            src="https://img.freepik.com/photos-gratuite/beau-male-adulte-posant_23-2148729713.jpg?t=st=1707686184~exp=1707686784~hmac=5c14c793ccc62019d2e930b88de714f4fdae49e5c12d1881c3337441cbe955b9"
             alt="">
         </div>
         <div class="sidebarBottomLeftInfo">
@@ -44,7 +44,7 @@
       <header class="d-flex justify-content-between align-items-center">
         <div class="menuTogler" (click)="onToggleMenu()"><i class="bi bi-list "></i></div>
         <a routerLink="./profile" class="profil"><img
-            src="https://img.freepik.com/photos-gratuite/homme-latin-souriant-maquette-psd-expression-joyeuse-closeup-portrai_53876-145665.jpg?size=626&ext=jpg&ga=GA1.1.1920336883.1697903598&semt=sph"
+            src="https://img.freepik.com/photos-gratuite/beau-male-adulte-posant_23-2148729713.jpg?t=st=1707686184~exp=1707686784~hmac=5c14c793ccc62019d2e930b88de714f4fdae49e5c12d1881c3337441cbe955b9"
             alt="">
         </a>
       </header>
