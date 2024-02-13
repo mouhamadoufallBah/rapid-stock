@@ -1,6 +1,6 @@
 import { NgClass } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router, RouterLink, RouterOutlet } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { SidebarComponent } from '../layouts/sidebar/sidebar.component';
 import { HeaderComponent } from '../layouts/header/header.component';
 import Notiflix from 'notiflix';
@@ -10,7 +10,7 @@ import { RoleIdToroleNamePipe } from '../../pipes/user/role-id-torole-name.pipe'
 @Component({
   selector: 'app-main',
   standalone: true,
-  imports: [RouterOutlet, NgClass, SidebarComponent, HeaderComponent, RouterLink, RoleIdToroleNamePipe],
+  imports: [RouterOutlet, NgClass, SidebarComponent, HeaderComponent, RouterLink, RoleIdToroleNamePipe,RouterLinkActive],
   templateUrl: './main.component.html',
   styleUrl: './main.component.scss'
 })

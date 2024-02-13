@@ -68,20 +68,18 @@ export class AcceuilComponent implements OnInit {
   latestVente: any[] = [];
   allClients: any[] = []
 
-  sommeAchatVente = this.montantAchat + this.montantvente
-
-
+  montantTotalVenteParMois: any[] = []
 
 
   constructor(private authService: AuthService, private clientService: ClientService, private venteService: VenteService, private achatService: AchatService) {
     this.chartOptions = {
       series: [
         {
-          name: "series1",
+          name: "Achat",
           data: [31, 40, 28, 51, 42, 109, 100]
         },
         {
-          name: "series2",
+          name: "Vente",
           data: [11, 32, 45, 32, 34, 52, 41]
         }
       ],
@@ -152,6 +150,8 @@ export class AcceuilComponent implements OnInit {
     this.montantAllAchat();
     this.updateChartOptions();
     this.getLatestVente();
+
+    this.getMontantVenteTotalParMois();
 
 
     this.dtOptions = {
@@ -234,6 +234,18 @@ export class AcceuilComponent implements OnInit {
       }
     );
   }
+
+  getMontantVenteTotalParMois(){
+    this.venteService.getTotalParMois().subscribe(
+      (response) =>{
+        this.montantTotalVenteParMois = response
+        console.log(this.montantTotalVenteParMois);
+
+      }
+    )
+  }
+
+
 }
 
 

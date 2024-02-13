@@ -1,8 +1,11 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { Observable, Subject, of, tap } from 'rxjs';
 import { api } from '../../shared/apiUrl';
 import { Storage, getDownloadURL, ref, uploadBytesResumable } from '@angular/fire/storage';
+import { Cacheable } from 'ts-cacheable';
+
+const cacheBuster$ = new Subject<void>();
 
 @Injectable({
   providedIn: 'root'
@@ -18,10 +21,11 @@ export class ProduitService {
     return accessToken ?
       this.http.post<any>(`${api}/produit/create`, data, {
         headers: new HttpHeaders({ 'Authorization': `Bearer ${accessToken}` })
-      }) :
+      }).pipe(tap(() => cacheBuster$.next())) :
       of(null);
   }
 
+  @Cacheable({cacheBusterObserver: cacheBuster$})
   getAllProduct(): Observable<any> {
     const accessToken = localStorage.getItem('access_token');
 
@@ -42,6 +46,7 @@ export class ProduitService {
       of(null);
   }
 
+  @Cacheable({cacheBusterObserver: cacheBuster$})
   getProductByIdCategorie(id: number): Observable<any> {
     const accessToken = localStorage.getItem('access_token');
 
@@ -58,7 +63,7 @@ export class ProduitService {
     return accessToken ?
       this.http.put<any>(`${api}/produit/edit/${id}`, data, {
         headers: new HttpHeaders({ 'Authorization': `Bearer ${accessToken}` })
-      }) :
+      }).pipe(tap(() => cacheBuster$.next())) :
       of(null);
   }
 
@@ -68,7 +73,7 @@ export class ProduitService {
     return accessToken ?
       this.http.delete<any>(`${api}/produit/supprimer/${id}`, {
         headers: new HttpHeaders({ 'Authorization': `Bearer ${accessToken}` })
-      }) :
+      }).pipe(tap(() => cacheBuster$.next())) :
       of(null);
   }
 

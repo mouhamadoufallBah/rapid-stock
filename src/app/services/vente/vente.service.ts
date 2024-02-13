@@ -1,7 +1,10 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { Observable, Subject, of, tap } from 'rxjs';
 import { api } from '../../shared/apiUrl';
+import { Cacheable } from 'ts-cacheable';
+
+const cacheBuster$ = new Subject<void>();
 
 @Injectable({
   providedIn: 'root'
@@ -16,10 +19,11 @@ export class VenteService {
     return accessToken ?
       this.http.post<any>(`${api}/vente/create`, data, {
         headers: new HttpHeaders({ 'Authorization': `Bearer ${accessToken}` })
-      }) :
+      }).pipe(tap(() => cacheBuster$.next())) :
       of(null);
   }
 
+  @Cacheable({cacheBusterObserver: cacheBuster$})
   getAllVente(): Observable<any> {
     const accessToken = localStorage.getItem('access_token');
 
@@ -30,6 +34,7 @@ export class VenteService {
       of(null);
   }
 
+  @Cacheable({cacheBusterObserver: cacheBuster$})
   getLatestVentes() {
     const accessToken = localStorage.getItem('access_token');
 
@@ -56,7 +61,7 @@ export class VenteService {
     return accessToken ?
       this.http.put<any>(`${api}/vente/edit/${id}`, data, {
         headers: new HttpHeaders({ 'Authorization': `Bearer ${accessToken}` })
-      }) :
+      }).pipe(tap(() => cacheBuster$.next())) :
       of(null);
   }
 
@@ -66,7 +71,7 @@ export class VenteService {
     return accessToken ?
       this.http.delete<any>(`${api}/vente/supprimer/${id}`, {
         headers: new HttpHeaders({ 'Authorization': `Bearer ${accessToken}` })
-      }) :
+      }).pipe(tap(() => cacheBuster$.next())) :
       of(null);
   }
 
@@ -79,4 +84,17 @@ export class VenteService {
       }) :
       of(null);
   }
+
+  @Cacheable({cacheBusterObserver: cacheBuster$})
+  getTotalParMois(): Observable<any> {
+    const accessToken = localStorage.getItem('access_token');
+
+    return accessToken ?
+      this.http.get<any>(`${api}/ventes/total-par-mois`, {
+        headers: new HttpHeaders({ 'Authorization': `Bearer ${accessToken}` })
+      }) :
+      of(null);
 }
+}
+
+

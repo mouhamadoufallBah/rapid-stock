@@ -1,7 +1,10 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { Observable, Subject, of, tap } from 'rxjs';
 import { api } from '../../shared/apiUrl';
+import { Cacheable } from 'ts-cacheable';
+
+const cacheBuster$ = new Subject<void>();
 
 @Injectable({
   providedIn: 'root'
@@ -16,10 +19,11 @@ export class AchatService {
     return accessToken ?
       this.http.post<any>(`${api}/achat/create`, data, {
         headers: new HttpHeaders({ 'Authorization': `Bearer ${accessToken}` })
-      }) :
+      }).pipe(tap(() => cacheBuster$.next())) :
       of(null);
   }
 
+  @Cacheable({cacheBusterObserver: cacheBuster$})
   getAllAchat(): Observable<any> {
     const accessToken = localStorage.getItem('access_token');
 
@@ -46,7 +50,7 @@ export class AchatService {
     return accessToken ?
       this.http.put<any>(`${api}/achat/edit/${id}`, data, {
         headers: new HttpHeaders({ 'Authorization': `Bearer ${accessToken}` })
-      }) :
+      }).pipe(tap(() => cacheBuster$.next())) :
       of(null);
   }
 
@@ -56,7 +60,7 @@ export class AchatService {
     return accessToken ?
       this.http.delete<any>(`${api}/achat/supprimer/${id}`, {
         headers: new HttpHeaders({ 'Authorization': `Bearer ${accessToken}` })
-      }) :
+      }).pipe(tap(() => cacheBuster$.next())) :
       of(null);
   }
 }

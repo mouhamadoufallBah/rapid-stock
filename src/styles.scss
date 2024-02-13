@@ -22,6 +22,10 @@ body {
     .activeMenu {
       background-color: #f47a20 !important;
       color: white;
+
+      i{
+        color: white;
+      }
     }
 
     & .brand {

@@ -1,7 +1,10 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { Observable, Subject, of, tap } from 'rxjs';
 import { api } from '../../shared/apiUrl';
+import { Cacheable } from 'ts-cacheable';
+
+const cacheBuster$ = new Subject<void>();
 
 @Injectable({
   providedIn: 'root'
@@ -10,6 +13,7 @@ export class ClientService {
 
   constructor(private http: HttpClient) { }
 
+  @Cacheable({cacheBusterObserver: cacheBuster$})
   getAllClient(): Observable<any> {
     const accessToken = localStorage.getItem('access_token');
 
@@ -26,7 +30,7 @@ export class ClientService {
     return accessToken ?
       this.http.post<any>(`${api}/client/create`, data, {
         headers: new HttpHeaders({ 'Authorization': `Bearer ${accessToken}` })
-      }) :
+      }).pipe(tap(() => cacheBuster$.next())) :
       of(null);
   }
 
@@ -36,7 +40,7 @@ export class ClientService {
     return accessToken ?
       this.http.put<any>(`${api}/client/edit/${id}`, data, {
         headers: new HttpHeaders({ 'Authorization': `Bearer ${accessToken}` })
-      }) :
+      }).pipe(tap(() => cacheBuster$.next())) :
       of(null);
   }
 
@@ -46,7 +50,7 @@ export class ClientService {
     return accessToken ?
       this.http.delete(`${api}/client/supprimer/${id}`, {
         headers: new HttpHeaders({ 'Authorization': `Bearer ${accessToken}` })
-      }) :
+      }).pipe(tap(() => cacheBuster$.next())) :
       of(null);
   }
 }

@@ -1,19 +1,19 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs'
+import { Observable, Subject, of, tap } from 'rxjs'
 import { api } from '../../shared/apiUrl';
+import { Cacheable } from 'ts-cacheable';
 
+const cacheBuster$ = new Subject<void>();
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
-
-
   constructor(private http: HttpClient) { }
 
   addEmploye(data: string): Observable<any> {
-    return this.http.post<any>(`${api}/register`, data);
+    return this.http.post<any>(`${api}/register`, data).pipe(tap(() => cacheBuster$.next()));
   }
 
   login(email: string, password: string): Observable<any> {
@@ -27,11 +27,12 @@ export class AuthService {
       return accessToken ?
         this.http.put<any>(`${api}/client/edit/${id}`, data, {
           headers: new HttpHeaders({ 'Authorization': `Bearer ${accessToken}` })
-        }) :
+        }).pipe(tap(() => cacheBuster$.next())) :
         of(null);
 
   }
 
+  @Cacheable({cacheBusterObserver: cacheBuster$})
   getAllEmploye(): Observable<any> {
     const accessToken = localStorage.getItem('access_token');
 
@@ -58,7 +59,7 @@ export class AuthService {
 
     return accessToken ? this.http.put<any>(`${api}/employe/archive/${id}`, {}, {
       headers: new HttpHeaders({ 'Authorization': `Bearer ${accessToken}` })
-    }) : of(null);
+    }).pipe(tap(() => cacheBuster$.next()))  : of(null);
   }
 
   logout(): Observable<any> {
