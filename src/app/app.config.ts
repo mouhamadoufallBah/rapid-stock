@@ -10,6 +10,7 @@ import { firebaseConfig } from './firebase.config';
 import { provideServiceWorker } from '@angular/service-worker';
 
 
+
 export const appConfig: ApplicationConfig = {
   providers: [
     provideRouter(routes),

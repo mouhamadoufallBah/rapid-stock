@@ -89,7 +89,7 @@ export class GestionClientComponent implements OnInit {
     };
 
     if (this.nomAdd === "", this.prenomAdd === "", this.telephoneAdd === "", this.adresseAdd === "") {
-      Notiflix.Report.failure('Veuillez remplir le champs', '', 'Okay');
+      Notiflix.Notify.failure('Veuillez remplir le champs');
     } else {
       Notiflix.Loading.init({
         svgColor: '#f47a20',
@@ -100,13 +100,13 @@ export class GestionClientComponent implements OnInit {
       Notiflix.Loading.hourglass();
       this.clientService.addClient(data).subscribe(
         () => {
-          Notiflix.Report.init({
+          Notiflix.Notify.init({
             cssAnimation: true,
             cssAnimationDuration: 360,
             cssAnimationStyle: 'zoom',
           });
 
-          Notiflix.Report.success('Client ajoutée avec succès', '', 'Okay');
+          Notiflix.Notify.success('Client ajoutée avec succès');
           this.getAllClients();
           console.log(this.clients);
 
@@ -148,7 +148,7 @@ export class GestionClientComponent implements OnInit {
 
     // Combine multiple conditions for conciseness
     if (!data.nom || !data.prenom || !data.telephone || !data.adresse) {
-      Notiflix.Report.failure('Veuillez remplir tous les champs', '', 'Okay');
+      Notiflix.Notify.failure('Veuillez remplir tous les champs');
       return;
     }
 
@@ -156,7 +156,7 @@ export class GestionClientComponent implements OnInit {
     Notiflix.Loading.hourglass(); // Show loading indicator directly
     this.clientService.updateClient(data, id).subscribe({
       next: () => {
-        Notiflix.Report.success('Client modifié avec succès', '', 'Okay');
+        Notiflix.Notify.success('Client modifié avec succès');
         this.getAllClients();
         Notiflix.Loading.remove();
       },
@@ -186,9 +186,8 @@ export class GestionClientComponent implements OnInit {
 
         this.clientService.deleteClient(id).subscribe(
           (response) => {
-            console.log()
             Notiflix.Loading.remove();
-            Notiflix.Report.success('Client supprimée avec succès', '', 'Okay');
+            Notiflix.Notify.success('Client supprimée avec succès');
             this.getAllClients();
           },
           (error) => {

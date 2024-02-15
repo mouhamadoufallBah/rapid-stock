@@ -66,7 +66,7 @@ export class GestionCategorieComponent implements OnInit {
       nom: this.nomCategory
     }
     if (!this.nomCategory) {
-      Notiflix.Report.failure('Veuillez remplir le champs', '', 'Okay');
+      Notiflix.Notify.failure('Veuillez remplir le champs');
     } else {
       Notiflix.Loading.init({
         svgColor: '#f47a20',
@@ -77,13 +77,13 @@ export class GestionCategorieComponent implements OnInit {
       Notiflix.Loading.hourglass();
       this.categoryService.addCategory(data).subscribe(
         () => {
-          Notiflix.Report.init({
+          Notiflix.Notify.init({
             cssAnimation: true,
             cssAnimationDuration: 360,
             cssAnimationStyle: 'zoom',
           });
 
-          Notiflix.Report.success('Catégorie ajoutée avec succès', '', 'Okay');
+          Notiflix.Notify.success('Catégorie ajoutée avec succès');
           this.getAllCategories();
           Notiflix.Loading.remove();
           this.nomCategory = "";
@@ -111,7 +111,7 @@ export class GestionCategorieComponent implements OnInit {
     }
 
     if (!this.nomCategoryUpdate) {
-      Notiflix.Report.failure('Veuillez remplir le champs', '', 'Okay');
+      Notiflix.Notify.failure('Veuillez remplir le champs');
     } else {
       Notiflix.Loading.init({
         svgColor: '#f47a20',
@@ -120,7 +120,7 @@ export class GestionCategorieComponent implements OnInit {
 
       this.categoryService.updateCategory(data, id).subscribe(
         (data: Category) => {
-          Notiflix.Report.success('Catégorie mise à jour avec succès', '', 'Okay');
+          Notiflix.Notify.success('Catégorie mise à jour avec succès');
           this.getAllCategories();
           Notiflix.Loading.remove();
           this.nomCategoryUpdate = "";
@@ -153,7 +153,7 @@ export class GestionCategorieComponent implements OnInit {
           (response) => {
             console.log()
             Notiflix.Loading.remove();
-            Notiflix.Report.success('Catégorie supprimée avec succès', '', 'Okay');
+            Notiflix.Notify.success('Catégorie supprimée avec succès');
             this.getAllCategories();
           },
           (error) => {

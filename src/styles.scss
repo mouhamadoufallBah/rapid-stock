@@ -23,6 +23,10 @@ body {
       background-color: #f47a20 !important;
       color: white;
 
+      a{
+        color: white;
+      }
+
       i{
         color: white;
       }
@@ -288,6 +292,7 @@ header {
   font-size: 35px;
   cursor: pointer;
 
+
   /* Responsive pour les tablettes */
   @media (min-width: 768px) and (max-width: 991px) {
     height: 40px;
@@ -547,5 +552,16 @@ header {
 .paginate_button.next {
   background-color: #001F3F !important;
   border-radius: 50px;
-    color: white;
+   color:white;
+}
+
+
+.notification{
+  border: 1px solid;
+  width: 50px;
+  border-radius: 50%;
+
+  &:hover{
+    background-color: #e9e9e9;
+  }
 }

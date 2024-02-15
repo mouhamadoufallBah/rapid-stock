@@ -27,7 +27,7 @@ export class GestionProduitComponent implements OnInit {
   nomAdd: string = "";
   imageAdd: string = "";
   prixUAdd: number;
-  quantiteAdd: number;
+  quantiteAdd: number = 0;
   quantiteSeuilAdd: number;
   etatAdd: string = "";
   categorie_idAdd: number;
@@ -52,7 +52,7 @@ export class GestionProduitComponent implements OnInit {
       lengthChange: false,
       paging: true,
       info: false,
-      pageLength: 9,
+      pageLength: 8,
       language: {
         url: 'https://cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/French.json',
       }
@@ -92,11 +92,6 @@ export class GestionProduitComponent implements OnInit {
     )
   }
 
-  getProduitByIdCategorie() {
-
-  }
-
-
   upload($event){
     this.fichierAdd = $event.target.files[0];
   }
@@ -135,7 +130,7 @@ export class GestionProduitComponent implements OnInit {
     };
 
     if (this.nomAdd == "" || this.prixUAdd == undefined || this.quantiteAdd == undefined || this.quantiteSeuilAdd == undefined || this.categorie_idAdd == undefined) {
-      Notiflix.Report.failure('Veuillez remplir le champs', '', 'Okay');
+      Notiflix.Notify.failure('Veuillez remplir le champs');
     } else {
       Notiflix.Loading.init({
         svgColor: '#f47a20',
@@ -148,13 +143,14 @@ export class GestionProduitComponent implements OnInit {
         (data) => {
           console.log(data);
 
-          Notiflix.Report.init({
+          Notiflix.Notify.init({
             cssAnimation: true,
             cssAnimationDuration: 360,
-            cssAnimationStyle: 'zoom',
+            cssAnimationStyle: 'zoom'
           });
 
-          Notiflix.Report.success('Produit ajoutée avec succès', '', 'Okay');
+
+          Notiflix.Notify.success('Produit ajoutée avec succès');
           this.getAllProducts();
           // console.log(this.produits);
 
@@ -190,9 +186,6 @@ export class GestionProduitComponent implements OnInit {
           etat: data.etat,
           categorie_id: this.categorie_idUpdate
         } = this.selectedProduit);
-
-        console.log(this.selectedProduit);
-
       }
     )
   }
@@ -209,25 +202,24 @@ export class GestionProduitComponent implements OnInit {
     };
 
     if (this.nomUpdate == "" || this.prixUUpdate == undefined || this.quantiteUpdate == undefined || this.quantiteSeuilUpdate == undefined || this.categorie_idUpdate == undefined) {
-      Notiflix.Report.failure('Veuillez remplir le champs', '', 'Okay');
+      Notiflix.Notify.failure('Veuillez remplir le champs');
     } else {
       Notiflix.Loading.init({
         svgColor: '#f47a20',
         cssAnimation: true,
         cssAnimationDuration: 360,
-
       });
       Notiflix.Loading.hourglass();
 
       this.produitService.updateProduct(id, data).subscribe(
         (data) => {
-          Notiflix.Report.init({
+          Notiflix.Notify.init({
             cssAnimation: true,
             cssAnimationDuration: 360,
-            cssAnimationStyle: 'zoom',
+            cssAnimationStyle: 'zoom'
           });
 
-          Notiflix.Report.success('Produit modifier avec succès', '', 'Okay');
+          Notiflix.Notify.success('Produit modifier avec succès');
           this.getAllProducts();
         }
       );
@@ -241,7 +233,7 @@ export class GestionProduitComponent implements OnInit {
     });
     Notiflix.Confirm.show(
       'Attention',
-      'Voulez-vous supprimer cette catégorie?',
+      'Voulez-vous supprimer cette produit?',
       'Oui',
       'Non',
       () => {
@@ -254,7 +246,7 @@ export class GestionProduitComponent implements OnInit {
           (response) => {
             console.log()
             Notiflix.Loading.remove();
-            Notiflix.Report.success('Catégorie supprimée avec succès', '', 'Okay');
+            Notiflix.Notify.success('Produit supprimée avec succès');
             this.getAllProducts();
           },
           (error) => {

@@ -26,7 +26,7 @@ export class LoginComponent {
 
   onLogin() {
     if (this.email == "" || this.password == "") {
-      Notiflix.Report.failure('Veuillez remplir les champs', '', 'Okay',);
+      Notiflix.Notify.failure('Veuillez remplir les champs');
     } else {
       Notiflix.Loading.init({
         svgColor:'#f47a20',
@@ -37,9 +37,6 @@ export class LoginComponent {
         (data) => {
           // console.log(data)
           if (data.user) {
-            Notiflix.Loading.remove();
-
-            Notiflix.Report.success('Connexion avec succées', '', 'Okay',);
 
             this.clearInput();
 
@@ -47,8 +44,12 @@ export class LoginComponent {
             localStorage.setItem("access_token", JSON.stringify(data.access_token).replace(/['"]+/g, ''));
 
             this.route.navigate(['/dashboard'])
+
+            Notiflix.Loading.remove();
+
+            Notiflix.Notify.success('Connexion avec succées');
           } else {
-            Notiflix.Report.failure('Email ou mot de passe incorrecte', '', 'Okay',);
+            Notiflix.Notify.failure('Email ou mot de passe incorrecte');
           }
         }, (error) => {
           console.error('Erreur lors de la connexion', error);
@@ -56,7 +57,7 @@ export class LoginComponent {
           Notiflix.Loading.remove();
 
           if (error.status === 401) {
-            Notiflix.Report.failure('Erreur d\'authentification', 'Email ou mot de passe incorrect', 'Okay');
+            Notiflix.Notify.failure('Erreur d\'authentification');
           } else {
             Notiflix.Report.failure('Erreur inattendue', 'Une erreur s\'est produite lors de la connexion', 'Okay');
           }

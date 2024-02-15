@@ -2,7 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, Subject, of, tap } from 'rxjs'
 import { api } from '../../shared/apiUrl';
-import { Cacheable } from 'ts-cacheable';
+import { Cacheable, LocalStorageStrategy } from 'ts-cacheable';
 
 const cacheBuster$ = new Subject<void>();
 @Injectable({
@@ -16,6 +16,7 @@ export class AuthService {
     return this.http.post<any>(`${api}/register`, data).pipe(tap(() => cacheBuster$.next()));
   }
 
+  // @Cacheable({storageStrategy: LocalStorageStrategy, maxAge: 60*60*1000})
   login(email: string, password: string): Observable<any> {
     const data = { email, password };
     return this.http.post<any>(`${api}/login`, data);

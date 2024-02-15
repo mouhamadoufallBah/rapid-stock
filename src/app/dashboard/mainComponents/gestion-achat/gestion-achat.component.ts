@@ -44,11 +44,14 @@ export class GestionAchatComponent {
   quantiteSeuilProduit: number;
   etatProduit: string = "";
   categorie_idProduit: number;
+  fichierAdd: any;
+  imageAdd: string = ""
 
   nomAchatUpdate: string = "";
   prixachatUpdate: number;
   quantiteachatUpdate: number;
   produit_idUpdate: number;
+
 
   constructor(private achatService: AchatService, private categorieService: CategorieService, private produitService: ProduitService) { }
 
@@ -78,7 +81,6 @@ export class GestionAchatComponent {
     this.getAllAchat();
     this.getAllProducts()
   }
-
 
   getAllAchat() {
     Notiflix.Loading.init({
@@ -161,7 +163,7 @@ export class GestionAchatComponent {
     };
 
     if (this.nomAchatAdd == "" || this.prixachatAdd == undefined || this.quantiteachatAdd == undefined || this.produit_idAdd == undefined) {
-      Notiflix.Report.failure('Veuillez remplir le champs', '', 'Okay');
+      Notiflix.Notify.failure('Veuillez remplir le champs');
     } else {
       Notiflix.Loading.init({
         svgColor: '#f47a20',
@@ -172,13 +174,13 @@ export class GestionAchatComponent {
       Notiflix.Loading.hourglass();
       this.achatService.addAchat(data).subscribe(
         () => {
-          Notiflix.Report.init({
+          Notiflix.Notify.init({
             cssAnimation: true,
             cssAnimationDuration: 360,
             cssAnimationStyle: 'zoom',
           });
 
-          Notiflix.Report.success('Achat ajoutée avec succès', '', 'Okay');
+          Notiflix.Notify.success('Achat ajoutée avec succès');
           this.getAllAchat();
           // console.log(this.achats);
 
@@ -206,7 +208,7 @@ export class GestionAchatComponent {
     };
 
     if (this.nomAchatUpdate == "" || this.prixachatUpdate == undefined || this.quantiteachatUpdate == undefined || this.produit_idUpdate == undefined) {
-      Notiflix.Report.failure('Veuillez remplir le champs', '', 'Okay');
+      Notiflix.Notify.failure('Veuillez remplir le champs');
     } else {
       Notiflix.Loading.init({
         svgColor: '#f47a20',
@@ -219,7 +221,7 @@ export class GestionAchatComponent {
         (data) => {
           // console.log(data);
           Notiflix.Loading.remove();
-          Notiflix.Report.success('Achat Modifier avec succès', '', 'Okay');
+          Notiflix.Notify.success('Achat Modifier avec succès');
           this.getAllAchat();
         },
         (error) => {
@@ -252,7 +254,7 @@ export class GestionAchatComponent {
           (response) => {
             // console.log()
             Notiflix.Loading.remove();
-            Notiflix.Report.success('Achat annuler avec succès', '', 'Okay');
+            Notiflix.Notify.success('Achat annuler avec succès');
             this.getAllAchat();
           },
           (error) => {
@@ -269,19 +271,46 @@ export class GestionAchatComponent {
 
   }
 
+  upload($event){
+    this.fichierAdd = $event.target.files[0];
+  }
+
+
+  save() {
+    Notiflix.Loading.init({
+      svgColor: '#f47a20',
+      cssAnimation: true,
+      cssAnimationDuration: 360,
+
+    });
+    Notiflix.Loading.hourglass();
+    this.produitService.addFile(this.fichierAdd)
+      .then(downloadURL => {
+        // Utiliser l'URL de téléchargement, par exemple :
+        console.log('Fichier téléchargé avec succès ! URL :', downloadURL);
+        this.imageAdd = downloadURL;
+        this.onAddProduitFromAchat();
+      })
+      .catch(error => {
+        // Gérer les erreurs
+        console.error('Erreur lors du téléchargement du fichier : ', error);
+        alert('Échec du téléchargement du fichier.');
+      });
+  }
+
   onAddProduitFromAchat() {
     const data: any = {
       nomproduit: this.nomProduit,
-      image: this.imageProduit,
+      image: this.imageAdd,
       prixU: this.prixUProduit,
-      quantite: this.quantiteProduit,
+      quantite: 0,
       quantiteseuil: this.quantiteSeuilProduit,
       etat: this.quantiteProduit > this.quantiteSeuilProduit ? "En_stock" : "rupture",
       categorie_id: this.categorie_idProduit
     };
 
-    if (this.nomProduit == "" || this.imageProduit == "" || this.prixUProduit == undefined || this.quantiteProduit == undefined || this.quantiteSeuilProduit == undefined || this.categorie_idProduit == undefined) {
-      Notiflix.Report.failure('Veuillez remplir le champs', '', 'Okay');
+    if (this.nomProduit == "" || this.prixUProduit == undefined || this.quantiteSeuilProduit == undefined || this.categorie_idProduit == undefined) {
+      Notiflix.Notify.failure('Veuillez remplir le champs');
     } else {
       Notiflix.Loading.init({
         svgColor: '#f47a20',
@@ -292,13 +321,13 @@ export class GestionAchatComponent {
       Notiflix.Loading.hourglass();
       this.produitService.addProduct(data).subscribe(
         () => {
-          Notiflix.Report.init({
+          Notiflix.Notify.init({
             cssAnimation: true,
             cssAnimationDuration: 360,
             cssAnimationStyle: 'zoom',
           });
 
-          Notiflix.Report.success('Produit ajoutée avec succès', '', 'Okay');
+          Notiflix.Notify.success('Produit ajoutée avec succès');
           this.getAllProducts();
           // console.log(data);
 
@@ -320,6 +349,5 @@ export class GestionAchatComponent {
       );
     }
   }
-
 
 }

@@ -1,6 +1,6 @@
 <div class="dynamicContentTop" >
   <div class="dynamicContentTopItem">
-    <h6>Entrée/Sortie périodique</h6>
+    <h5>Les achats/ventes périodique</h5>
     <div id="chart">
       <apx-chart [series]="chartOptions.series" [chart]="chartOptions.chart" [xaxis]="chartOptions.xaxis"
         [stroke]="chartOptions.stroke" [tooltip]="chartOptions.tooltip"
@@ -8,7 +8,7 @@
     </div>
   </div>
   <div class="dynamicContentTopItem">
-    <h2>Les entrée/sortie</h2>
+    <h5>Les achats/ventes</h5>
     <div id="chart" style="height: 100px;">
       <apx-chart [series]="chartOptions2.series" [chart]="chartOptions2.chart" [labels]="chartOptions2.labels"
         [responsive]="chartOptions2.responsive"></apx-chart>
@@ -17,7 +17,7 @@
 </div>
 <div class="dynamicContentBottom mt-5">
   <div class="dynamicContentBottomLeft p-5">
-    <h5>La liste des dernière vente</h5>
+    <h5>La liste des dernières vente</h5>
     @if(latestVente.length > 0){
       <table datatable [dtOptions]="dtOptions" class="table">
         <thead class="table-secondary rounded-top-3">
@@ -62,8 +62,8 @@
       </table>
       }
   </div>
-  <div class="dynamicContentBottomRight">
-    <h3>Les stats</h3>
+  <div class="dynamicContentBottomRight pt-">
+    <h5>Les statistiques</h5>
     <div class="dynamicContentBottomRightCard">
       <div class="dynamicContentBottomRightCardItem blue">
         <div class="icon">

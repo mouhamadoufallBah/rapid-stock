@@ -61,6 +61,9 @@ export class GestionVenteComponent {
   dtOptions: DataTables.Settings = {};
   panier: DataTables.Settings = {};
 
+  quantityField: boolean = false;
+  quantityFromInput: number = 0;
+
   constructor(private venteService: VenteService, private categorieService: CategorieService, private produitService: ProduitService, private clientService: ClientService, private paiementService: PaiementService, private factureService: FactureService, private authService: AuthService) { }
 
   ngOnInit(): void {
@@ -69,7 +72,7 @@ export class GestionVenteComponent {
       lengthChange: false,
       paging: true,
       info: false,
-      pageLength: 9,
+      pageLength: 8,
       language: {
         url: 'https://cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/French.json',
       }
@@ -116,7 +119,7 @@ export class GestionVenteComponent {
         Notiflix.Loading.remove();
       }, (error) => {
         console.error('Erreur lors de l\'affichage des Ventes', error);
-        Notiflix.Report.failure('Une erreur s\'est produite lors de l\'affichage des Ventes', '', 'Okay');
+        Notiflix.Notify.failure('Une erreur s\'est produite lors de l\'affichage des Ventes');
         Notiflix.Loading.remove();
       }
     )
@@ -202,13 +205,13 @@ export class GestionVenteComponent {
           (response) => {
             console.log(response)
             Notiflix.Loading.remove();
-            Notiflix.Report.success('Vente annuler avec succès', '', 'Okay');
+            Notiflix.Notify.success('Vente annuler avec succès');
             this.getAllVente();
           },
           (error) => {
             Notiflix.Loading.remove();
             console.error('Erreur lors de la suppression de la vente', error);
-            Notiflix.Report.failure('Une erreur s\'est produite lors de l\annulation de la vente', '', 'Okay');
+            Notiflix.Notify.failure('Une erreur s\'est produite lors de l\annulation de la vente');
 
           }
         );
@@ -277,6 +280,25 @@ export class GestionVenteComponent {
     }
   }
 
+  onChangeQuantityFieldValue(item: any) {
+    this.quantityField = !this.quantityField;
+    console.log(this.quantityField);
+    this.quantityFromInput = item.quantiteVendu;
+  }
+
+  onUpdateQuantityFromInput(item: any) {
+    let cartProducts: any[] = JSON.parse(localStorage.getItem('cart')) || [];
+
+    const productIndex = cartProducts.findIndex(elt => elt.id === item.id);
+
+    cartProducts[productIndex].quantiteVendu = this.quantityFromInput;
+
+    localStorage.setItem('cart', JSON.stringify(cartProducts));
+    this.getProductFromCart();
+    this.onChangeQuantityFieldValue(item)
+
+  }
+
   removeProductFromCart(productId: number) {
     let cartProducts: any[] = JSON.parse(localStorage.getItem('cart')) || [];
 
@@ -289,6 +311,16 @@ export class GestionVenteComponent {
 
       this.getProductFromCart();
     }
+  }
+
+  clearCart() {
+    localStorage.removeItem('cart');
+  }
+
+  curentVenteId() {
+    this.idVent = this.selectedVente.historiques[0].vente_id;
+    console.log(this.idVent);
+
   }
 
   addVente() {
@@ -308,9 +340,9 @@ export class GestionVenteComponent {
 
     // console.log(data, "donnée à envoyé");
     if (data.client_id === null) {
-      Notiflix.Report.failure('Veuillez renseigner le client', '', 'Okay');
+      Notiflix.Notify.failure('Veuillez renseigner le client');
     } if (data.produit.length === 0) {
-      Notiflix.Report.failure('Le panier est vide veuillez', '', 'Okay');
+      Notiflix.Notify.failure('Le panier est vide veuillez');
     } else {
       Notiflix.Loading.init({
         svgColor: '#f47a20',
@@ -325,57 +357,58 @@ export class GestionVenteComponent {
           // console.log(response, "info vente");
           this.clearCart();
 
-          const paiementInfo = {
-            id: response.vente.id,
-            etat: this.etatPaiment,
-            montantVerser: this.etatPaiment === "comptant" ? response.vente.montant_total : this.montantPaiment
+          console.log(response);
+
+          if (response.message) {
+            Notiflix.Loading.remove();
+            Notiflix.Report.failure('La vente n\'a pas était fait ', 'La qunatité vendu est supérieur à la quantité de stock', 'Okay');
+          } else {
+            const paiementInfo = {
+              id: response.vente.id,
+              etat: this.etatPaiment,
+              montantVerser: this.etatPaiment === "comptant" ? response.vente.montant_total : this.montantPaiment
+            }
+
+            //paiement
+            this.paiementService.addPaiement(paiementInfo, response.vente.id).subscribe(
+              (res) => {
+                // console.log(res, "info paiment");
+
+                const data = {
+                  "payement_id": res.idPaiement,
+                  "montantVerser": res.informationPaiement.montantVerser
+                }
+
+                // facture
+                this.factureService.createFacture(data).subscribe(
+                  (data) => {
+                    // console.log(data, "info facture");
+
+                  }
+                );
+              }
+            );
+
+            this.getProductFromCart();
+
+            Notiflix.Notify.success('Vente ajoutée avec succès');
+            this.getAllVente();
+            // console.log(this.achats);
+            Notiflix.Loading.remove();
           }
 
-          //paiement
-          this.paiementService.addPaiement(paiementInfo, response.vente.id).subscribe(
-            (res) => {
-              // console.log(res, "info paiment");
 
-              const data = {
-                "payement_id": res.idPaiement,
-                "montantVerser": res.informationPaiement.montantVerser
-              }
 
-              // facture
-              this.factureService.createFacture(data).subscribe(
-                (data) => {
-                  // console.log(data, "info facture");
 
-                }
-              );
-            }
-          );
-
-          this.getProductFromCart();
-
-          Notiflix.Report.success('Vente ajoutée avec succès', '', 'Okay');
-          this.getAllVente();
-          // console.log(this.achats);
-          Notiflix.Loading.remove();
 
         }
       );
     }
   }
 
-  clearCart() {
-    localStorage.removeItem('cart');
-  }
-
-  curentVenteId() {
-    this.idVent = this.selectedVente.historiques[0].vente_id;
-    console.log(this.idVent);
-
-  }
-
   newPaimentAcompte(id: number) {
     if (this.montantVersementAcompte == undefined) {
-      Notiflix.Report.failure('Veuillez renseigner le montant verser', '', 'Okay');
+      Notiflix.Notify.failure('Veuillez renseigner le montant verser');
     } else {
       const data = {
         "montantVerser": this.montantVersementAcompte
@@ -400,7 +433,7 @@ export class GestionVenteComponent {
             (data) => {
               // console.log(data, "info facture");
               Notiflix.Loading.remove();
-              Notiflix.Report.success('Paiement enregistrer avec succès', '', 'Okay');
+              Notiflix.Notify.success('Paiement enregistrer avec succès');
 
             }
           );

@@ -20,31 +20,38 @@ main {
 
     .mainContainerLeftImage {
       // border: 1px solid;
-      border-radius: 50%;
       display: flex;
       justify-content: center;
       align-items: center;
 
       .image {
-        height: 200px;
-        width: 200px;
+        height: 150px;
+        width: 150px;
         // border: 1px solid;
         border-radius: 50%;
         background-image: url("https://img.freepik.com/photos-gratuite/beau-male-adulte-posant_23-2148729713.jpg?t=st=1707686184~exp=1707686784~hmac=5c14c793ccc62019d2e930b88de714f4fdae49e5c12d1881c3337441cbe955b9");
         background-size: cover;
         background-position: center;
+
       }
     }
 
     .mainContainerLeftInfo {
       // border: 1px solid;
 
+      h4{
+        font-size: 1.1em;
+      }
+
       .mainContainerLeftInfoDetail {
         // border: 1px solid;
         width: 100%;
 
+
+
         h5 {
           color: #f47a20;
+          font-size: 1em;
 
           span {
             color: black;

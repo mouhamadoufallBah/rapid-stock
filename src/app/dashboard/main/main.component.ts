@@ -25,7 +25,7 @@ export class MainComponent implements OnInit {
 
 
   sidebarItems = [
-    { id: 1, title: "Tableau de bord", lien: "/dashboard", icon: "fas fa-tachometer-alt me-2", role_id: [1, 2], isActive: false },
+    { id: 1, title: "Tableau de bord", lien: "./acceuil-dashboard", icon: "fas fa-tachometer-alt me-2", role_id: [1, 2], isActive: false },
     { id: 2, title: "Gestion des ventes", lien: "./gestion-vente", icon: "fas fa-chart-line me-2", role_id: [1, 2], isActive: false },
     { id: 3, title: "Gestion des Achat", lien: "./gestion-achat", icon: "fas fa-chart-line me-2", role_id: [1, 2], isActive: false },
     { id: 4, title: "Gestion des produits", lien: "./gestion-produit", icon: "fas fa-cube me-2", role_id: [1, 2], isActive: false },

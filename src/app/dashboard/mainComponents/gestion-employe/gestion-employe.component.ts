@@ -84,7 +84,7 @@ export class GestionEmployeComponent implements OnInit{
     };
 
     if (!this.nomAdd || !this.prenomAdd || !this.telephoneAdd || !this.adresseAdd || !this.emailAdd) {
-      Notiflix.Report.failure('Veuillez remplir le champs', '', 'Okay');
+      Notiflix.Notify.failure('Veuillez remplir le champs');
     } else {
       Notiflix.Loading.init({
         svgColor: '#f47a20',
@@ -95,13 +95,13 @@ export class GestionEmployeComponent implements OnInit{
       Notiflix.Loading.hourglass();
       this.authService.addEmploye(data).subscribe(
         () => {
-          Notiflix.Report.init({
+          Notiflix.Notify.init({
             cssAnimation: true,
             cssAnimationDuration: 360,
             cssAnimationStyle: 'zoom',
           });
 
-          Notiflix.Report.success('Employé ajoutée avec succès', '', 'Okay');
+          Notiflix.Notify.success('Employé ajoutée avec succès');
           this.getAllEmploye();
           console.log(this.employe);
 

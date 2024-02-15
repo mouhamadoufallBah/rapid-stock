@@ -1,3 +1,5 @@
+import { signal } from "@angular/core";
+
 export let api = "http://localhost:8000/api";
 
 export let firebaseConfig = {
@@ -8,3 +10,7 @@ export let firebaseConfig = {
   messagingSenderId: "532104748507",
   appId: "1:532104748507:web:d22a4330387d7d69025bfe"
 };
+
+
+export let  test = signal<number>(0);
+

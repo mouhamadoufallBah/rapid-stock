@@ -252,11 +252,6 @@
             </select>
           </div>
           <div class="mb-3">
-            <label for="quantiteProduit" class="form-label">Quantité</label>
-            <input type="number" class="form-control" id="quantiteProduit" name="quantiteProduit"
-              placeholder="Nom du produit" [(ngModel)]="quantiteProduit">
-          </div>
-          <div class="mb-3">
             <label for="quantiteSeuilProduit" class="form-label">Quantité seuil</label>
             <input type="number" class="form-control" id="quantiteSeuilProduit" placeholder="Nom du produit"
               name="quantiteSeuilProduit" [(ngModel)]="quantiteSeuilProduit">
@@ -267,22 +262,15 @@
               [(ngModel)]="prixUProduit">
           </div>
           <div class="mb-3">
-            <label for="imageProduit" class="form-label">Image</label>
-            <input type="text" class="form-control" id="imageProduit" placeholder="Image du produit" name="imageProduit"
-              [(ngModel)]="imageProduit">
+            <label for="imageAdd" class="form-label">Image</label><br>
+            <input type="file" (change)="upload($event)" accept="*.png.jpg" style="width: 100%; overflow: scroll;">
           </div>
-          <!-- <div class="mb-3">
-            <label for="imageAdd" class="form-label">Image</label>
-            <input type="file" class="form-control" id="imageAdd" placeholder="Nom du produit" name="imageAdd"
-              [(ngModel)]="imageAdd">
-          </div> -->
-
         </form>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btnAnnuler" data-bs-dismiss="modal">Annuler</button>
         <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalAjouter"
-          (click)="onAddProduitFromAchat()">Ajouter</button>
+        (click)="save()">Ajouter</button>
       </div>
     </div>
   </div>
