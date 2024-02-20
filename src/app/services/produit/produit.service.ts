@@ -93,4 +93,24 @@ export class ProduitService {
     }
   }
 
+  getAllNotification(): Observable<any>{
+    const accessToken = localStorage.getItem('access_token');
+
+    return accessToken ?
+      this.http.get<any>(`${api}/notification/lister`, {
+        headers: new HttpHeaders({ 'Authorization': `Bearer ${accessToken}` })
+      }) :
+      of(null);
+  }
+
+  updateEtatNotification(id: string): Observable<any>{
+    const accessToken = localStorage.getItem('access_token');
+
+    return accessToken ?
+      this.http.put<any>(`${api}/notification/read/${id}`, {}, {
+        headers: new HttpHeaders({ 'Authorization': `Bearer ${accessToken}` })
+      }).pipe(tap(() => cacheBuster$.next())) :
+      of(null);
+  }
+
 }

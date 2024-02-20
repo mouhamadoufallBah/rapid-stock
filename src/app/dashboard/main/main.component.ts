@@ -1,4 +1,4 @@
-import { NgClass } from '@angular/common';
+import { DatePipe, NgClass } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { SidebarComponent } from '../layouts/sidebar/sidebar.component';
@@ -6,11 +6,12 @@ import { HeaderComponent } from '../layouts/header/header.component';
 import Notiflix from 'notiflix';
 import { AuthService } from '../../services/users/auth.service';
 import { RoleIdToroleNamePipe } from '../../pipes/user/role-id-torole-name.pipe';
+import { ProduitService } from '../../services/produit/produit.service';
 
 @Component({
   selector: 'app-main',
   standalone: true,
-  imports: [RouterOutlet, NgClass, SidebarComponent, HeaderComponent, RouterLink, RoleIdToroleNamePipe,RouterLinkActive],
+  imports: [RouterOutlet, NgClass, SidebarComponent, HeaderComponent, RouterLink, RoleIdToroleNamePipe,RouterLinkActive, DatePipe],
   templateUrl: './main.component.html',
   styleUrl: './main.component.scss'
 })
@@ -21,8 +22,6 @@ export class MainComponent implements OnInit {
   userConnected: any;
 
   roles: any[]
-
-
 
   sidebarItems = [
     { id: 1, title: "Tableau de bord", lien: "./acceuil-dashboard", icon: "fas fa-tachometer-alt me-2", role_id: [1, 2], isActive: false },
@@ -38,7 +37,9 @@ export class MainComponent implements OnInit {
     // { title: "Gestion des stocks", lien: "", icon: "fas fa-user-tie me-2" },
   ]
 
-  constructor(private authService: AuthService,private route: Router, private routeActive: ActivatedRoute) { }
+  notification: any[] = [];
+
+  constructor(private authService: AuthService,private route: Router, private routeActive: ActivatedRoute, private produitService: ProduitService){ }
 
   ngOnInit(): void {
 
@@ -54,6 +55,8 @@ export class MainComponent implements OnInit {
     } else {
       console.error('L\'utilisateur connecté n\'a pas été trouvé dans le local storage');
     }
+
+    this.allNotication();
   }
 
   filteredSidebarItems(): any[] {
@@ -70,7 +73,6 @@ export class MainComponent implements OnInit {
   changeColor(id: number): void {
     this.activeItemId = id;
   }
-
 
   onToggleMenu() {
     this.toggleMenu = !this.toggleMenu;
@@ -101,6 +103,24 @@ export class MainComponent implements OnInit {
         }
       }
     );
+  }
+
+  allNotication(){
+    this.produitService.getAllNotification().subscribe(
+      (data) => {
+        console.log(data.Notification);
+        this.notification = data.Notification;
+      }
+    )
+  }
+
+  readNotication(id: string){
+    this.produitService.updateEtatNotification(id).subscribe(
+      (data) => {
+        console.log(data);
+        this.allNotication();
+      }
+    )
   }
 
 }

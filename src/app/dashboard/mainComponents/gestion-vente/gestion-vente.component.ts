@@ -282,7 +282,7 @@ export class GestionVenteComponent {
 
   onChangeQuantityFieldValue(item: any) {
     this.quantityField = !this.quantityField;
-    console.log(this.quantityField);
+    // console.log(this.quantityField);
     this.quantityFromInput = item.quantiteVendu;
   }
 
@@ -291,12 +291,16 @@ export class GestionVenteComponent {
 
     const productIndex = cartProducts.findIndex(elt => elt.id === item.id);
 
-    cartProducts[productIndex].quantiteVendu = this.quantityFromInput;
+    console.log(productIndex, "index");
 
+    for (let i = 0; i < cartProducts.length; i++) {
+      if (productIndex === i) {
+        cartProducts[productIndex].quantiteVendu = cartProducts[i].quantiteVendu;
+      }
+    }
+
+    // Mettre à jour le localStorage après la boucle
     localStorage.setItem('cart', JSON.stringify(cartProducts));
-    this.getProductFromCart();
-    this.onChangeQuantityFieldValue(item)
-
   }
 
   removeProductFromCart(productId: number) {

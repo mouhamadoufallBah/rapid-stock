@@ -1,19 +1,27 @@
-<nav class="col-12">
-  <ul class="col-6 list-unstyled">
-    <li>Acceuil</li>
-    <li>A propos</li>
-    <li>Nos produits</li>
-    <li>Notre equipe</li>
-    <li>Nous contacter</li>
-  </ul>
-</nav>
-<header class="col-10 rounded-2 mb-3">
+<section id="header">
+  <a href="#"><img src="../../../assets/RAPIDSTOCK.png" alt=""></a>
+  <div>
+    <ul id="navBar">
+      <li><a class="active" href="#">Acceuil</a></li>
+      <li><a href="#">Apropos</a></li>
+      <li><a href="#">Nos Produit</a></li>
+      <li><a href="#">Nous Contacter</a></li>
+    </ul>
+  </div>
+</section>
 
-</header>
-<section class="about col-10 p-5 rounded-3 mb-3">
+<section id="banner">
+  <h4>Votre matériel de construction</h4>
+  <h2>ou de rénovation à des prix</h2>
+  <h1>imbattables.</h1>
+  <p>Pour en savoir plus, veuillez cliquer sur le bouton suivant.</p>
+  <button>Voir nos produit</button>
+</section>
+
+<section class="about section-p1">
   <div class="aboutLeft">
     <div class="aboutLeftItem rounded-3 p-3">
-      <h5 class="text-center mb-4">A propos</h5>
+      <h2 class="text-center mb-4">A propos</h2>
       <div>
         <h3 class="fw-bold"><span>Rapid Stock &nbsp;</span>rerum libero reprehenderit</h3>
         <p class="mb-3">Ipsa sint sit. Quis ducimus tempore dolores impedit et dolor cumque alias maxime. Enim
@@ -30,13 +38,13 @@
   <div class="aboutRight ">
     <div class="aboutRightItemLeft pt-5">
       <div class="aboutRightItem rounded-3 p-3">
-        <div class="circle mb-3"><i class="fa-regular fa-face-smile"></i></div>
+        <div class="circle mb-3"><i class="bi bi-emoji-smile"></i></div>
         <h5 class="title fw-bold mb-3">Satisfaction</h5>
         <p>Magni repellendus vel ullam hic officia accusantium ipsa dolor omnis dolor voluptatem</p>
       </div>
       <div class="aboutRightItem rounded-3 p-3">
-        <div class="circle mb-3"><i class="fa-regular fa-face-smile"></i></div>
-        <h5 class="title fw-bold mb-3">Satisfaction</h5>
+        <div class="circle mb-3"><i class="bi bi-check-lg"></i></div>
+        <h5 class="title fw-bold mb-3">Fiabilité</h5>
         <p>Magni repellendus vel ullam hic officia accusantium ipsa dolor omnis dolor voluptatem</p>
       </div>
     </div>
@@ -44,54 +52,249 @@
     <div class="aboutRightItemRight pb-5">
       <div class="aboutRightItem rounded-3 p-3">
         <div class="circle mb-3"><i class="fa-regular fa-face-smile"></i></div>
-        <h5 class="title fw-bold mb-3">Satisfaction</h5>
+        <h5 class="title fw-bold mb-3">Durabilité</h5>
         <p>Magni repellendus vel ullam hic officia accusantium ipsa dolor omnis dolor voluptatem</p>
       </div>
       <div class="aboutRightItem rounded-3 p-3">
-          <div class="circle mb-3"><i class="fa-regular fa-face-smile"></i></div>
-        <h5 class="title fw-bold mb-3">Satisfaction</h5>
+        <div class="circle mb-3"><i class="fa-regular fa-face-smile"></i></div>
+        <h5 class="title fw-bold mb-3">Crédibilité</h5>
         <p>Magni repellendus vel ullam hic officia accusantium ipsa dolor omnis dolor voluptatem</p>
       </div>
     </div>
   </div>
 </section>
-<section class="productList col-10 rounded-3 p-3 mb-3">
-  <h1 class="text-center mb-3">Nos Produit</h1>
-  <ul class="col-6 list-unstyled p-3 rounded-2 mb-3">
-    <li>Tout</li>
-    <li>Ciment</li>
-    <li>Electricité</li>
-    <li>Jardinage</li>
-    <li>Plomberie</li>
-    <li>Fer</li>
+
+<section id="Products" class="section-p1">
+  <h2>Nos produit</h2>
+  <ul class="categories">
+    @for(item of categories; track $index){
+      <li>{{ item.nom }}</li>
+    }
+
   </ul>
-  <div class="product ">
-    <div class="productCard mb-5">
 
+  <div class="productItems">
+    <div class="productItem">
+      <img src="../../../assets/images/Ciment.jpg" alt="">
+      <div class="productItemDescription">
+        <span>Ciment</span>
+        <h5>Ciment Dangote</h5>
+        <div class="productItemBottom">
+          <h4>4500 f CFA</h4>
+          <a href="#"><i class="bi bi-whatsapp order"></i></a>
+        </div>
+      </div>
     </div>
-    <div class="productCard mb-5">
-
+    <div class="productItem">
+      <img src="../../../assets/images/Brouette.jpg" alt="">
+      <div class="productItemDescription">
+        <span>Ciment</span>
+        <h5>Ciment Dangote</h5>
+        <div class="productItemBottom">
+          <h4>4500 f CFA</h4>
+          <a href="#"><i class="bi bi-whatsapp order"></i></a>
+        </div>
+      </div>
     </div>
-    <div class="productCard mb-5">
-
+    <div class="productItem">
+      <img src="../../../assets/images/FER8.jpg" alt="">
+      <div class="productItemDescription">
+        <span>Ciment</span>
+        <h5>Ciment Dangote</h5>
+        <div class="productItemBottom">
+          <h4>4500 f CFA</h4>
+          <a href="#"><i class="bi bi-whatsapp order"></i></a>
+        </div>
+      </div>
     </div>
-    <div class="productCard mb-5">
-
+    <div class="productItem">
+      <img src="../../../assets/images/LAMPE.jpg" alt="">
+      <div class="productItemDescription">
+        <span>Ciment</span>
+        <h5>Ciment Dangote</h5>
+        <div class="productItemBottom">
+          <h4>4500 f CFA</h4>
+          <a href="#"><i class="bi bi-whatsapp order"></i></a>
+        </div>
+      </div>
     </div>
-    <div class="productCard mb-5">
-
+    <div class="productItem">
+      <img src="../../../assets/images/LAMPE.jpg" alt="">
+      <div class="productItemDescription">
+        <span>Ciment</span>
+        <h5>Ciment Dangote</h5>
+        <div class="productItemBottom">
+          <h4>4500 f CFA</h4>
+          <a href="#"><i class="bi bi-whatsapp order"></i></a>
+        </div>
+      </div>
     </div>
-    <div class="productCard mb-5">
-
+    <div class="productItem">
+      <img src="../../../assets/images/Brouette.jpg" alt="">
+      <div class="productItemDescription">
+        <span>Ciment</span>
+        <h5>Ciment Dangote</h5>
+        <div class="productItemBottom">
+          <h4>4500 f CFA</h4>
+          <a href="#"><i class="bi bi-whatsapp order"></i></a>
+        </div>
+      </div>
     </div>
-    <div class="productCard mb-5">
-
+    <div class="productItem">
+      <img src="../../../assets/images/DANGOTE.jpg" alt="">
+      <div class="productItemDescription">
+        <span>Ciment</span>
+        <h5>Ciment Dangote</h5>
+        <div class="productItemBottom">
+          <h4>4500 f CFA</h4>
+          <a href="#"><i class="bi bi-whatsapp order"></i></a>
+        </div>
+      </div>
     </div>
-    <div class="productCard mb-5">
-
+    <div class="productItem">
+      <img src="../../../assets/images/PEINTURE.jpeg" alt="">
+      <div class="productItemDescription">
+        <span>Ciment</span>
+        <h5>Ciment Dangote</h5>
+        <div class="productItemBottom">
+          <h4>4500 f CFA</h4>
+          <a href="#"><i class="bi bi-whatsapp order"></i></a>
+        </div>
+      </div>
     </div>
   </div>
-  <div class="pagination col-6 rounded-3"></div>
 
 </section>
 
+<section id="contact-map" class="section-p1">
+  <h2>Nous contacter</h2>
+  <div class="contact-map-container">
+    <div class="btnContainer">
+      @if(!switchValue){
+      <button class="contactBtn activeBtn">Nous Contacter</button>
+      <button class="mapBtn" (click)="onChangeSwitchValue()">Google Map</button>
+      }@else {
+      <button class="contactBtn" (click)="onChangeSwitchValue()">Nous Contacter</button>
+      <button class="mapBtn activeBtn">Google Map</button>
+      }
+    </div>
+
+    <div class="content">
+      @if(!switchValue){
+      <div class="contact">
+        <div class="row">
+          <div class="mb-3 col-lg-6 pe-2">
+            <input type="email" class="form-control p-2" id="exampleFormControlInput1" placeholder="Nom complet">
+          </div>
+          <div class="mb-3 col-lg-6 ps-2">
+            <input type="email" class="form-control p-2" id="exampleFormControlInput1" placeholder="Email">
+          </div>
+          <div class="mb-3">
+            <input type="email" class="form-control p-2" id="exampleFormControlInput1" placeholder="Sujet">
+          </div>
+          <div class="mb-3">
+            <textarea class="form-control p-2" id="exampleFormControlTextarea1" rows="3"
+              placeholder="Message"></textarea>
+          </div>
+          <div class="mb-3 send-message">
+            <button class="">Envoyer message</button>
+          </div>
+
+        </div>
+      </div>
+      }@else{
+      <div class="map hide">
+        <div class="mapouter">
+          <div class="gmap_canvas"><iframe class="gmap_iframe" width="100%" frameborder="0" scrolling="no"
+              marginheight="0" marginwidth="0"
+              src="https://maps.google.com/maps?width=1011&amp;height=480&amp;hl=en&amp;q=yoff&amp;t=&amp;z=14&amp;ie=UTF8&amp;iwloc=B&amp;output=embed"></iframe><a
+              href="https://connectionsgame.org/">Connections NYT</a></div>
+          <style>
+            .mapouter {
+              position: relative;
+              text-align: right;
+              width: 100%;
+              height: 480px;
+            }
+
+            .gmap_canvas {
+              overflow: hidden;
+              background: none !important;
+              width: 100%;
+              height: 100%;
+            }
+
+            .gmap_iframe {
+              height: 480px !important;
+            }
+          </style>
+        </div>
+      </div>
+      }
+
+    </div>
+
+  </div>
+</section>
+
+<footer id="footer" class="footer">
+
+  <div class="container fContainer">
+    <div class="row gy-3">
+      <div class="col-lg-3 col-md-6 d-flex">
+        <i class="bi bi-geo-alt icon"></i>
+        <div>
+          <h4>Addresse</h4>
+          <p>
+            Yoff <br>
+            Dakar - Sénégal<br>
+          </p>
+        </div>
+
+      </div>
+
+      <div class="col-lg-3 col-md-6 footer-links d-flex">
+        <i class="bi bi-telephone icon"></i>
+        <div>
+          <h4>Contact</h4>
+          <p>
+            <strong>Phone:</strong> +221 78 306 44 72<br>
+            <strong>Email:</strong> info&#64;rapidstock.com<br>
+          </p>
+        </div>
+      </div>
+
+      <div class="col-lg-3 col-md-6 footer-links d-flex">
+        <i class="bi bi-clock icon"></i>
+        <div>
+          <h4>Heure d'ouverture</h4>
+          <p>
+            <strong>Lun-Sam: 08h</strong> - 21h<br>
+            Dimanche: <strong>Lun-Sam: 09h</strong> - 17h
+          </p>
+        </div>
+      </div>
+
+      <div class="col-lg-3 col-md-6 footer-links">
+        <h4>Nous suivre</h4>
+        <div class="social-links d-flex">
+          <a href="#" class="twitter"><i class="bi bi-twitter"></i></a>
+          <a href="#" class="facebook"><i class="bi bi-facebook"></i></a>
+          <a href="#" class="instagram"><i class="bi bi-instagram"></i></a>
+          <a href="#" class="linkedin"><i class="bi bi-linkedin"></i></a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="container fContainer">
+    <div class="copyright">
+      &copy; Copyright <strong><span>Rapid stock</span></strong>. Tout droit reservée
+    </div>
+    <div class="credits">
+      Designed by <a href="#">Moohamad</a>
+    </div>
+  </div>
+
+</footer>

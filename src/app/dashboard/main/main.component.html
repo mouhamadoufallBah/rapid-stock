@@ -46,11 +46,52 @@
       <header class="d-flex justify-content-between align-items-center">
         <div class="menuTogler" (click)="onToggleMenu()"><i class="bi bi-list "></i></div>
         <div class=" profile d-flex">
-          <i class="fa-regular fa-bell me-3 fs-4 d-flex align-items-center justify-content-center notification" style="cursor: pointer;"></i>
-          <a routerLink="./profile" class="profil"><img
-              src="https://img.freepik.com/photos-gratuite/beau-male-adulte-posant_23-2148729713.jpg?t=st=1707686184~exp=1707686784~hmac=5c14c793ccc62019d2e930b88de714f4fdae49e5c12d1881c3337441cbe955b9"
-              alt="">
-          </a>
+          @if(notification.length <= 0){ <i
+            class="fa-regular fa-bell me-3 fs-4 d-flex align-items-center justify-content-center notification"
+            style="cursor: pointer;"></i>
+            }@else {
+            <a class="nav-link nav-icon d-flex justify-content-center align-items-center" href="#"
+              data-bs-toggle="dropdown">
+              <i class="fa-solid fa-bell me-3 fs-4 d-flex align-items-center justify-content-center notification"></i>
+            </a><!-- End Notification Icon -->
+
+            <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow notifications">
+              <li class="dropdown-header">
+                Vous avez {{ notification.length }} nouveaux notifications
+                <a href="#"><span class="badge rounded-pill bg-primary p-2 ms-2"></span></a>
+              </li>
+
+              @for(item of notification; track $index){
+                <li>
+                  <hr class="dropdown-divider">
+                </li>
+
+                <li class="notification-item">
+                  <i class="bi bi-exclamation-circle text-warning"></i>
+                  <div>
+                    <h4>{{ item.data.produit }}</h4>
+                    <p>{{ item.data.Messages }}</p>
+                    <p>{{ item.created_at | date: 'short': 'fr' }}</p>
+                  </div>
+                </li>
+
+              }
+
+
+
+
+
+
+
+            </ul><!-- End Notification Dropdown Items -->
+            }
+
+
+
+            <a routerLink="./profile" class="profil"><img
+                src="https://img.freepik.com/photos-gratuite/beau-male-adulte-posant_23-2148729713.jpg?t=st=1707686184~exp=1707686784~hmac=5c14c793ccc62019d2e930b88de714f4fdae49e5c12d1881c3337441cbe955b9"
+                alt="">
+            </a>
         </div>
       </header>
       <div class="dynamicContent p-5 pb-5">

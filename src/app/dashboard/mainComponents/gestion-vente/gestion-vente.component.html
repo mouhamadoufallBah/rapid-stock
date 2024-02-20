@@ -113,7 +113,7 @@
               </tr>
             </thead>
             <tbody>
-              @for (item of cartProducts; track $index) {
+              @for (item of cartProducts; track $index;) {
               <tr>
                 <td>{{ item.nomproduit }}</td>
                 <td (dblclick)="onChangeQuantityFieldValue(item)">
@@ -121,7 +121,7 @@
                     {{ item.quantiteVendu }}
                   }
                   @else {
-                    <input type="number" value="{{ item.quantiteVendu }}" [(ngModel)]="quantityFromInput" (keyup.enter)="onUpdateQuantityFromInput(item)" style="border: none;" min="1">
+                    <input type="number" [(ngModel)]="cartProducts[$index].quantiteVendu" (keyup.enter)="onUpdateQuantityFromInput(item)" style="border: none;" min="1">
                   }
                 </td>
                 <td>{{ item.prixU * item.quantiteVendu}}f CFA</td>

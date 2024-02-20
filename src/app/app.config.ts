@@ -9,6 +9,12 @@ import { getStorage, provideStorage } from '@angular/fire/storage';
 import { firebaseConfig } from './firebase.config';
 import { provideServiceWorker } from '@angular/service-worker';
 
+import { registerLocaleData } from '@angular/common';
+import localeFr from '@angular/common/locales/fr';
+import { LOCALE_ID } from '@angular/core';
+
+registerLocaleData(localeFr, 'fr');
+
 
 
 export const appConfig: ApplicationConfig = {
@@ -20,6 +26,7 @@ export const appConfig: ApplicationConfig = {
     provideServiceWorker('ngsw-worker.js', {
         enabled: !isDevMode(),
         registrationStrategy: 'registerWhenStable:30000'
-    })
+    }),
+    {provide: LOCALE_ID, useValue: 'fr' }
 ]
 };
