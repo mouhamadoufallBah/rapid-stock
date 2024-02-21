@@ -18,7 +18,7 @@
   <button>Voir nos produit</button>
 </section>
 
-<section class="about section-p1">
+<section class="about section-p1" data-aos="fade-up">
   <div class="aboutLeft">
     <div class="aboutLeftItem rounded-3 p-3">
       <h2 class="text-center mb-4">A propos</h2>
@@ -64,109 +64,55 @@
   </div>
 </section>
 
-<section id="Products" class="section-p1">
+<section id="Products" class="section-p1" data-aos="fade-up">
   <h2>Nos produit</h2>
   <ul class="categories">
     @for(item of categories; track $index){
-      <li>{{ item.nom }}</li>
+    <li (click)="onActiveCategorie(item.id, $index)" style="cursor: pointer;"  (click)="getProduitByIdCategorie(item.id)" [ngClass]="{ 'activeCat': $index === activeCategoryIndex }">{{ item.nom }}</li>
     }
 
   </ul>
 
   <div class="productItems">
-    <div class="productItem">
-      <img src="../../../assets/images/Ciment.jpg" alt="">
+    @if(productsByCategorie != undefined && productsByCategorie.length > 0){
+
+    @for(item of productsByCategorie; track $index){
+      <div class="productItem me-4">
+        <img src="{{ item.image }}" alt="">
+        <div class="productItemDescription">
+          <span>{{ item.categorie_id |categorieIdToCategorieName:categories }}</span>
+          <h5>{{ item.nomproduit }}</h5>
+          <div class="productItemBottom">
+            <h4>{{ item.prixU }} f CFA</h4>
+            <a href="#"><i class="bi bi-whatsapp order"></i></a>
+          </div>
+        </div>
+      </div>
+    }
+    }@else if(allProducts.length>0) {
+    @for(item of allProducts; track $index){
+    <div class="productItem me-4">
+      <img src="{{ item.image }}" alt="">
       <div class="productItemDescription">
-        <span>Ciment</span>
-        <h5>Ciment Dangote</h5>
+        <span>{{ item.categorie_id | categorieIdToCategorieName: categories }}</span>
+        <h5>{{ item.nomproduit }}</h5>
         <div class="productItemBottom">
-          <h4>4500 f CFA</h4>
-          <a href="#"><i class="bi bi-whatsapp order"></i></a>
+          <h4>{{ item.prixU }} f CFA</h4>
+          <a href="https://wa.me/221783074495?text=Bonjour%20je%20suis%20intéressé%20par%20{{ item.nomproduit }}%20qui%20coûte%20{{ item.prixU }}%20f%20CFA" target="_blank"><i class="bi bi-whatsapp order"></i></a>
         </div>
       </div>
     </div>
-    <div class="productItem">
-      <img src="../../../assets/images/Brouette.jpg" alt="">
-      <div class="productItemDescription">
-        <span>Ciment</span>
-        <h5>Ciment Dangote</h5>
-        <div class="productItemBottom">
-          <h4>4500 f CFA</h4>
-          <a href="#"><i class="bi bi-whatsapp order"></i></a>
-        </div>
-      </div>
-    </div>
-    <div class="productItem">
-      <img src="../../../assets/images/FER8.jpg" alt="">
-      <div class="productItemDescription">
-        <span>Ciment</span>
-        <h5>Ciment Dangote</h5>
-        <div class="productItemBottom">
-          <h4>4500 f CFA</h4>
-          <a href="#"><i class="bi bi-whatsapp order"></i></a>
-        </div>
-      </div>
-    </div>
-    <div class="productItem">
-      <img src="../../../assets/images/LAMPE.jpg" alt="">
-      <div class="productItemDescription">
-        <span>Ciment</span>
-        <h5>Ciment Dangote</h5>
-        <div class="productItemBottom">
-          <h4>4500 f CFA</h4>
-          <a href="#"><i class="bi bi-whatsapp order"></i></a>
-        </div>
-      </div>
-    </div>
-    <div class="productItem">
-      <img src="../../../assets/images/LAMPE.jpg" alt="">
-      <div class="productItemDescription">
-        <span>Ciment</span>
-        <h5>Ciment Dangote</h5>
-        <div class="productItemBottom">
-          <h4>4500 f CFA</h4>
-          <a href="#"><i class="bi bi-whatsapp order"></i></a>
-        </div>
-      </div>
-    </div>
-    <div class="productItem">
-      <img src="../../../assets/images/Brouette.jpg" alt="">
-      <div class="productItemDescription">
-        <span>Ciment</span>
-        <h5>Ciment Dangote</h5>
-        <div class="productItemBottom">
-          <h4>4500 f CFA</h4>
-          <a href="#"><i class="bi bi-whatsapp order"></i></a>
-        </div>
-      </div>
-    </div>
-    <div class="productItem">
-      <img src="../../../assets/images/DANGOTE.jpg" alt="">
-      <div class="productItemDescription">
-        <span>Ciment</span>
-        <h5>Ciment Dangote</h5>
-        <div class="productItemBottom">
-          <h4>4500 f CFA</h4>
-          <a href="#"><i class="bi bi-whatsapp order"></i></a>
-        </div>
-      </div>
-    </div>
-    <div class="productItem">
-      <img src="../../../assets/images/PEINTURE.jpeg" alt="">
-      <div class="productItemDescription">
-        <span>Ciment</span>
-        <h5>Ciment Dangote</h5>
-        <div class="productItemBottom">
-          <h4>4500 f CFA</h4>
-          <a href="#"><i class="bi bi-whatsapp order"></i></a>
-        </div>
-      </div>
-    </div>
+    }
+    }@else {
+    <h3 class="text-center">Pas de produit disponible</h3>
+    }
+
+
   </div>
 
 </section>
 
-<section id="contact-map" class="section-p1">
+<section id="contact-map" class="section-p1" data-aos="fade-up">
   <h2>Nous contacter</h2>
   <div class="contact-map-container">
     <div class="btnContainer">

@@ -7,6 +7,7 @@ import Notiflix from 'notiflix';
 import { AuthService } from '../../services/users/auth.service';
 import { RoleIdToroleNamePipe } from '../../pipes/user/role-id-torole-name.pipe';
 import { ProduitService } from '../../services/produit/produit.service';
+import { EncryptionService } from '../../services/encryption.service';
 
 @Component({
   selector: 'app-main',
@@ -39,7 +40,7 @@ export class MainComponent implements OnInit {
 
   notification: any[] = [];
 
-  constructor(private authService: AuthService,private route: Router, private routeActive: ActivatedRoute, private produitService: ProduitService){ }
+  constructor(private authService: AuthService,private route: Router, private routeActive: ActivatedRoute, private produitService: ProduitService, private encryptionService: EncryptionService){ }
 
   ngOnInit(): void {
 
@@ -48,7 +49,9 @@ export class MainComponent implements OnInit {
       { id: 2, nom: 'Employée' },
     ];
 
-    const userConnectedString = localStorage.getItem("userOnline");
+
+
+     const userConnectedString = this.encryptionService.decryptionAES(localStorage.getItem('userOnline'));
 
     if (userConnectedString) {
       this.userConnected = JSON.parse(userConnectedString);

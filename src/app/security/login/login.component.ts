@@ -3,6 +3,7 @@ import { AuthService } from '../../services/users/auth.service';
 import Notiflix from 'notiflix';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+import { EncryptionService } from '../../services/encryption.service';
 
 @Component({
   selector: 'app-login',
@@ -14,22 +15,66 @@ import { Router } from '@angular/router';
 export class LoginComponent {
   email: string = "";
   password: string = "";
+  exactEmail: boolean;
+  verifEmail: string = "";
+  
+  exactPassword: boolean;
+  verifPassword: string = "";
 
-  regexEmail = new RegExp('^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,4}$');
 
-  constructor(private authService: AuthService,private route: Router) { }
+  constructor(private authService: AuthService, private route: Router, private encryptionService: EncryptionService) { }
 
-  clearInput(){
+  clearInput() {
     this.email = "";
     this.password = "";
   }
 
+
+  validateEmail(email: string): boolean {
+    const emailRegex = /^[A-Za-z]+[A-Za-z0-9._%+-]+@[A-Za-z][A-Za-z0-9.-]+.[A-Za-z]{2,}$/;
+
+    return emailRegex.test(email);
+  }
+
+  verifiEmail() {
+    if (this.email == '') {
+      this.verifEmail = '';
+    } else {
+      if (this.validateEmail(this.email) == true) {
+        this.exactEmail = true;
+        this.verifEmail = '';
+      }
+
+      if (this.validateEmail(this.email) == false) {
+        this.exactEmail = false;
+        this.verifEmail = 'le format du mail est invalide';
+      }
+    }
+  }
+
+  verifPasswordFonction() {
+    this.exactPassword = false;
+    if (this.password == '') {
+      this.verifPassword = 'Veuillez renseigner votre mot de passe';
+    } else if (this.password.length < 8) {
+      this.verifPassword = 'Mot de passe doit être supérieur ou égal à 8';
+    } else if (this.password.includes(' ')) {
+      this.verifPassword = "Le mot de passe ne peut pas contenir d'espace";
+    } else {
+      this.verifPassword = '';
+      this.exactPassword = true;
+    }
+    if (this.password == '') {
+      this.verifPassword = '';
+    }
+  }
+
   onLogin() {
-    if (this.email == "" || this.password == "") {
+    if (!this.validateEmail(this.email) || this.password == "") {
       Notiflix.Notify.failure('Veuillez remplir les champs');
     } else {
       Notiflix.Loading.init({
-        svgColor:'#f47a20',
+        svgColor: '#f47a20',
       });
       Notiflix.Loading.hourglass();
 
@@ -40,7 +85,9 @@ export class LoginComponent {
 
             this.clearInput();
 
-            localStorage.setItem("userOnline", JSON.stringify(data.user));
+            const userOnline = this.encryptionService.encryptionAES(JSON.stringify(data.user));
+            localStorage.setItem('userOnline', userOnline);
+
             localStorage.setItem("access_token", JSON.stringify(data.access_token).replace(/['"]+/g, ''));
 
             this.route.navigate(['/dashboard'])
