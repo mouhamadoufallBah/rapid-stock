@@ -15,9 +15,10 @@ import { EncryptionService } from '../../services/encryption.service';
 export class LoginComponent {
   email: string = "";
   password: string = "";
+  
   exactEmail: boolean;
   verifEmail: string = "";
-  
+
   exactPassword: boolean;
   verifPassword: string = "";
 

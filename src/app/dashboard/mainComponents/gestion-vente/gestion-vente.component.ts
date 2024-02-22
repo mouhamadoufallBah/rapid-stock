@@ -343,9 +343,9 @@ export class GestionVenteComponent {
     });
 
     // console.log(data, "donnée à envoyé");
-    if (data.client_id === null) {
+    if (data.client_id == null) {
       Notiflix.Notify.failure('Veuillez renseigner le client');
-    } if (data.produit.length === 0) {
+    }else if (data.produit.length === 0) {
       Notiflix.Notify.failure('Le panier est vide veuillez');
     } else {
       Notiflix.Loading.init({

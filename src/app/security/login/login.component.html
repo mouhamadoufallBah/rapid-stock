@@ -12,9 +12,9 @@
             <input type="mail" class="form-control" id="email" placeholder="Veuillez entrer le email" name="email"
               [(ngModel)]="email" required (input)="verifiEmail()">
               @if(exactEmail == true){
-                <span id="verifEmailcorrect" class="text-success">{{ verifEmail }}</span>
+                <span id="verifEmailcorrect" class="text-success fs-6 fw-light">{{ verifEmail }}</span>
               }@else {
-                <span id="verifEmail" class="text-danger">{{ verifEmail }}</span>
+                <span id="verifEmail" class="text-danger fs-6 fw-light">{{ verifEmail }}</span>
               }
           </div>
           <div class="form-group mb-3">

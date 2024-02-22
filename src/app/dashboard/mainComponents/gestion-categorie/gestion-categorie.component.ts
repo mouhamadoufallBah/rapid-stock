@@ -20,6 +20,10 @@ export class GestionCategorieComponent implements OnInit {
   nomCategory = "";
   nomCategoryUpdate = "";
 
+
+  exactNom: boolean;
+  verifNom: string = "";
+
   dtCategories: DataTables.Settings = {};
 
   constructor(private categoryService: CategorieService) { }
@@ -59,6 +63,33 @@ export class GestionCategorieComponent implements OnInit {
         console.error('Erreur lors de la récupération des catégories', error);
       }
     );
+  }
+
+  validateNomPrenom(text: string): boolean {
+    const prenomNomRegex = /^[A-Za-z]{2,}(?: [A-Za-z]{2,})*$/;
+
+    return prenomNomRegex.test(text);
+  }
+
+  verifiNom() {
+    const nom = this.nomCategory.length>0? this.nomCategory.trim(): this.nomCategoryUpdate.trim();
+
+    if (nom === '') {
+      this.verifNom = '';
+      this.exactNom = false;
+    } else if (
+      this.validateNomPrenom(nom) &&
+      nom.length >= 2
+    ) {
+      this.exactNom = true;
+      this.verifNom = '';
+    } else if (nom.length < 2) {
+      this.exactNom = false;
+      this.verifNom = 'au minimum avoir deux caractères ';
+    } else {
+      this.exactNom = false;
+      this.verifNom = 'le nom est invalide ';
+    }
   }
 
   onAddCategorie() {

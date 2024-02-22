@@ -23,6 +23,19 @@ export class GestionClientComponent implements OnInit {
   telephoneAdd: string = "";
   adresseAdd: string = "";
 
+  exactPrenom: boolean;
+  verifPrenom: string = "";
+
+  exactNom: boolean;
+  verifNom: string = "";
+
+  exactTelephone: boolean;
+  verifTelephone: string = "";
+
+  exactAdresse: boolean;
+  verifAdresse: string = "";
+
+
   nomUpdate: string = "";
   prenomUpdate: string = "";
   telephoneUpdate: string = "";
@@ -46,6 +59,114 @@ export class GestionClientComponent implements OnInit {
     };
 
     this.getAllClients();
+  }
+
+  validateNomPrenom(text: string): boolean {
+    const prenomNomRegex = /^[A-Za-z]{2,}(?: [A-Za-z]{2,})*$/;
+
+    return prenomNomRegex.test(text);
+  }
+
+  verifiNom() {
+    const nom = this.nomAdd.length>0? this.nomAdd.trim(): this.nomUpdate.trim();
+
+    if (nom === '') {
+      this.verifNom = '';
+      this.exactNom = false;
+    } else if (
+      this.validateNomPrenom(nom) &&
+      nom.length >= 2
+    ) {
+      this.exactNom = true;
+      this.verifNom = '';
+    } else if (nom.length < 2) {
+      this.exactNom = false;
+      this.verifNom = 'au minimum avoir deux caractères ';
+    } else {
+      this.exactNom = false;
+      this.verifNom = 'le nom est invalide ';
+    }
+  }
+
+  verifiPrenom() {
+    const Prenom = this.prenomAdd.length>0? this.nomAdd.trim(): this.prenomUpdate.trim();
+
+    if (Prenom === '') {
+      this.verifPrenom = '';
+      this.exactPrenom = false;
+    } else if (
+      this.validateNomPrenom(Prenom) &&
+      Prenom.length >= 2
+    ) {
+      this.exactPrenom = true;
+      this.verifPrenom = '';
+    } else if (Prenom.length < 2) {
+      this.exactPrenom = false;
+      this.verifPrenom = 'au minimum avoir deux caractères ';
+    } else {
+      this.exactPrenom = false;
+      this.verifPrenom = 'le Prenom est invalide ';
+    }
+  }
+
+  validateTel(telephone: string): boolean {
+    const phoneRegex = /^(77|78|76|70|75|33)[0-9]{7}$/;
+
+    return phoneRegex.test(telephone);
+  }
+
+
+  verifiAdresse() {
+    const Adresse = this.adresseAdd ? this.adresseAdd.trim() : this.adresseUpdate.trim();
+
+    if (Adresse === '') {
+      this.verifAdresse = '';
+      this.exactAdresse = false;
+    } else if (
+      this.validateNomPrenom(Adresse) &&
+      Adresse.length >= 2
+    ) {
+      this.exactAdresse = true;
+      this.verifAdresse = '';
+    } else if (Adresse.length < 2) {
+      this.exactAdresse = false;
+      this.verifAdresse = 'au minimum avoir deux caractères ';
+    } else {
+      this.exactPrenom = false;
+      this.verifPrenom = 'le Adresse est invalide ';
+    }
+  }
+
+  verifiTel() {
+    if (this.telephoneAdd == '') {
+      this.verifTelephone = '';
+    } else {
+      if (this.validateTel(this.telephoneAdd) == true) {
+        this.exactTelephone = true;
+        this.verifTelephone = '';
+      }
+
+      if (this.validateTel(this.telephoneAdd) == false) {
+        this.exactTelephone = false;
+        this.verifTelephone = 'le format du numéro doit commencer par 77/78/70/76 plus 7 chiffres';
+      }
+    }
+  }
+
+  verifiTelUpdate() {
+    if (this.telephoneUpdate == '') {
+      this.verifTelephone = '';
+    } else {
+      if (this.validateTel(this.telephoneUpdate) == true) {
+        this.exactTelephone = true;
+        this.verifTelephone = '';
+      }
+
+      if (this.validateTel(this.telephoneUpdate) == false) {
+        this.exactTelephone = false;
+        this.verifTelephone = 'le format du numéro doit commencer par 77/78/70/76 plus 7 chiffres';
+      }
+    }
   }
 
   getAllClients() {

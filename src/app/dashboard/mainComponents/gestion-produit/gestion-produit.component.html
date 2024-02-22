@@ -90,7 +90,12 @@
           <div class="mb-3">
             <label for="nomProduitAdd" class="form-label">Nom du produit</label>
             <input type="text" class="form-control" id="nomProduitAdd" placeholder="Nom du produit" name="nomProduitAdd"
-              [(ngModel)]="nomAdd">
+              [(ngModel)]="nomAdd" (input)="verifiNom()">
+            @if(exactNom == true){
+            <span class="text-success">{{ verifNom }}</span>
+            }@else {
+            <span class="text-danger">{{ verifNom }}</span>
+            }
           </div>
           <div class="mb-3">
             <label for="categorieAdd" class="form-label">Catégorie du produit</label>
@@ -110,12 +115,22 @@
           <div class="mb-3">
             <label for="quantiteSeuil" class="form-label">Quantité seuil</label>
             <input type="number" class="form-control" id="quantiteSeuil" placeholder="Quantite seuil du produit"
-              name="quantiteSeuil" [(ngModel)]="quantiteSeuilAdd">
+              name="quantiteSeuil" [(ngModel)]="quantiteSeuilAdd" (input)="verifiQuantiteSeuil()">
+            @if(exactQuantiteSeuil == true){
+            <!-- <span class="text-success">{{ verifQuantiteSeuil }}</span> -->
+            }@else {
+            <span class="text-danger">{{ verifQuantiteSeuil }}</span>
+            }
           </div>
           <div class="mb-3">
             <label for="prixUnitaire" class="form-label">Prix unitaire</label>
             <input type="number" class="form-control" id="prixUnitaire" placeholder="Prix unitaire du produit"
-              name="prixUnitaire" [(ngModel)]="prixUAdd">
+              name="prixUnitaire" [(ngModel)]="prixUAdd" (input)="verifPrixUnitaire()">
+            @if(exactPrixU == true){
+            <!-- <span class="text-success">{{ verifPrixU }}</span> -->
+            }@else {
+            <span class="text-danger">{{ verifPrixU }}</span>
+            }
           </div>
           <div class="mb-3">
             <label for="imageAdd" class="form-label">Image</label><br>
@@ -124,8 +139,8 @@
         </form>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btnAnnuler" data-bs-dismiss="modal">Annuler</button>
-        <button type="button" class="btn" (click)="save()" data-bs-dismiss="modal">Ajouter</button>
+        <button type="button" class="btn btnAnnuler" data-bs-dismiss="modal" #closeAddExpenseModal>Annuler</button>
+        <button type="button" class="btn" (click)="save()">Ajouter</button>
       </div>
     </div>
   </div>
@@ -164,12 +179,22 @@
           <div class="mb-3">
             <label for="quantiteSeuil" class="form-label">Quantité seuil</label>
             <input type="number" class="form-control" id="quantiteSeuil" placeholder="Nom du produit"
-              name="quantiteSeuil" [(ngModel)]="quantiteSeuilUpdate">
+              name="quantiteSeuil" [(ngModel)]="quantiteSeuilUpdate" (input)="verifiQuantiteSeuilUpdate()">
+            @if(exactQuantiteSeuil == true){
+            <!-- <span class="text-success">{{ verifQuantiteSeuil }}</span> -->
+            }@else {
+            <span class="text-danger">{{ verifQuantiteSeuil }}</span>
+            }
           </div>
           <div class="mb-3">
             <label for="prixUniatireUpdate" class="form-label">Prix unitaire</label>
             <input type="number" class="form-control" id="prixUniatireUpdate" placeholder="Nom du produit"
-              name="prixUniatireUpdate" [(ngModel)]="prixUUpdate">
+              name="prixUniatireUpdate" [(ngModel)]="prixUUpdate" (input)="verifPrixUnitaireUpdate()">
+            @if(exactPrixU == true){
+            <!-- <span class="text-success">{{ verifPrixU }}</span> -->
+            }@else {
+            <span class="text-danger">{{ verifPrixU }}</span>
+            }
           </div>
           <!-- <div class="mb-3">
               <label for="imageAdd" class="form-label">Image</label>
@@ -201,9 +226,7 @@
         <div class="modalBodyConatiner">
           @if(selectedProduit){
           <div class="modalBodyConatinerLeft">
-            <img
-              src="{{ selectedProduit.image }}"
-              alt="">
+            <img src="{{ selectedProduit.image }}" alt="">
           </div>
           <div class="modalBodyConatinerRight">
             <div class="modalBodyConatinerRightItem py-5">
@@ -227,7 +250,7 @@
 
             </div>
           </div>
-        }
+          }
         </div>
       </div>
       <div class="modal-footer">

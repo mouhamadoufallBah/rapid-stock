@@ -74,22 +74,42 @@
           <div class="mb-3">
             <label for="nomAdd" class="form-label">Nom du client</label>
             <input type="text" class="form-control" id="nomAdd" name="nomAdd" placeholder="Nom du client"
-              [(ngModel)]="nomAdd">
+              [(ngModel)]="nomAdd" (input)="verifiNom()">
+              @if(exactNom == true){
+                <span class="text-success">{{ verifNom }}</span>
+                }@else {
+                <span class="text-danger">{{ verifNom }}</span>
+                }
           </div>
           <div class="mb-3">
             <label for="prenomAdd" class="form-label">Prénom du client</label>
             <input type="text" class="form-control" id="prenomAdd" name="prenomAdd" placeholder="Prénom du client"
-              [(ngModel)]="prenomAdd">
+              [(ngModel)]="prenomAdd" (input)="verifiPrenom()">
+              @if(exactNom == true){
+                <span class="text-danger">{{ verifPrenom }}</span>
+                }@else {
+                <span class="text-danger">{{ verifPrenom }}</span>
+                }
           </div>
           <div class="mb-3">
             <label for="telephoneAdd" class="form-label">Téléphone</label>
             <input type="tel" class="form-control" id="telephoneAdd" name="telephoneAdd"
-              placeholder="Numéro téléphone du client" [(ngModel)]="telephoneAdd">
+              placeholder="Numéro téléphone du client" [(ngModel)]="telephoneAdd"  (input)=" verifiTel()">
+              @if(exactTelephone == true){
+                <span class="text-danger">{{ verifTelephone }}</span>
+                }@else {
+                <span class="text-danger">{{ verifTelephone }}</span>
+                }
           </div>
           <div class="mb-3">
             <label for="adresseAdd" class="form-label">Adresse</label>
             <input type="text" class="form-control" id="adresseAdd" name="adresseAdd" placeholder="Adresse du client"
-              [(ngModel)]="adresseAdd">
+              [(ngModel)]="adresseAdd" (input)="verifiAdresse()">
+              @if(exactTelephone == true){
+                <span class="text-danger">{{ verifAdresse }}</span>
+                }@else {
+                <span class="text-danger">{{ verifAdresse }}</span>
+                }
           </div>
 
         </form>
@@ -114,22 +134,42 @@
           <div class="mb-3">
             <label for="nomUpdate" class="form-label">Nom du client</label>
             <input type="text" class="form-control" id="nomUpdate" name="nomUpdate" placeholder="Nom du client"
-              [(ngModel)]="nomUpdate">
+              [(ngModel)]="nomUpdate" (input)="verifiNom()">
+              @if(exactNom == true){
+                <span class="text-success">{{ verifNom }}</span>
+                }@else {
+                <span class="text-danger">{{ verifNom }}</span>
+                }
           </div>
           <div class="mb-3">
             <label for="prenomUpdate" class="form-label">Prénom du client</label>
             <input type="text" class="form-control" id="prenomUpdate" name="prenomUpdate" placeholder="Prénom du client"
-              [(ngModel)]="prenomUpdate">
+              [(ngModel)]="prenomUpdate" (input)="verifiPrenom()">
+              @if(exactPrenom == true){
+                <span class="text-success">{{ verifPrenom }}</span>
+                }@else {
+                <span class="text-danger">{{ verifPrenom }}</span>
+                }
           </div>
           <div class="mb-3">
             <label for="telephoneUpdate" class="form-label">Téléphone</label>
             <input type="tel" class="form-control" id="telephoneUpdate" name="telephoneUpdate"
-              placeholder="Numéro téléphone du client" [(ngModel)]="telephoneUpdate">
+              placeholder="Numéro téléphone du client" [(ngModel)]="telephoneUpdate" (input)="verifiTelUpdate()">
+              @if(exactTelephone == true){
+                <span class="text-danger">{{ verifTelephone }}</span>
+                }@else {
+                <span class="text-danger">{{ verifTelephone }}</span>
+                }
           </div>
           <div class="mb-3">
             <label for="adresseUpdate" class="form-label">Adresse</label>
             <input type="text" class="form-control" id="adresseUpdate" name="adresseUpdate"
-              placeholder="Adresse du client" [(ngModel)]="adresseUpdate">
+              placeholder="Adresse du client" [(ngModel)]="adresseUpdate" (input)="verifiAdresse()">
+              @if(exactAdresse == true){
+                <span class="text-success">{{ verifAdresse }}</span>
+                }@else {
+                <span class="text-danger">{{ verifAdresse }}</span>
+                }
           </div>
 
         </form>

@@ -27,11 +27,10 @@
           <td>{{ item.adresse }}</td>
           <td>{{ item.telephone }}</td>
           <td>
-            <span class="badge rounded-pill"  (click)="onActiveDeactiveEmploye(item.id)"
-            [ngClass]="{'bg-success-subtle text-success px-3': item.etat === 'actif',
+            <span class="badge rounded-pill" (click)="onActiveDeactiveEmploye(item.id)" [ngClass]="{'bg-success-subtle text-success px-3': item.etat === 'actif',
                         'bg-danger-subtle text-danger px-3': item.etat === 'inactif'}" style="cursor: pointer;">
-            {{ item.etat }}
-        </span>
+              {{ item.etat }}
+            </span>
           </td>
           <td>
             <button class="btn" data-bs-toggle="modal" data-bs-target="#voirDetail" (click)="getEmployeById(item.id)"><i
@@ -77,27 +76,52 @@
           <div class="mb-3">
             <label for="nomAdd" class="form-label">Nom</label>
             <input type="text" class="form-control" id="nomAdd" name="nomAdd" placeholder="Nom de l'employé"
-              [(ngModel)]="nomAdd">
+              [(ngModel)]="nomAdd" (input)="verifiNom()">
+            @if(exactNom == true){
+            <span class="text-success">{{ verifNom }}</span>
+            }@else {
+            <span class="text-danger">{{ verifNom }}</span>
+            }
           </div>
           <div class="mb-3">
             <label for="prenomAdd" class="form-label">Prénom</label>
             <input type="text" class="form-control" id="prenomAdd" name="prenomAdd" placeholder="Prénom de l'employé"
-              [(ngModel)]="prenomAdd">
+              [(ngModel)]="prenomAdd" (input)="verifiPrenom()">
+            @if(exactNom == true){
+            <span class="text-danger">{{ verifPrenom }}</span>
+            }@else {
+            <span class="text-danger">{{ verifPrenom }}</span>
+            }
           </div>
           <div class="mb-3">
             <label for="emailAdd" class="form-label">Email</label>
             <input type="text" class="form-control" id="emailAdd" name="emailAdd" placeholder="Prénom de l'employé"
-              [(ngModel)]="emailAdd">
+              [(ngModel)]="emailAdd" (input)="verifiEmail()">
+            @if(exactEmail == true){
+            <span class="text-success">{{ verifEmail }}</span>
+            }@else {
+            <span  class="text-danger">{{ verifEmail }}</span>
+            }
           </div>
           <div class="mb-3">
             <label for="telephoneAdd" class="form-label">Téléphone</label>
             <input type="tel" class="form-control" id="telephoneAdd" name="telephoneAdd"
-              placeholder="Numéro téléphone de l'employé" [(ngModel)]="telephoneAdd">
+              placeholder="Numéro téléphone de l'employé" [(ngModel)]="telephoneAdd" (input)=" verifiTel()">
+              @if(exactTelephone == true){
+                <span class="text-danger">{{ verifTelephone }}</span>
+                }@else {
+                <span class="text-danger">{{ verifTelephone }}</span>
+                }
           </div>
           <div class="mb-3">
             <label for="adresseAdd" class="form-label">Adresse</label>
             <input type="text" class="form-control" id="adresseAdd" name="adresseAdd" placeholder="Adresse de l'employé"
-              [(ngModel)]="adresseAdd">
+              [(ngModel)]="adresseAdd" (input)="verifiAdresse()">
+              @if(exactTelephone == true){
+                <span class="text-danger">{{ verifAdresse }}</span>
+                }@else {
+                <span class="text-danger">{{ verifAdresse }}</span>
+                }
           </div>
 
         </form>

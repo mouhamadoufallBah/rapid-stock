@@ -1,5 +1,5 @@
 import { NgIf } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { DataTablesModule } from 'angular-datatables';
 import { ProduitService } from '../../../services/produit/produit.service';
 
@@ -18,6 +18,8 @@ import { CategorieIdToCategorieNamePipe } from '../../../pipes/categorie/categor
 })
 export class GestionProduitComponent implements OnInit {
 
+  @ViewChild('closeAddExpenseModal') closeAddExpenseModal!: ElementRef; //closing the bootstrap modal
+
   produits: any[] = [];
   selectedProduit: any;
 
@@ -32,7 +34,7 @@ export class GestionProduitComponent implements OnInit {
   etatAdd: string = "";
   categorie_idAdd: number;
 
-  fichierAdd: File;
+  fichierAdd: any="";
 
   nomUpdate: string = "";
   imageUpdate: string = "";
@@ -41,6 +43,18 @@ export class GestionProduitComponent implements OnInit {
   quantiteSeuilUpdate: number;
   etatUpdate: string = "";
   categorie_idUpdate: number;
+
+  exactNom: boolean;
+  verifNom: string = "";
+
+  exactCategorie: boolean;
+  verifCategorie: string = "";
+
+  exactPrixU: boolean;
+  verifPrixU: string = "";
+
+  exactQuantiteSeuil: boolean;
+  verifQuantiteSeuil: string = "";
 
   dtOptions: DataTables.Settings = {};
 
@@ -52,7 +66,7 @@ export class GestionProduitComponent implements OnInit {
       lengthChange: false,
       paging: true,
       info: false,
-      pageLength: 8,
+      pageLength: 7,
       language: {
         url: 'https://cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/French.json',
       }
@@ -96,27 +110,122 @@ export class GestionProduitComponent implements OnInit {
     this.fichierAdd = $event.target.files[0];
   }
 
-
   save() {
-    Notiflix.Loading.init({
-      svgColor: '#f47a20',
-      cssAnimation: true,
-      cssAnimationDuration: 360,
+    if (this.fichierAdd==""){
+      Notiflix.Notify.failure('Veuillez ajouter l\'image');
+    }else{
+      Notiflix.Loading.init({
+        svgColor: '#f47a20',
+        cssAnimation: true,
+        cssAnimationDuration: 360,
 
-    });
-    Notiflix.Loading.hourglass();
-    this.produitService.addFile(this.fichierAdd)
-      .then(downloadURL => {
-        // Utiliser l'URL de téléchargement, par exemple :
-        console.log('Fichier téléchargé avec succès ! URL :', downloadURL);
-        this.imageAdd = downloadURL;
-        this.onAddProduit();
-      })
-      .catch(error => {
-        // Gérer les erreurs
-        console.error('Erreur lors du téléchargement du fichier : ', error);
-        alert('Échec du téléchargement du fichier.');
       });
+      Notiflix.Loading.hourglass();
+      this.produitService.addFile(this.fichierAdd)
+        .then(downloadURL => {
+          // Utiliser l'URL de téléchargement, par exemple :
+          console.log('Fichier téléchargé avec succès ! URL :', downloadURL);
+          this.imageAdd = downloadURL;
+          this.onAddProduit();
+
+          this.closeAddExpenseModal.nativeElement.click();
+        })
+        .catch(error => {
+          // Gérer les erreurs
+          console.error('Erreur lors du téléchargement du fichier : ', error);
+          alert('Échec du téléchargement du fichier.');
+        });
+    }
+
+  }
+
+  validateNomPrenom(text: string): boolean {
+    const prenomNomRegex = /^[A-Za-z]{2,}(?: [A-Za-z]{2,})*$/;
+
+    return prenomNomRegex.test(text);
+  }
+
+  verifiNom() {
+    const nom = this.nomAdd.length>0? this.nomAdd.trim(): this.nomUpdate.trim();
+
+    if (nom === '') {
+      this.verifNom = '';
+      this.exactNom = false;
+    } else if (
+      this.validateNomPrenom(nom) &&
+      nom.length >= 2
+    ) {
+      this.exactNom = true;
+      this.verifNom = '';
+    } else if (nom.length < 2) {
+      this.exactNom = false;
+      this.verifNom = 'au minimum avoir deux caractères ';
+    } else {
+      this.exactNom = false;
+      this.verifNom = 'le nom est invalide ';
+    }
+  }
+
+  validateCategorie() {
+    if (this.categorie_idAdd == undefined) {
+      this.verifCategorie = 'Veuillez selectionner la catégorie';
+      this.exactCategorie = false;
+    } else if (this.categorie_idAdd != undefined) {
+      this.exactCategorie = true;
+    }
+  }
+
+  validateInputNumber(chiffre: any): boolean {
+    const regex = /^[0-9]+$/;
+    return regex.test(chiffre);
+  }
+
+  verifPrixUnitaire() {
+    if (this.prixUAdd === undefined) {
+      this.exactPrixU = false;
+      this.verifPrixU = 'Ce champ accepte uniquement des chiffres';
+    } else if (this.validateInputNumber(this.prixUAdd)) {
+      this.exactPrixU = true;
+    } else {
+      this.exactPrixU = false;
+      this.verifPrixU = 'Ce champ accepte uniquement des chiffres';
+    }
+  }
+
+  verifPrixUnitaireUpdate() {
+    if (this.prixUUpdate === undefined) {
+      this.exactPrixU = false;
+      this.verifPrixU = 'Ce champ accepte uniquement des chiffres';
+    } else if (this.validateInputNumber(this.prixUUpdate)) {
+      this.exactPrixU = true;
+    } else {
+      this.exactPrixU = false;
+      this.verifPrixU = 'Ce champ accepte uniquement des chiffres';
+    }
+  }
+
+  verifiQuantiteSeuil() {
+    if (this.quantiteSeuilAdd === undefined) {
+      this.exactQuantiteSeuil = false;
+      this.verifQuantiteSeuil = 'Ce champ accepte uniquement des chiffres';
+    } else if (this.validateInputNumber(this.quantiteSeuilAdd)) {
+      this.exactQuantiteSeuil = true;
+    } else {
+      this.exactQuantiteSeuil = false;
+      this.verifQuantiteSeuil = 'Ce champ accepte uniquement des chiffres';
+    }
+  }
+
+  verifiQuantiteSeuilUpdate() {
+    if (this.quantiteSeuilUpdate === undefined) {
+      this.exactQuantiteSeuil = false;
+      this.verifQuantiteSeuil = 'Ce champ accepte uniquement des chiffres';
+    } else if (this.validateInputNumber(this.quantiteSeuilUpdate)) {
+      this.exactQuantiteSeuil = true;
+    } else {
+      this.exactQuantiteSeuil = false;
+      this.verifQuantiteSeuil = 'Ce champ accepte uniquement des chiffres';
+    }
   }
 
   onAddProduit() {
