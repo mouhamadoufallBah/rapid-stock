@@ -22,11 +22,19 @@ export class AuthService {
     return this.http.post<any>(`${api}/login`, data);
   }
 
+  checkPassWord(data: any){
+    const accessToken = localStorage.getItem('access_token');
+
+    return accessToken ? this.http.post<any>(`${api}/employe/edit/passwordHash`, data, {
+      headers: new HttpHeaders({ 'Authorization': `Bearer ${accessToken}` })
+    }) : of(null);
+  }
+
   updateEmploye(data: any, id: number): Observable<any> {
       const accessToken = localStorage.getItem('access_token');
 
       return accessToken ?
-        this.http.put<any>(`${api}/client/edit/${id}`, data, {
+        this.http.put<any>(`${api}/employe/edit/${id}`, data, {
           headers: new HttpHeaders({ 'Authorization': `Bearer ${accessToken}` })
         }).pipe(tap(() => cacheBuster$.next())) :
         of(null);

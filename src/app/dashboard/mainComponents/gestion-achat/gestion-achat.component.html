@@ -63,7 +63,6 @@
   </div>
 </main>
 
-
 <!-- les Modals -->
 <div class="modal fade modal" id="modalAjouter" tabindex="-1" aria-labelledby="modalAjouterLabel" aria-hidden="true"
   data-bs-backdrop='static'>
@@ -81,7 +80,12 @@
           <div class="mb-3">
             <label for="nomAdd" class="form-label align-items-center">Nom du achat</label>
             <input type="text" class="form-control" id="nomAdd" name="nomAdd" placeholder="Nom de l'achat"
-              [(ngModel)]="nomAchatAdd">
+              [(ngModel)]="nomAchatAdd" (input)="verifiNomAchat()">
+            @if(exactNomAchat == true){
+            <span class="text-success">{{ verifNomAchat }}</span>
+            }@else {
+            <span class="text-danger">{{ verifNomAchat }}</span>
+            }
           </div>
           <div class="mb-3">
             <label for="categorie" class="form-label">Catégorie</label>
@@ -105,19 +109,33 @@
           </div>
           <div class="mb-3">
             <label for="quantiteachatAdd" class="form-label">Quantité achat</label>
-            <input type="text" class="form-control" id="quantiteachatAdd" name="quantiteachatAdd"
-              placeholder="Qantité acheter" [(ngModel)]="quantiteachatAdd">
+            <input type="number" class="form-control" id="quantiteachatAdd" name="quantiteachatAdd"
+              placeholder="Qantité acheter" [(ngModel)]="quantiteachatAdd" (input)="verifiQuantiteAchat()">
+            @if(exactQuantiteAchat == true){
+            <!-- <span class="text-success">{{ verifQuantiteAchat }}</span> -->
+            }@else {
+            <span class="text-danger">{{ verifQuantiteAchat }}</span>
+            }
           </div>
           <div class="mb-3">
             <label for="prixachatAdd" class="form-label">Prix unitaire</label>
-            <input type="tel" class="form-control" id="prixachatAdd" name="prixachatAdd" placeholder="Prix unitaire"
-              [(ngModel)]="prixachatAdd">
+            <input type="number" class="form-control" id="prixachatAdd" name="prixachatAdd" placeholder="Prix unitaire"
+              [(ngModel)]="prixachatAdd" (input)="verifiPrixUnitaireAchat()">
+            @if(exactPrixUAchat == true){
+            <!-- <span class="text-success">{{ verifQuantiteAchat }}</span> -->
+            }@else {
+            <span class="text-danger">{{ verifPrixUAchat }}</span>
+            }
           </div>
         </form>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btnAnnuler" data-bs-dismiss="modal">Annuler</button>
-        <button type="button" class="btn" (click)="  onAddAchat()" data-bs-dismiss="modal">Ajouter</button>
+        <button type="button" class="btn btnAnnuler" data-bs-dismiss="modal" #closeAddExpenseModal>Annuler</button>
+        @if(exactNomAchat == true && exactQuantiteAchat == true && exactPrixUAchat == true){
+        <button type="button" class="btn" (click)="onAddAchat()">Ajouter</button>
+        }@else {
+        <button type="button" class="btn" data-bs-dismiss="modal" disabled>Ajouter</button>
+        }
       </div>
     </div>
   </div>
@@ -136,7 +154,12 @@
           <div class="mb-3">
             <label for="nomAchatUpdate" class="form-label align-items-center">Nom du achat</label>
             <input type="text" class="form-control" id="nomAchatUpdate" name="nomAchatUpdate"
-              placeholder="Nom de l'achat" [(ngModel)]="nomAchatUpdate">
+              placeholder="Nom de l'achat" [(ngModel)]="nomAchatUpdate" (input)="verifiNomAchatUpdate()">
+            @if(exactNomAchat == true){
+            <span class="text-success">{{ verifNomAchat }}</span>
+            }@else {
+            <span class="text-danger">{{ verifNomAchat }}</span>
+            }
           </div>
           <div class="mb-3">
             <label for="categorie" class="form-label">Catégorie</label>
@@ -162,12 +185,22 @@
           <div class="mb-3">
             <label for="quantiteachatAdd" class="form-label">Quantité achat</label>
             <input type="text" class="form-control" id="quantiteachatAdd" name="quantiteachatAdd"
-              placeholder="Qantité acheter" [(ngModel)]="quantiteachatUpdate">
+              placeholder="Qantité acheter" [(ngModel)]="quantiteachatUpdate" (input)="verifiQuantiteAchatUpdate()">
+            @if(exactQuantiteAchat == true){
+            <!-- <span class="text-success">{{ verifQuantiteAchat }}</span> -->
+            }@else {
+            <span class="text-danger">{{ verifQuantiteAchat }}</span>
+            }
           </div>
           <div class="mb-3">
             <label for="prixachatAdd" class="form-label">Prix unitaire</label>
             <input type="tel" class="form-control" id="prixachatAdd" name="prixachatAdd" placeholder="Prix unitaire"
-              [(ngModel)]="prixachatUpdate">
+              [(ngModel)]="prixachatUpdate" (input)="verifiPrixUnitaireAchatUpdate()">
+            @if(exactPrixUAchat == true){
+            <!-- <span class="text-success">{{ verifQuantiteAchat }}</span> -->
+            }@else {
+            <span class="text-danger">{{ verifPrixUAchat }}</span>
+            }
           </div>
         </form>
         }
@@ -175,8 +208,11 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btnAnnuler" data-bs-dismiss="modal">Annuler</button>
-        <button type="button" class="btn" (click)=" onUpdateAchat(selectedAchat.id)"
-          data-bs-dismiss="modal">Modifier</button>
+        @if(exactNomAchat == true && exactQuantiteAchat == true && exactPrixUAchat == true){
+          <button type="button" class="btn" (click)=" onUpdateAchat(selectedAchat.id)" data-bs-dismiss="modal">Modifier</button>
+        }@else {
+          <button type="button" class="btn" disabled>Modifier</button>
+        }
       </div>
     </div>
   </div>
@@ -237,12 +273,17 @@
       <div class="modal-body">
         <form>
           <div class="mb-3">
-            <label for="nomProduit" class="form-label">Nom du produit</label>
-            <input type="text" class="form-control" id="nomProduit" placeholder="Nom du produit" name="nomProduit"
-              [(ngModel)]="nomProduit">
+            <label for="nomProduitAdd" class="form-label">Nom du produit</label>
+            <input type="text" class="form-control" id="nomProduitAdd" placeholder="Nom du produit" name="nomProduitAdd"
+              [(ngModel)]="nomProduit" (input)="verifiNom()">
+            @if(exactNom == true){
+            <span class="text-success">{{ verifNom }}</span>
+            }@else {
+            <span class="text-danger">{{ verifNom }}</span>
+            }
           </div>
           <div class="mb-3">
-            <label for="categorie_idProduit" class="form-label">Catégorie du produit</label>
+            <label for="categorieAdd" class="form-label">Catégorie du produit</label>
             <select class="form-select" name="specialite" aria-label="Default select example"
               [(ngModel)]="categorie_idProduit">
               <option selected disabled>Selectionner son specialté</option>
@@ -251,15 +292,30 @@
               }
             </select>
           </div>
+          <!-- <div class="mb-3">
+            <label for="quantiteAdd" class="form-label">Quantité</label>
+            <input type="number" class="form-control" id="quantiteAdd" name="quantiteAdd" placeholder="Quantité du produit"
+              [(ngModel)]="quantiteAdd">
+          </div> -->
           <div class="mb-3">
-            <label for="quantiteSeuilProduit" class="form-label">Quantité seuil</label>
-            <input type="number" class="form-control" id="quantiteSeuilProduit" placeholder="Nom du produit"
-              name="quantiteSeuilProduit" [(ngModel)]="quantiteSeuilProduit">
+            <label for="quantiteSeuil" class="form-label">Quantité seuil</label>
+            <input type="number" class="form-control" id="quantiteSeuil" placeholder="Quantite seuil du produit"
+              name="quantiteSeuil" [(ngModel)]="quantiteSeuilProduit" (input)="verifiQuantiteSeuil()">
+            @if(exactQuantiteSeuil == true){
+            <!-- <span class="text-success">{{ verifQuantiteSeuil }}</span> -->
+            }@else {
+            <span class="text-danger">{{ verifQuantiteSeuil }}</span>
+            }
           </div>
           <div class="mb-3">
-            <label for="prixUProduit" class="form-label">Prix unitaire</label>
-            <input type="number" class="form-control" id="prixUProduit" placeholder="Nom du produit" name="prixUProduit"
-              [(ngModel)]="prixUProduit">
+            <label for="prixUnitaire" class="form-label">Prix unitaire</label>
+            <input type="number" class="form-control" id="prixUnitaire" placeholder="Prix unitaire du produit"
+              name="prixUnitaire" [(ngModel)]="prixUProduit" (input)="verifPrixUnitaire()">
+            @if(exactPrixU == true){
+            <!-- <span class="text-success">{{ verifPrixU }}</span> -->
+            }@else {
+            <span class="text-danger">{{ verifPrixU }}</span>
+            }
           </div>
           <div class="mb-3">
             <label for="imageAdd" class="form-label">Image</label><br>
@@ -269,8 +325,12 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btnAnnuler" data-bs-dismiss="modal">Annuler</button>
-        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalAjouter"
-        (click)="save()">Ajouter</button>
+        @if(exactPrixU == true && exactQuantiteSeuil == true && exactNom == true && fichierAdd != ""){
+        <button type="button" class="btn" (click)="save()" data-bs-toggle="modal"
+          data-bs-target="#modalAjouter">Ajouter</button>
+        }@else {
+        <button type="button" class="btn" (click)="save()" disabled>Ajouter</button>
+        }
       </div>
     </div>
   </div>

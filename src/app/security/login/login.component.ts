@@ -15,7 +15,7 @@ import { EncryptionService } from '../../services/encryption.service';
 export class LoginComponent {
   email: string = "";
   password: string = "";
-  
+
   exactEmail: boolean;
   verifEmail: string = "";
 
@@ -32,7 +32,7 @@ export class LoginComponent {
 
 
   validateEmail(email: string): boolean {
-    const emailRegex = /^[A-Za-z]+[A-Za-z0-9._%+-]+@[A-Za-z][A-Za-z0-9.-]+.[A-Za-z]{2,}$/;
+    const emailRegex = /^[A-Za-z]+[A-Za-z0-9._%+-]+@+[A-Za-z][A-Za-z0-9.-]+.[A-Za-z]{2,}$/;
 
     return emailRegex.test(email);
   }

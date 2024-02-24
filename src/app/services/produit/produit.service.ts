@@ -92,7 +92,8 @@ export class ProduitService {
       throw error;
     }
   }
-
+  
+  @Cacheable({cacheBusterObserver: cacheBuster$})
   getAllNotification(): Observable<any>{
     const accessToken = localStorage.getItem('access_token');
 

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 import { DatatableService } from '../../../services/datatable.service';
 import { DataTablesModule } from 'angular-datatables';
 import { FormsModule } from '@angular/forms';
@@ -17,6 +17,9 @@ import { ProduitIdToProduitNamePipe } from '../../../pipes/produit/produit-id-to
   styleUrl: './gestion-achat.component.scss'
 })
 export class GestionAchatComponent {
+
+  @ViewChild('closeAddExpenseModal') closeAddExpenseModal!: ElementRef;
+
   editValue: boolean = false;
 
   dtOptions: DataTables.Settings = {};
@@ -37,6 +40,15 @@ export class GestionAchatComponent {
   quantiteachatAdd: number;
   produit_idAdd: number;
 
+  exactNomAchat: boolean;
+  verifNomAchat: string = "";
+
+  exactPrixUAchat: boolean;
+  verifPrixUAchat: string = "";
+
+  exactQuantiteAchat: boolean;
+  verifQuantiteAchat: string = "";
+
   nomProduit: string = "";
   imageProduit: string = "";
   prixUProduit: number;
@@ -44,8 +56,17 @@ export class GestionAchatComponent {
   quantiteSeuilProduit: number;
   etatProduit: string = "";
   categorie_idProduit: number;
-  fichierAdd: any;
+  fichierAdd: any = "";
   imageAdd: string = ""
+
+  exactNom: boolean;
+  verifNom: string = "";
+
+  exactPrixU: boolean;
+  verifPrixU: string = "";
+
+  exactQuantiteSeuil: boolean;
+  verifQuantiteSeuil: string = "";
 
   nomAchatUpdate: string = "";
   prixachatUpdate: number;
@@ -154,6 +175,52 @@ export class GestionAchatComponent {
     );
   }
 
+
+  verifiNomAchat() {
+    const nom = this.nomAchatAdd;
+
+    if (nom === '') {
+      this.verifNomAchat = '';
+      this.exactNomAchat = false;
+    } else if (
+      this.validateNomPrenom(nom) &&
+      nom.length >= 2
+    ) {
+      this.exactNomAchat = true;
+      this.verifNomAchat = '';
+    } else if (nom.length < 2) {
+      this.exactNomAchat = false;
+      this.verifNomAchat = 'au minimum avoir deux caractères ';
+    } else {
+      this.exactNomAchat = false;
+      this.verifNomAchat = 'le nom est invalide ';
+    }
+  }
+
+  verifiPrixUnitaireAchat() {
+    if (this.prixachatAdd === undefined) {
+      this.exactPrixUAchat = false;
+      this.verifPrixUAchat = 'Ce champ accepte uniquement des chiffre23s';
+    } else if (this.validateInputNumber(this.prixachatAdd)) {
+      this.exactPrixUAchat = true;
+    } else {
+      this.exactPrixUAchat = false;
+      this.verifPrixUAchat = 'Ce champ accepte uniquement des chiffres';
+    }
+  }
+
+  verifiQuantiteAchat() {
+    if (this.quantiteachatAdd === undefined) {
+      this.exactQuantiteAchat = false;
+      this.verifQuantiteAchat = 'Veuillez renseigner la quantité seuil';
+    } else if (this.validateInputNumber(this.quantiteachatAdd)) {
+      this.exactQuantiteAchat = true;
+    } else {
+      this.exactQuantiteAchat = false;
+      this.verifQuantiteAchat = 'Ce champ accepte uniquement des chiffres21';
+    }
+  }
+
   onAddAchat() {
     const data: any = {
       nomachat: this.nomAchatAdd,
@@ -183,6 +250,7 @@ export class GestionAchatComponent {
           Notiflix.Notify.success('Achat ajoutée avec succès');
           this.getAllAchat();
           // console.log(this.achats);
+          this.closeAddExpenseModal.nativeElement.click();
 
           Notiflix.Loading.remove();
           this.nomAchatAdd = "";
@@ -196,6 +264,51 @@ export class GestionAchatComponent {
           Notiflix.Loading.remove();
         }
       );
+    }
+  }
+
+  verifiNomAchatUpdate() {
+    const nom = this.nomAchatUpdate;
+
+    if (nom === '') {
+      this.verifNomAchat = '';
+      this.exactNomAchat = false;
+    } else if (
+      this.validateNomPrenom(nom) &&
+      nom.length >= 2
+    ) {
+      this.exactNomAchat = true;
+      this.verifNomAchat = '';
+    } else if (nom.length < 2) {
+      this.exactNomAchat = false;
+      this.verifNomAchat = 'au minimum avoir deux caractères ';
+    } else {
+      this.exactNomAchat = false;
+      this.verifNomAchat = 'le nom est invalide ';
+    }
+  }
+
+  verifiPrixUnitaireAchatUpdate() {
+    if (this.prixachatUpdate === undefined) {
+      this.exactPrixUAchat = false;
+      this.verifPrixUAchat = 'Ce champ accepte uniquement des chiffre23s';
+    } else if (this.validateInputNumber(this.prixachatUpdate)) {
+      this.exactPrixUAchat = true;
+    } else {
+      this.exactPrixUAchat = false;
+      this.verifPrixUAchat = 'Ce champ accepte uniquement des chiffres';
+    }
+  }
+
+  verifiQuantiteAchatUpdate() {
+    if (this.quantiteachatUpdate === undefined) {
+      this.exactQuantiteAchat = false;
+      this.verifQuantiteAchat = 'Veuillez renseigner la quantité seuil';
+    } else if (this.validateInputNumber(this.quantiteachatUpdate)) {
+      this.exactQuantiteAchat = true;
+    } else {
+      this.exactQuantiteAchat = false;
+      this.verifQuantiteAchat = 'Ce champ accepte uniquement des chiffres21';
     }
   }
 
@@ -271,31 +384,92 @@ export class GestionAchatComponent {
 
   }
 
-  upload($event){
+  upload($event) {
     this.fichierAdd = $event.target.files[0];
   }
 
 
   save() {
-    Notiflix.Loading.init({
-      svgColor: '#f47a20',
-      cssAnimation: true,
-      cssAnimationDuration: 360,
+    if (this.fichierAdd == "") {
+      Notiflix.Notify.failure('Veuillez ajouter l\'image');
+    } else {
+      Notiflix.Loading.init({
+        svgColor: '#f47a20',
+        cssAnimation: true,
+        cssAnimationDuration: 360,
 
-    });
-    Notiflix.Loading.hourglass();
-    this.produitService.addFile(this.fichierAdd)
-      .then(downloadURL => {
-        // Utiliser l'URL de téléchargement, par exemple :
-        console.log('Fichier téléchargé avec succès ! URL :', downloadURL);
-        this.imageAdd = downloadURL;
-        this.onAddProduitFromAchat();
-      })
-      .catch(error => {
-        // Gérer les erreurs
-        console.error('Erreur lors du téléchargement du fichier : ', error);
-        alert('Échec du téléchargement du fichier.');
       });
+      Notiflix.Loading.hourglass();
+      this.produitService.addFile(this.fichierAdd)
+        .then(downloadURL => {
+          // Utiliser l'URL de téléchargement, par exemple :
+          console.log('Fichier téléchargé avec succès ! URL :', downloadURL);
+          this.imageAdd = downloadURL;
+          this.onAddProduitFromAchat();
+        })
+        .catch(error => {
+          // Gérer les erreurs
+          console.error('Erreur lors du téléchargement du fichier : ', error);
+          alert('Échec du téléchargement du fichier.');
+        });
+    }
+
+  }
+
+  validateNomPrenom(text: string): boolean {
+    const prenomNomRegex = /^[A-Za-z0-9]{2,}(?: [A-Za-z0-9]{2,})*$/;
+
+    return prenomNomRegex.test(text);
+  }
+
+  verifiNom() {
+    const nom = this.nomProduit;
+
+    if (nom === '') {
+      this.verifNom = '';
+      this.exactNom = false;
+    } else if (
+      this.validateNomPrenom(nom) &&
+      nom.length >= 2
+    ) {
+      this.exactNom = true;
+      this.verifNom = '';
+    } else if (nom.length < 2) {
+      this.exactNom = false;
+      this.verifNom = 'au minimum avoir deux caractères ';
+    } else {
+      this.exactNom = false;
+      this.verifNom = 'le nom est invalide ';
+    }
+  }
+
+  validateInputNumber(chiffre: any): boolean {
+    const regex = /^[0-9]+$/;
+    return regex.test(chiffre);
+  }
+
+  verifPrixUnitaire() {
+    if (this.prixUProduit === undefined) {
+      this.exactPrixU = false;
+      this.verifPrixU = 'Ce champ accepte uniquement des chiffres';
+    } else if (this.validateInputNumber(this.prixUProduit)) {
+      this.exactPrixU = true;
+    } else {
+      this.exactPrixU = false;
+      this.verifPrixU = 'Ce champ accepte uniquement des chiffres';
+    }
+  }
+
+  verifiQuantiteSeuil() {
+    if (this.quantiteSeuilProduit === undefined) {
+      this.exactQuantiteSeuil = false;
+      this.verifQuantiteSeuil = 'Veuillez renseigner la quantité seuil';
+    } else if (this.validateInputNumber(this.quantiteSeuilProduit)) {
+      this.exactQuantiteSeuil = true;
+    } else {
+      this.exactQuantiteSeuil = false;
+      this.verifQuantiteSeuil = 'Ce champ accepte uniquement des chiffres21';
+    }
   }
 
   onAddProduitFromAchat() {

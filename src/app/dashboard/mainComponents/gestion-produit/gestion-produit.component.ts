@@ -44,11 +44,13 @@ export class GestionProduitComponent implements OnInit {
   etatUpdate: string = "";
   categorie_idUpdate: number;
 
+  exactCategorie: boolean;
+  verifCategorie: string = "";
+
   exactNom: boolean;
   verifNom: string = "";
 
-  exactCategorie: boolean;
-  verifCategorie: string = "";
+
 
   exactPrixU: boolean;
   verifPrixU: string = "";
@@ -139,8 +141,17 @@ export class GestionProduitComponent implements OnInit {
 
   }
 
+  validateCategorie() {
+    if (this.categorie_idAdd == undefined) {
+      this.verifCategorie = 'Veuillez selectionner la catégorie';
+      this.exactCategorie = false;
+    } else if (this.categorie_idAdd != undefined) {
+      this.exactCategorie = true;
+    }
+  }
+
   validateNomPrenom(text: string): boolean {
-    const prenomNomRegex = /^[A-Za-z]{2,}(?: [A-Za-z]{2,})*$/;
+    const prenomNomRegex = /^[A-Za-z0-9]{2,}(?: [A-Za-z0-9]{2,})*$/;
 
     return prenomNomRegex.test(text);
   }
@@ -166,15 +177,6 @@ export class GestionProduitComponent implements OnInit {
     }
   }
 
-  validateCategorie() {
-    if (this.categorie_idAdd == undefined) {
-      this.verifCategorie = 'Veuillez selectionner la catégorie';
-      this.exactCategorie = false;
-    } else if (this.categorie_idAdd != undefined) {
-      this.exactCategorie = true;
-    }
-  }
-
   validateInputNumber(chiffre: any): boolean {
     const regex = /^[0-9]+$/;
     return regex.test(chiffre);
@@ -192,18 +194,6 @@ export class GestionProduitComponent implements OnInit {
     }
   }
 
-  verifPrixUnitaireUpdate() {
-    if (this.prixUUpdate === undefined) {
-      this.exactPrixU = false;
-      this.verifPrixU = 'Ce champ accepte uniquement des chiffres';
-    } else if (this.validateInputNumber(this.prixUUpdate)) {
-      this.exactPrixU = true;
-    } else {
-      this.exactPrixU = false;
-      this.verifPrixU = 'Ce champ accepte uniquement des chiffres';
-    }
-  }
-
   verifiQuantiteSeuil() {
     if (this.quantiteSeuilAdd === undefined) {
       this.exactQuantiteSeuil = false;
@@ -213,6 +203,18 @@ export class GestionProduitComponent implements OnInit {
     } else {
       this.exactQuantiteSeuil = false;
       this.verifQuantiteSeuil = 'Ce champ accepte uniquement des chiffres';
+    }
+  }
+
+  verifPrixUnitaireUpdate() {
+    if (this.prixUUpdate === undefined) {
+      this.exactPrixU = false;
+      this.verifPrixU = 'Ce champ accepte uniquement des chiffres';
+    } else if (this.validateInputNumber(this.prixUUpdate)) {
+      this.exactPrixU = true;
+    } else {
+      this.exactPrixU = false;
+      this.verifPrixU = 'Ce champ accepte uniquement des chiffres';
     }
   }
 
@@ -305,7 +307,7 @@ export class GestionProduitComponent implements OnInit {
       nomproduit: this.nomUpdate,
       image: this.imageUpdate,
       prixU: this.prixUUpdate,
-      quantite: this.quantiteUpdate,
+      quantite: this.selectedProduit.quantite,
       quantiteseuil: this.quantiteSeuilUpdate,
       categorie_id: this.categorie_idUpdate
     };

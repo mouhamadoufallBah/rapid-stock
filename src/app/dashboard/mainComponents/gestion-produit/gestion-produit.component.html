@@ -140,7 +140,11 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btnAnnuler" data-bs-dismiss="modal" #closeAddExpenseModal>Annuler</button>
+        @if(exactPrixU == true && exactQuantiteSeuil == true && exactNom == true){
         <button type="button" class="btn" (click)="save()">Ajouter</button>
+        }@else {
+        <button type="button" class="btn" (click)="save()" disabled>Ajouter</button>
+        }
       </div>
     </div>
   </div>
@@ -171,11 +175,11 @@
               }
             </select>
           </div>
-          <div class="mb-3">
+          <!-- <div class="mb-3">
             <label for="quantiteUpdate" class="form-label">Quantité</label>
             <input type="number" class="form-control" id="quantiteUpdate" name="quantiteUpdate"
               placeholder="Nom du produit" [(ngModel)]="quantiteUpdate">
-          </div>
+          </div> -->
           <div class="mb-3">
             <label for="quantiteSeuil" class="form-label">Quantité seuil</label>
             <input type="number" class="form-control" id="quantiteSeuil" placeholder="Nom du produit"
@@ -208,8 +212,13 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btnAnnuler" data-bs-dismiss="modal">Annuler</button>
+        @if(exactPrixU == true && exactQuantiteSeuil == true){
         <button type="button" class="btn" data-bs-dismiss="modal"
           (click)="onUpdateProduit(selectedProduit.id)">Modifier</button>
+        }@else {
+        <button type="button" class="btn" data-bs-dismiss="modal" (click)="onUpdateProduit(selectedProduit.id)"
+          disabled>Modifier</button>
+        }
       </div>
     </div>
   </div>
