@@ -10,7 +10,7 @@
   <div class="mainBottom p-4">
     @if(produits.length > 0){
     <table datatable [dtOptions]="dtOptions" class="table">
-      <thead>
+      <thead class="table-secondary rounded-top-3">
         <tr>
 
           <th>Image</th>
@@ -212,13 +212,8 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btnAnnuler" data-bs-dismiss="modal">Annuler</button>
-        @if(exactPrixU == true && exactQuantiteSeuil == true){
         <button type="button" class="btn" data-bs-dismiss="modal"
           (click)="onUpdateProduit(selectedProduit.id)">Modifier</button>
-        }@else {
-        <button type="button" class="btn" data-bs-dismiss="modal" (click)="onUpdateProduit(selectedProduit.id)"
-          disabled>Modifier</button>
-        }
       </div>
     </div>
   </div>

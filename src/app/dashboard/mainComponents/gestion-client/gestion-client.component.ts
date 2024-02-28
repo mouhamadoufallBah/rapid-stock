@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { DatatableService } from '../../../services/datatable.service';
 import { DataTablesModule } from 'angular-datatables';
 import Notiflix from 'notiflix';
@@ -14,6 +14,10 @@ import { Client } from '../../../models/client'
   styleUrl: './gestion-client.component.scss'
 })
 export class GestionClientComponent implements OnInit {
+
+  @ViewChild('closeAddExpenseModal') closeAddExpenseModal!: ElementRef;
+  @ViewChild('closeAddExpenseModalEdit') closeAddExpenseModalEdit!: ElementRef;
+
   clients : Client[] = [];
   selectedClient: any;
   newCode_client: string = "";
@@ -110,11 +114,10 @@ export class GestionClientComponent implements OnInit {
   }
 
   validateTel(telephone: string): boolean {
-    const phoneRegex = /^(77|78|76|70|75|33)[0-9]{7}$/;
+    const phoneRegex = /^\+221(77|78|70|76)[0-9]{7}$/;
 
     return phoneRegex.test(telephone);
   }
-
 
   verifiAdresse() {
     const Adresse = this.adresseAdd ? this.adresseAdd.trim() : this.adresseUpdate.trim();
@@ -148,7 +151,7 @@ export class GestionClientComponent implements OnInit {
 
       if (this.validateTel(this.telephoneAdd) == false) {
         this.exactTelephone = false;
-        this.verifTelephone = 'le format du numéro doit commencer par 77/78/70/76 plus 7 chiffres';
+        this.verifTelephone = 'le format du numéro doit commencer par +221 suivie de 77/78/70/76 plus 7 chiffres';
       }
     }
   }
@@ -164,7 +167,7 @@ export class GestionClientComponent implements OnInit {
 
       if (this.validateTel(this.telephoneUpdate) == false) {
         this.exactTelephone = false;
-        this.verifTelephone = 'le format du numéro doit commencer par 77/78/70/76 plus 7 chiffres';
+        this.verifTelephone = 'le format du numéro doit commencer par +221 suivie de 77/78/70/76 plus 7 chiffres';
       }
     }
   }
@@ -200,12 +203,11 @@ export class GestionClientComponent implements OnInit {
       this.newCode_client =  'C00001';
     }
 
-
     const data: any = {
       nom: this.nomAdd,
       prenom: this.prenomAdd,
       code_client: this.newCode_client,
-      telephone: `+221${this.telephoneAdd}`,
+      telephone: `${this.telephoneAdd}`,
       adresse: this.adresseAdd
     };
 
@@ -229,7 +231,8 @@ export class GestionClientComponent implements OnInit {
 
           Notiflix.Notify.success('Client ajoutée avec succès');
           this.getAllClients();
-          console.log(this.clients);
+
+          this.closeAddExpenseModal.nativeElement.click();
 
           Notiflix.Loading.remove();
           this.nomAdd = "";
@@ -267,19 +270,20 @@ export class GestionClientComponent implements OnInit {
       adresse: this.adresseUpdate
     };
 
-    // Combine multiple conditions for conciseness
     if (!data.nom || !data.prenom || !data.telephone || !data.adresse) {
       Notiflix.Notify.failure('Veuillez remplir tous les champs');
       return;
     }
 
     //update
-    Notiflix.Loading.hourglass(); // Show loading indicator directly
+    Notiflix.Loading.hourglass();
     this.clientService.updateClient(data, id).subscribe({
       next: () => {
         Notiflix.Notify.success('Client modifié avec succès');
         this.getAllClients();
         Notiflix.Loading.remove();
+        this.closeAddExpenseModalEdit.nativeElement.click();
+
       },
       error: (error) => {
         console.error('Erreur lors de la modification du client', error);

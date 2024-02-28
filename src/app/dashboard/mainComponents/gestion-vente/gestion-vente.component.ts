@@ -12,7 +12,6 @@ import { tap, catchError, of, take } from 'rxjs';
 import { ProduitIdToProduitPricePipe } from '../../../pipes/produit/produit-id-to-produit-price.pipe';
 import { ClientService } from '../../../services/client/client.service';
 import { ClientIdToClientInfoPipe } from '../../../pipes/clients/client-id-to-client-info.pipe';
-import { data } from 'jquery';
 import { ProduitIdToProduitInfoPipe } from '../../../pipes/produit/produit-id-to-produit-info.pipe';
 import { VenteIdToVenteInfoPipe } from '../../../pipes/vente/vente-id-to-vente-info.pipe';
 import { PaiementService } from '../../../services/paiement/paiement.service';
@@ -358,17 +357,17 @@ export class GestionVenteComponent {
 
       this.venteService.addVente(data).subscribe(
         (response) => {
-          // console.log(response, "info vente");
+          console.log(response.vente.id, "info vente id");
           this.clearCart();
 
-          console.log(response);
+          // console.log(response.vente.id);
 
           if (response.message) {
             Notiflix.Loading.remove();
             Notiflix.Report.failure('La vente n\'a pas était fait ', 'La qunatité vendu est supérieur à la quantité de stock', 'Okay');
           } else {
             const paiementInfo = {
-              id: response.vente.id,
+              historiquevente_id: response.vente.id,
               etat: this.etatPaiment,
               montantVerser: this.etatPaiment === "comptant" ? response.vente.montant_total : this.montantPaiment
             }
@@ -376,7 +375,7 @@ export class GestionVenteComponent {
             //paiement
             this.paiementService.addPaiement(paiementInfo, response.vente.id).subscribe(
               (res) => {
-                // console.log(res, "info paiment");
+                console.log(res, "info paiment");
 
                 const data = {
                   "payement_id": res.idPaiement,
@@ -386,7 +385,7 @@ export class GestionVenteComponent {
                 // facture
                 this.factureService.createFacture(data).subscribe(
                   (data) => {
-                    // console.log(data, "info facture");
+                    console.log(data, "info facture");
 
                   }
                 );
@@ -451,6 +450,7 @@ export class GestionVenteComponent {
       (resp) => {
         // console.log(resp);
         this.selectedFacture = resp;
+
       }
     )
   }

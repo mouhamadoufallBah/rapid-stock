@@ -9,54 +9,58 @@
   </div>
   <div class="mainBottom p-4">
     @if(ventes.length > 0){
-    <table datatable [dtOptions]="dtOptions" class="table">
-      <thead class="table-secondary rounded-top-3">
-        <tr>
-          <th>Prenom du client</th>
-          <th>Nom du client</th>
-          <th>Telephone</th>
-          <th>Montant</th>
-          <th>Date</th>
-          <th>Action</th>
-        </tr>
-      </thead>
-      <tbody>
-        @for(item of ventes; track $index){
-        <tr>
-          <td>{{ item.client_id | clientIdToClientInfo:allClient:false:true:false:false }}</td>
-          <td>{{ item.client_id | clientIdToClientInfo:allClient:true:false:false:false }}</td>
-          <td>{{ item.client_id | clientIdToClientInfo:allClient:false:false:true:false }}</td>
-          <td>{{ item.montant_total }}f CFA</td>
-          <td>{{ item.created_at | date: 'dd/MM/YYYY hh:mm' }}</td>
-          <td>
-            <button class="btn" data-bs-toggle="modal" data-bs-target="#voirDetail"
-              (click)=" getSelectedVente(item.id)"><i class="fa-solid fa-eye"></i></button>
-            <!-- <button class="btn" data-bs-toggle="modal" data-bs-target="#modifierVente"
+    <div class="table-responsive">
+      <table datatable [dtOptions]="dtOptions" class="table">
+        <thead class="table-secondary rounded-top-3">
+          <tr>
+            <th>Prenom du client</th>
+            <th>Nom du client</th>
+            <th>Telephone</th>
+            <th>Montant</th>
+            <th>Date</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for(item of ventes; track $index){
+          <tr>
+            <td>{{ item.client_id | clientIdToClientInfo:allClient:false:true:false:false }}</td>
+            <td>{{ item.client_id | clientIdToClientInfo:allClient:true:false:false:false }}</td>
+            <td>{{ item.client_id | clientIdToClientInfo:allClient:false:false:true:false }}</td>
+            <td>{{ item.montant_total }}f CFA</td>
+            <td>{{ item.created_at | date:"dd/MM/yyyy HH:mm" }}</td>
+            <td>
+              <button class="btn" data-bs-toggle="modal" data-bs-target="#voirDetail"
+                (click)=" getSelectedVente(item.id)"><i class="fa-solid fa-eye"></i></button>
+              <!-- <button class="btn" data-bs-toggle="modal" data-bs-target="#modifierVente"
               (click)="getVenteById(item.id)"><i class="fa-solid fa-pen-to-square"></i></button> -->
-            <button class="btn"><i class="fa-solid fa-trash" (click)="  onDeleteVente(item.id)"></i></button>
-          </td>
-        </tr>
-        }
-      </tbody>
-    </table>
+              <button class="btn"><i class="fa-solid fa-trash" (click)="  onDeleteVente(item.id)"></i></button>
+            </td>
+          </tr>
+          }
+        </tbody>
+      </table>
+    </div>
     }@else {
-    <table class="table">
-      <thead class="table-secondary rounded-top-3">
-        <tr>
-          <th>id</th>
-          <th>Nom</th>
-          <th>Nombre de vente</th>
-          <th>Action</th>
-        </tr>
-      </thead>
-      <tbody>
+      <div class="table-responsive">
+        <table class="table">
+          <thead class="table-secondary rounded-top-3">
+            <tr>
+              <th>id</th>
+              <th>Nom</th>
+              <th>Nombre de vente</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
 
-        <tr>
-          <td colspan="4" class="text-center"> Aucun vente disponible</td>
-        </tr>
+            <tr>
+              <td colspan="4" class="text-center"> Aucun vente disponible</td>
+            </tr>
 
-      </tbody>
-    </table>
+          </tbody>
+        </table>
+      </div>
     }
 
   </div>
@@ -118,10 +122,11 @@
                 <td>{{ item.nomproduit }}</td>
                 <td (dblclick)="onChangeQuantityFieldValue(item)">
                   @if(!quantityField){
-                    {{ item.quantiteVendu }}
+                  {{ item.quantiteVendu }}
                   }
                   @else {
-                    <input type="number" [(ngModel)]="cartProducts[$index].quantiteVendu" (keyup.enter)="onUpdateQuantityFromInput(item)" style="border: none;" min="1">
+                  <input type="number" [(ngModel)]="cartProducts[$index].quantiteVendu"
+                    (keyup.enter)="onUpdateQuantityFromInput(item)" style="border: none;" min="1">
                   }
                 </td>
                 <td>{{ item.prixU * item.quantiteVendu}}f CFA</td>
@@ -182,7 +187,7 @@
             </div>
 
             <div class="col-5">
-              <label for="categorie">Selectionner le client</label>
+              <label for="categorie">Selectionner le paiement</label>
               <select class="form-select mb-3" name="categorie" id="categorie" aria-label="Default select example"
                 [(ngModel)]="etatPaiment">
                 <option value="comptant" selected>Comptant</option>
@@ -248,8 +253,11 @@
           <ul class="list-group mb-3">
             @if(selectedVente.historiques.length > 0){
             @for(item of selectedVente.historiques; track $index){
-            <li class="list-group-item d-flex justify-content-between"><div>{{ item.produit_id | produitIdToProduitInfo:AllProducts:true:false:false }} </div> <div> {{
-              item.quantite_vendu }}</div></li>
+            <li class="list-group-item d-flex justify-content-between">
+              <div>{{ item.produit_id | produitIdToProduitInfo:AllProducts:true:false:false:false }} </div>
+              <div> {{
+                item.quantite_vendu }}</div>
+            </li>
             }
             }
           </ul>

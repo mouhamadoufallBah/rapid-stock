@@ -108,8 +108,8 @@ export class GestionProduitComponent implements OnInit {
     )
   }
 
-  upload($event){
-    this.fichierAdd = $event.target.files[0];
+  upload(event: any){
+    this.fichierAdd = event.target.files[0];
   }
 
   save() {

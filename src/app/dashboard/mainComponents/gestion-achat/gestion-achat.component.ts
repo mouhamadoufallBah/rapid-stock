@@ -8,11 +8,12 @@ import Notiflix from 'notiflix';
 import { CategorieService } from '../../../services/categorie/categorie.service';
 import { ProduitService } from '../../../services/produit/produit.service';
 import { ProduitIdToProduitNamePipe } from '../../../pipes/produit/produit-id-to-produit-name.pipe';
+import { ProduitIdToProduitInfoPipe } from '../../../pipes/produit/produit-id-to-produit-info.pipe';
 
 @Component({
   selector: 'app-gestion-achat',
   standalone: true,
-  imports: [DataTablesModule, FormsModule, NgIf, DatePipe, ProduitIdToProduitNamePipe],
+  imports: [DataTablesModule, FormsModule, NgIf, DatePipe, ProduitIdToProduitNamePipe, ProduitIdToProduitInfoPipe],
   templateUrl: './gestion-achat.component.html',
   styleUrl: './gestion-achat.component.scss'
 })
@@ -127,8 +128,6 @@ export class GestionAchatComponent {
     this.categorieService.getAllCategory().subscribe(
       (data) => {
         this.categories = data.data;
-        // console.log(this.categories);
-
       }
     )
   }
@@ -137,34 +136,35 @@ export class GestionAchatComponent {
     this.produitService.getProductByIdCategorie(id).subscribe(
       (data) => {
         this.productsByCategorie = data.data;
-        // console.log(this.productsByCategorie);
       }
     )
+  }
+
+  categorie: any;
+  getCategorie(id: number){
+    this.categorie = this.categories.find((elt: any) => elt.id === id);
+    console.log(this.categorie);
+
   }
 
   getAllProducts() {
     this.produitService.getAllProduct().subscribe(
       (data) => {
         this.AllProducts = data.data;
-        // console.log(this.productsByCategorie);
       }
     )
   }
 
-  getAchatById(id: number) {
-    Notiflix.Loading.init({
-      svgColor: '#f47a20',
-      cssAnimation: true,
-      cssAnimationDuration: 360,
+  getProduitById(id: number){
+    this.AllProducts.find((elt: any) => elt.id === id);
+  }
 
-    });
-    Notiflix.Loading.hourglass();
+  getAchatById(id: number) {
     this.achatService.getAchatById(id).subscribe(
       (data) => {
-        this.selectedAchat = data;
-        Notiflix.Loading.remove();
-        // console.log(this.selectedAchat);
+        console.log(data);
 
+        this.selectedAchat = data;
         ({
           nomachat: this.nomAchatUpdate,
           prixachat: this.prixachatUpdate,
@@ -174,7 +174,6 @@ export class GestionAchatComponent {
       }
     );
   }
-
 
   verifiNomAchat() {
     const nom = this.nomAchatAdd;
@@ -249,7 +248,7 @@ export class GestionAchatComponent {
 
           Notiflix.Notify.success('Achat ajoutée avec succès');
           this.getAllAchat();
-          // console.log(this.achats);
+
           this.closeAddExpenseModal.nativeElement.click();
 
           Notiflix.Loading.remove();
@@ -332,7 +331,6 @@ export class GestionAchatComponent {
       Notiflix.Loading.hourglass();
       this.achatService.updateAchat(id, data).subscribe(
         (data) => {
-          // console.log(data);
           Notiflix.Loading.remove();
           Notiflix.Notify.success('Achat Modifier avec succès');
           this.getAllAchat();
@@ -365,7 +363,6 @@ export class GestionAchatComponent {
 
         this.achatService.deleteAchat(id).subscribe(
           (response) => {
-            // console.log()
             Notiflix.Loading.remove();
             Notiflix.Notify.success('Achat annuler avec succès');
             this.getAllAchat();
@@ -402,8 +399,6 @@ export class GestionAchatComponent {
       Notiflix.Loading.hourglass();
       this.produitService.addFile(this.fichierAdd)
         .then(downloadURL => {
-          // Utiliser l'URL de téléchargement, par exemple :
-          console.log('Fichier téléchargé avec succès ! URL :', downloadURL);
           this.imageAdd = downloadURL;
           this.onAddProduitFromAchat();
         })
@@ -503,7 +498,6 @@ export class GestionAchatComponent {
 
           Notiflix.Notify.success('Produit ajoutée avec succès');
           this.getAllProducts();
-          // console.log(data);
 
           Notiflix.Loading.remove();
 

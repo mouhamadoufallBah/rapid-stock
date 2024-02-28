@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { DataTablesModule } from 'angular-datatables';
 import { DatatableService } from '../../../services/datatable.service';
 import { NgClass, NgIf } from '@angular/common';
@@ -14,9 +14,11 @@ import { FormsModule } from '@angular/forms';
   styleUrl: './gestion-employe.component.scss'
 })
 export class GestionEmployeComponent implements OnInit{
+
+  @ViewChild('closeAddExpenseModal') closeAddExpenseModal!: ElementRef;
+
   employe = [];
   selectedEmploye : any;
-
 
   nomAdd: string = "";
   prenomAdd: string = "";
@@ -64,7 +66,6 @@ export class GestionEmployeComponent implements OnInit{
     this.getAllEmploye();
   }
 
-
   getAllEmploye(){
     Notiflix.Loading.init({
       svgColor: '#f47a20',
@@ -76,7 +77,6 @@ export class GestionEmployeComponent implements OnInit{
     this.authService.getAllEmploye().subscribe(
       (data: any) =>{
         this.employe = data.data;
-        console.log(this.employe);
 
         Notiflix.Loading.remove();
       },
@@ -162,7 +162,6 @@ export class GestionEmployeComponent implements OnInit{
     return phoneRegex.test(telephone);
   }
 
-
   verifiAdresse() {
     const Adresse = this.adresseAdd.trim();
 
@@ -200,8 +199,6 @@ export class GestionEmployeComponent implements OnInit{
     }
   }
 
-
-
   onAddEmploye() {
     const data: any = {
       nom: this.nomAdd,
@@ -234,7 +231,7 @@ export class GestionEmployeComponent implements OnInit{
 
           Notiflix.Notify.success('Employé ajoutée avec succès');
           this.getAllEmploye();
-          console.log(this.employe);
+          this.closeAddExpenseModal.nativeElement.click();
 
           Notiflix.Loading.remove();
           this.nomAdd = "";
@@ -263,11 +260,9 @@ export class GestionEmployeComponent implements OnInit{
   onActiveDeactiveEmploye(id: number){
     this.authService.activeDeactiveEmploye(id).subscribe(
       (data) => {
-        console.log(data)
         this.getAllEmploye();
       }
     )
   }
-
 
 }

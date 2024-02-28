@@ -194,8 +194,8 @@
           </div>
           <div class="mb-3">
             <label for="prixachatAdd" class="form-label">Prix unitaire</label>
-            <input type="tel" class="form-control" id="prixachatAdd" name="prixachatAdd" placeholder="Prix unitaire"
-              [(ngModel)]="prixachatUpdate" (input)="verifiPrixUnitaireAchatUpdate()">
+            <input type="number" class="form-control" id="prixachatAdd" name="prixachatAdd" placeholder="Prix unitaire"
+              [(ngModel)]="prixachatUpdate" (input)="verifiPrixUnitaireAchatUpdate()" min="1">
             @if(exactPrixUAchat == true){
             <!-- <span class="text-success">{{ verifQuantiteAchat }}</span> -->
             }@else {
@@ -208,11 +208,8 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btnAnnuler" data-bs-dismiss="modal">Annuler</button>
-        @if(exactNomAchat == true && exactQuantiteAchat == true && exactPrixUAchat == true){
-          <button type="button" class="btn" (click)=" onUpdateAchat(selectedAchat.id)" data-bs-dismiss="modal">Modifier</button>
-        }@else {
-          <button type="button" class="btn" disabled>Modifier</button>
-        }
+        <button type="button" class="btn" (click)=" onUpdateAchat(selectedAchat.id)" [disabled]="prixachatUpdate<1"
+          data-bs-dismiss="modal">Modifier</button>
       </div>
     </div>
   </div>

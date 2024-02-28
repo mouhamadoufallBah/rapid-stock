@@ -99,6 +99,7 @@
         <div class="productItemBottom">
           <h4>{{ item.prixU }} f CFA</h4>
           <a href="https://wa.me/221783074495?text=Bonjour%20je%20suis%20intéressé%20par%20{{ item.nomproduit }}%20qui%20coûte%20{{ item.prixU }}%20f%20CFA" target="_blank"><i class="bi bi-whatsapp order"></i></a>
+          <!-- <a class="btn p-1 text-white" style="background-color: orange;" href="https://wa.me/221783074495?text=Bonjour%20je%20suis%20intéressé%20par%20{{ item.nomproduit }}%20qui%20coûte%20{{ item.prixU }}%20f%20CFA" target="_blank">Commander</a> -->
         </div>
       </div>
     </div>
@@ -117,11 +118,11 @@
   <div class="contact-map-container">
     <div class="btnContainer">
       @if(!switchValue){
+        <button class="mapBtn" (click)="onChangeSwitchValue()">Google Map</button>
       <button class="contactBtn activeBtn">Nous Contacter</button>
-      <button class="mapBtn" (click)="onChangeSwitchValue()">Google Map</button>
       }@else {
+        <button class="mapBtn activeBtn">Google Map</button>
       <button class="contactBtn" (click)="onChangeSwitchValue()">Nous Contacter</button>
-      <button class="mapBtn activeBtn">Google Map</button>
       }
     </div>
 

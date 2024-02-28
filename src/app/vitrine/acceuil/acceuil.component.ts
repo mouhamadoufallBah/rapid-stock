@@ -17,7 +17,7 @@ import { NgClass } from '@angular/common';
   styleUrl: './acceuil.component.scss'
 })
 export class AcceuilComponent implements OnInit {
-  switchValue: boolean = false;
+  switchValue: boolean = true;
   categories: any[] = []
   allProducts: any[] = [];
   productsByCategorie: any[] = [];
@@ -42,6 +42,8 @@ export class AcceuilComponent implements OnInit {
   getAllCategories() {
     this.categoryService.getAllCategory().subscribe(
       (data) => {
+        console.log(data);
+
         this.categories = data.data;
       },
       (error) => {
@@ -62,6 +64,8 @@ export class AcceuilComponent implements OnInit {
   loadAllProducts() {
     this.produitService.getAllProduct().subscribe(
       (data) => {
+        console.log(data);
+
         this.allProducts = data.data;
       }
     )

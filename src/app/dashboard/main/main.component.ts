@@ -111,7 +111,6 @@ export class MainComponent implements OnInit {
   allNotication(){
     this.produitService.getAllNotification().subscribe(
       (data) => {
-        console.log(data.Notification);
         this.notification = data.Notification;
       }
     )
@@ -120,7 +119,6 @@ export class MainComponent implements OnInit {
   readNotication(id: string){
     this.produitService.updateEtatNotification(id).subscribe(
       (data) => {
-        console.log(data);
         this.allNotication();
       }
     )

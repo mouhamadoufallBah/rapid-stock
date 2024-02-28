@@ -12,7 +12,7 @@
             <input type="mail" class="form-control" id="email" placeholder="Veuillez entrer le email" name="email"
               [(ngModel)]="email" required (input)="verifiEmail()">
               @if(exactEmail == true){
-                <span id="verifEmailcorrect" class="text-success fs-6 fw-light">{{ verifEmail }}</span>
+                <!-- <span id="verifEmailcorrect" class="text-success fs-6 fw-light">{{ verifEmail }}</span> -->
               }@else {
                 <span id="verifEmail" class="text-danger fs-6 fw-light">{{ verifEmail }}</span>
               }
@@ -22,7 +22,7 @@
             <input type="password" class="form-control" placeholder="Veuillez entrer votre mot de passe" name="password"
               id="password" [(ngModel)]="password" (input)="verifPasswordFonction()">
               @if(exactEmail == true){
-                <span id="verifEmailcorrect" class="text-success">{{ verifPassword }}</span>
+                <!-- <span id="verifEmailcorrect" class="text-success">{{ verifPassword }}</span> -->
               }@else {
                 <span id="verifEmail" class="text-danger">{{ verifPassword }}</span>
               }

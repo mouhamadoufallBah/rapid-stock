@@ -16,13 +16,8 @@ export class CategorieService {
 
   @Cacheable({cacheBusterObserver: cacheBuster$})
   getAllCategory(): Observable<any> {
-    const accessToken = localStorage.getItem('access_token');
 
-    return accessToken ?
-      this.http.get<any>(`${api}/categorie/lister`, {
-        headers: new HttpHeaders({ 'Authorization': `Bearer ${accessToken}` })
-      }) :
-      of(null);
+    return this.http.get<any>(`${api}/categorie/lister`)
   }
 
   addCategory(data: any): Observable<any> {

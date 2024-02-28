@@ -9,7 +9,7 @@
         <ul class="list-unstyled">
           @for (item of filteredSidebarItems(); track $index) {
           <li class="mb-3" routerLinkActive="activeMenu" routerLink="{{ item.lien }}" style="cursor: pointer;"
-            [routerLinkActiveOptions]="{ exact: true }">
+            [routerLinkActiveOptions]="{ exact: true }"  title="{{ item.title }}">
             <i [class]=item.icon></i>
             <a routerLink="{{ item.lien }}">{{ item.title }}</a>
           </li>
@@ -76,12 +76,6 @@
                 </li>
 
               }
-
-
-
-
-
-
 
             </ul><!-- End Notification Dropdown Items -->
             }

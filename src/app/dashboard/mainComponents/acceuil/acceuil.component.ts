@@ -178,6 +178,8 @@ export class AcceuilComponent implements OnInit {
   getAllEmploye() {
     this.authService.getAllEmploye().subscribe(
       (resp) => {
+        console.log(resp);
+
         this.allEmploye = resp.data.length
       }
     )

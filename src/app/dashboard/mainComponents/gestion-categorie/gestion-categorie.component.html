@@ -60,9 +60,9 @@
           }
         </div>
         @if(exactNom == true){
-          <button type="button" class="btn" (click)="onAddCategorie()">Ajouter</button>
+        <button type="button" class="btn" (click)="onAddCategorie()">Ajouter</button>
         }@else {
-          <button type="button" class="btn" (click)="onAddCategorie()" disabled>Ajouter</button>
+        <button type="button" class="btn" (click)="onAddCategorie()" disabled>Ajouter</button>
         }
 
       </form>
@@ -95,13 +95,8 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btnAnnuler" data-bs-dismiss="modal">Annuler</button>
-        @if(exactNom == true){
-          <button type="button" class="btn" (click)="onUpdateCategorie(selectedCategory.id) "
+        <button type="button" class="btn" (click)="onUpdateCategorie(selectedCategory.id) "
           data-bs-dismiss="modal">Modifier</button>
-        }@else {
-          <button type="button" class="btn" (click)="onUpdateCategorie(selectedCategory.id) "
-          data-bs-dismiss="modal" disabled>Modifier</button>
-        }
 
       </div>
     </div>

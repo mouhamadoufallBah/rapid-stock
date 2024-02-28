@@ -81,6 +81,8 @@ export class LoginComponent {
 
       this.authService.login(this.email, this.password).subscribe(
         (data) => {
+          // this.authService.deconnexionAutomatique();
+
           // console.log(data)
           if (data.user) {
 
@@ -96,6 +98,7 @@ export class LoginComponent {
             Notiflix.Loading.remove();
 
             Notiflix.Notify.success('Connexion avec succées');
+
           } else {
             Notiflix.Notify.failure('Email ou mot de passe incorrecte');
           }

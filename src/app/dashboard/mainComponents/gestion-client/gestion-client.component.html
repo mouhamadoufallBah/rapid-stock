@@ -115,8 +115,8 @@
         </form>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btnAnnuler" data-bs-dismiss="modal">Annuler</button>
-        <button type="button" class="btn" data-bs-dismiss="modal" (click)="onAddClient()">Ajouter</button>
+        <button type="button" class="btn btnAnnuler" data-bs-dismiss="modal" #closeAddExpenseModal>Annuler</button>
+        <button type="button" class="btn" (click)="onAddClient()" [disabled]="!(exactNom && exactPrenom && exactAdresse && exactTelephone)">Ajouter</button>
       </div>
     </div>
   </div>
@@ -175,9 +175,8 @@
         </form>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btnAnnuler" data-bs-dismiss="modal">Annuler</button>
-        <button type="button" class="btn" (click)="onUpdateClient(selectedClient.id)"
-          data-bs-dismiss="modal">Modifier</button>
+        <button type="button" class="btn btnAnnuler" data-bs-dismiss="modal" #closeAddExpenseModalEdit>Annuler</button>
+        <button type="button" class="btn" (click)="onUpdateClient(selectedClient.id)">Modifier</button>
       </div>
     </div>
   </div>

@@ -27,34 +27,16 @@ export class ProduitService {
 
   @Cacheable({cacheBusterObserver: cacheBuster$})
   getAllProduct(): Observable<any> {
-    const accessToken = localStorage.getItem('access_token');
-
-    return accessToken ?
-      this.http.get<any>(`${api}/produits/lister`, {
-        headers: new HttpHeaders({ 'Authorization': `Bearer ${accessToken}` })
-      }) :
-      of(null);
+    return  this.http.get<any>(`${api}/produits/lister`);
   }
 
   getProductById(id: number): Observable<any> {
-    const accessToken = localStorage.getItem('access_token');
-
-    return accessToken ?
-      this.http.get<any>(`${api}/produit/detail/${id}`, {
-        headers: new HttpHeaders({ 'Authorization': `Bearer ${accessToken}` })
-      }) :
-      of(null);
+    return this.http.get<any>(`${api}/produit/detail/${id}`);
   }
 
   @Cacheable({cacheBusterObserver: cacheBuster$})
   getProductByIdCategorie(id: number): Observable<any> {
-    const accessToken = localStorage.getItem('access_token');
-
-    return accessToken ?
-      this.http.get<any>(`${api}/produit/${id}`, {
-        headers: new HttpHeaders({ 'Authorization': `Bearer ${accessToken}` })
-      }) :
-      of(null);
+    return this.http.get<any>(`${api}/produit/${id}`);
   }
 
   updateProduct(id: number, data: any): Observable<any> {
@@ -77,22 +59,22 @@ export class ProduitService {
       of(null);
   }
 
-  async addFile(fichier: File): Promise<string> {
-    try {
-      const randomFileName = `${Math.floor(Math.random() * 100000)}`;
-      const fileref = ref(this.storage, `fichier/rapidStokProduct${randomFileName}`);
-      const uploadTask = uploadBytesResumable(fileref, fichier);
+    async addFile(fichier: File): Promise<string> {
+      try {
+        const randomFileName = `${Math.floor(Math.random() * 100000)}`;
+        const fileref = ref(this.storage, `fichier/rapidStokProduct${randomFileName}`);
+        const uploadTask = uploadBytesResumable(fileref, fichier);
 
-      await uploadTask;
+        await uploadTask;
 
-      return await getDownloadURL(fileref);
-    } catch (error) {
-      console.log(error);
+        return await getDownloadURL(fileref);
+      } catch (error) {
+        console.log(error);
 
-      throw error;
+        throw error;
+      }
     }
-  }
-  
+
   @Cacheable({cacheBusterObserver: cacheBuster$})
   getAllNotification(): Observable<any>{
     const accessToken = localStorage.getItem('access_token');
