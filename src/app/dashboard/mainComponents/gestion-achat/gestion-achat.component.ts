@@ -151,6 +151,8 @@ export class GestionAchatComponent {
     this.produitService.getAllProduct().subscribe(
       (data) => {
         this.AllProducts = data.data;
+        console.log(data);
+
       }
     )
   }

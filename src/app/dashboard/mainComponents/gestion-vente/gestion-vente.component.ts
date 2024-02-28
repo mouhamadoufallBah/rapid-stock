@@ -165,7 +165,7 @@ export class GestionVenteComponent {
       const venteData = await this.venteService.getVenteById(id).toPromise();
       this.selectedVenteToUpdate = venteData;
 
-      console.warn(this.selectedVenteToUpdate);
+      // console.warn(this.selectedVenteToUpdate);
 
       // Récupération des informations détaillées de la vente (panier) de manière asynchrone
       await this.getSelectedVente(this.selectedVenteToUpdate.id);
@@ -179,7 +179,7 @@ export class GestionVenteComponent {
     this.venteService.getVenteInfo(id).subscribe(
       (data) => {
         this.selectedVente = data.data;
-        console.log(this.selectedVente.paiementInfo.montant_restant, "les facture");
+        // console.log(this.selectedVente.paiementInfo.montant_restant, "les facture");
       }
     );
   }
@@ -290,7 +290,7 @@ export class GestionVenteComponent {
 
     const productIndex = cartProducts.findIndex(elt => elt.id === item.id);
 
-    console.log(productIndex, "index");
+    // console.log(productIndex, "index");
 
     for (let i = 0; i < cartProducts.length; i++) {
       if (productIndex === i) {
@@ -322,7 +322,7 @@ export class GestionVenteComponent {
 
   curentVenteId() {
     this.idVent = this.selectedVente.historiques[0].vente_id;
-    console.log(this.idVent);
+    // console.log(this.idVent);
 
   }
 
@@ -357,7 +357,7 @@ export class GestionVenteComponent {
 
       this.venteService.addVente(data).subscribe(
         (response) => {
-          console.log(response.vente.id, "info vente id");
+          // console.log(response, "info vente id");
           this.clearCart();
 
           // console.log(response.vente.id);
@@ -375,7 +375,7 @@ export class GestionVenteComponent {
             //paiement
             this.paiementService.addPaiement(paiementInfo, response.vente.id).subscribe(
               (res) => {
-                console.log(res, "info paiment");
+                // console.log(res, "info paiment");
 
                 const data = {
                   "payement_id": res.idPaiement,
@@ -385,7 +385,7 @@ export class GestionVenteComponent {
                 // facture
                 this.factureService.createFacture(data).subscribe(
                   (data) => {
-                    console.log(data, "info facture");
+                    // console.log(data, "info facture");
 
                   }
                 );
@@ -399,10 +399,6 @@ export class GestionVenteComponent {
             // console.log(this.achats);
             Notiflix.Loading.remove();
           }
-
-
-
-
 
         }
       );

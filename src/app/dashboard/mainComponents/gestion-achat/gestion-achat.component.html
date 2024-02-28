@@ -223,9 +223,9 @@
         <h1 class="modal-title fs-5" id="voirDetailLabel">Detail produit</h1>
       </div>
       <div class="modal-body modalContent">
+        @if(selectedAchat){
         <div class="modalContentTop">
-          <div class="modalContentTopImage"></div>
-          @if(selectedAchat){
+          <div class="modalContentTopImage" style="background-image: url('{{ selectedAchat.produit_id | produitIdToProduitInfo:AllProducts:false:false:false:false:true }}');"></div>
           <div class="modalContentTopItems">
             <div class="modalContentBottomItem">
               <span class="fs-5 fw-bold">Nom de l'achat</span>
@@ -248,8 +248,8 @@
               <p class="fs-5">{{ selectedAchat.montantachat }}f CFA</p>
             </div>
           </div>
-          }
         </div>
+      }
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btnAnnuler" data-bs-dismiss="modal">Fermer</button>
