@@ -226,10 +226,18 @@ export class GestionVenteComponent {
 
     const existingProduct = cartProducts.find(item => item.id === product.id);
 
-    if (existingProduct) {
-      existingProduct.quantiteVendu += 1;
+    if (product.quantite > 0) {
+      if (existingProduct) {
+        if(existingProduct.quantiteVendu >= existingProduct.quantite){
+          Notiflix.Notify.failure(`la quantité du produit actuelle est ${existingProduct.quantite}`);
+        }else{
+          existingProduct.quantiteVendu += 1;
+        }
+      } else {
+        cartProducts.push({ ...product, quantiteVendu: 1 });
+      }
     } else {
-      cartProducts.push({ ...product, quantiteVendu: 1 });
+      Notiflix.Notify.failure(`la quantité du produit actuelle est ${product.quantite}`);
     }
 
     localStorage.setItem('cart', JSON.stringify(cartProducts));
@@ -272,7 +280,11 @@ export class GestionVenteComponent {
     const productIndex = cartProducts.findIndex(item => item.id === productId);
 
     if (productIndex !== -1) {
-      cartProducts[productIndex].quantiteVendu += 1;
+      if (cartProducts[productIndex].quantiteVendu >= cartProducts[productIndex].quantite) {
+        Notiflix.Notify.failure(`la quantité du produit actuelle est ${cartProducts[productIndex].quantite}`);
+      } else {
+        cartProducts[productIndex].quantiteVendu += 1;
+      }
 
       localStorage.setItem('cart', JSON.stringify(cartProducts));
       this.getProductFromCart();
@@ -344,7 +356,7 @@ export class GestionVenteComponent {
     // console.log(data, "donnée à envoyé");
     if (data.client_id == null) {
       Notiflix.Notify.failure('Veuillez renseigner le client');
-    }else if (data.produit.length === 0) {
+    } else if (data.produit.length === 0) {
       Notiflix.Notify.failure('Le panier est vide veuillez');
     } else {
       Notiflix.Loading.init({
