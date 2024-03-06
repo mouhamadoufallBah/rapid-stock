@@ -178,7 +178,7 @@ export class AcceuilComponent implements OnInit {
   getAllEmploye() {
     this.authService.getAllEmploye().subscribe(
       (resp) => {
-        console.log(resp);
+        // console.log(resp);
 
         this.allEmploye = resp.data.length
       }
@@ -241,7 +241,7 @@ export class AcceuilComponent implements OnInit {
     this.venteService.getTotalParMois().subscribe(
       (response) =>{
         this.montantTotalVenteParMois = response
-        console.log(this.montantTotalVenteParMois);
+        // console.log(this.montantTotalVenteParMois);
 
       }
     )

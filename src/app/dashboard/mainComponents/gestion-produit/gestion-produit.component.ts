@@ -12,7 +12,7 @@ import { CategorieIdToCategorieNamePipe } from '../../../pipes/categorie/categor
 @Component({
   selector: 'app-gestion-produit',
   standalone: true,
-  imports: [NgIf, DataTablesModule, FormsModule,CategorieIdToCategorieNamePipe],
+  imports: [NgIf, DataTablesModule, FormsModule, CategorieIdToCategorieNamePipe],
   templateUrl: './gestion-produit.component.html',
   styleUrl: './gestion-produit.component.scss'
 })
@@ -34,7 +34,7 @@ export class GestionProduitComponent implements OnInit {
   etatAdd: string = "";
   categorie_idAdd: number;
 
-  fichierAdd: any="";
+  fichierAdd: any = "";
 
   nomUpdate: string = "";
   imageUpdate: string = "";
@@ -102,20 +102,20 @@ export class GestionProduitComponent implements OnInit {
     this.categorieService.getAllCategory().subscribe(
       (data) => {
         this.categories = data.data;
-        console.log(this.categories);
+        // console.log(this.categories);
 
       }
     )
   }
 
-  upload(event: any){
+  upload(event: any) {
     this.fichierAdd = event.target.files[0];
   }
 
   save() {
-    if (this.fichierAdd==""){
-      Notiflix.Notify.failure('Veuillez ajouter l\'image');
-    }else{
+    if (this.fichierAdd == "") {
+      Notiflix.Notify.failure('Veuillez ajouter l\'image🖼️');
+    } else {
       Notiflix.Loading.init({
         svgColor: '#f47a20',
         cssAnimation: true,
@@ -126,8 +126,9 @@ export class GestionProduitComponent implements OnInit {
       this.produitService.addFile(this.fichierAdd)
         .then(downloadURL => {
           // Utiliser l'URL de téléchargement, par exemple :
-          console.log('Fichier téléchargé avec succès ! URL :', downloadURL);
+          // console.log('Fichier téléchargé avec succès ! URL :', downloadURL);
           this.imageAdd = downloadURL;
+
           this.onAddProduit();
 
           this.closeAddExpenseModal.nativeElement.click();
@@ -157,7 +158,7 @@ export class GestionProduitComponent implements OnInit {
   }
 
   verifiNom() {
-    const nom = this.nomAdd.length>0? this.nomAdd.trim(): this.nomUpdate.trim();
+    const nom = this.nomAdd.length > 0 ? this.nomAdd.trim() : this.nomUpdate.trim();
 
     if (nom === '') {
       this.verifNom = '';
@@ -241,7 +242,7 @@ export class GestionProduitComponent implements OnInit {
     };
 
     if (this.nomAdd == "" || this.prixUAdd == undefined || this.quantiteAdd == undefined || this.quantiteSeuilAdd == undefined || this.categorie_idAdd == undefined) {
-      Notiflix.Notify.failure('Veuillez remplir le champs');
+      Notiflix.Notify.failure('Veuillez remplir le champs❌');
     } else {
       Notiflix.Loading.init({
         svgColor: '#f47a20',
@@ -252,7 +253,7 @@ export class GestionProduitComponent implements OnInit {
       Notiflix.Loading.hourglass();
       this.produitService.addProduct(data).subscribe(
         (data) => {
-          console.log(data);
+          // console.log(data);
 
           Notiflix.Notify.init({
             cssAnimation: true,
@@ -273,6 +274,7 @@ export class GestionProduitComponent implements OnInit {
           this.quantiteSeuilAdd = undefined;
           this.etatAdd = "";
           this.categorie_idAdd = undefined;
+          this.fichierAdd = "";
         },
         (error) => {
           console.error('Erreur lors de l\'ajout du produit', error);
@@ -355,7 +357,7 @@ export class GestionProduitComponent implements OnInit {
 
         this.produitService.deleteProduct(id).subscribe(
           (response) => {
-            console.log()
+            // console.log(response)
             Notiflix.Loading.remove();
             Notiflix.Notify.success('Produit supprimée avec succès');
             this.getAllProducts();

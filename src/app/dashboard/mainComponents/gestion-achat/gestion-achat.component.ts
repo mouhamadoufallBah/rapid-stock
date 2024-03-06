@@ -143,7 +143,7 @@ export class GestionAchatComponent {
   categorie: any;
   getCategorie(id: number){
     this.categorie = this.categories.find((elt: any) => elt.id === id);
-    console.log(this.categorie);
+    // console.log(this.categorie);
 
   }
 
@@ -151,7 +151,7 @@ export class GestionAchatComponent {
     this.produitService.getAllProduct().subscribe(
       (data) => {
         this.AllProducts = data.data;
-        console.log(data);
+        // console.log(data);
 
       }
     )
@@ -164,7 +164,7 @@ export class GestionAchatComponent {
   getAchatById(id: number) {
     this.achatService.getAchatById(id).subscribe(
       (data) => {
-        console.log(data);
+        // console.log(data);
 
         this.selectedAchat = data;
         ({
